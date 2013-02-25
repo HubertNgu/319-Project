@@ -1,8 +1,5 @@
-push_script.sh
+*.sh
 
-*.class
-
-# Package Files #
-*.jar
-*.war
-*.ear
+*.pyc
+*.exe
+.DS_Store
