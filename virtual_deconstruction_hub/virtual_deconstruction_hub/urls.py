@@ -4,6 +4,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 
+# ORDER MATTERS!! Django will direct to first match it encounters, so make sure the most generic url regex is the lowest in the list
 urlpatterns = patterns('django.views.generic.simple',
     # Examples:
     # url(r'^$', 'virtual_deconstruction_hub.views.home', name='home'),
@@ -15,8 +16,11 @@ urlpatterns = patterns('django.views.generic.simple',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     #url(r'^test/', include(admin.site.))
-    url(r"listings", 'direct_to_template', {"template": "listings/listings_index.html"}),
-    url(r"blog", 'direct_to_template', {"template": "posts/blog_index.html"}),
+    url(r"blog", 'direct_to_template', {"template": "posts/posts_index.html"}),
     url(r"about", 'direct_to_template', {"template": "about.html"}),
+    
+    # listings URLs
+    url(r"listings/new", 'direct_to_template', {"template": "listings/listings_new.html"}),
+    url(r"listings", 'direct_to_template', {"template": "listings/listings_index.html"}),
     url(r"^$", 'direct_to_template', {"template": "base.html"})
     )

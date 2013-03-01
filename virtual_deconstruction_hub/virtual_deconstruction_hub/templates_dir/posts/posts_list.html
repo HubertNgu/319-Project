@@ -1,0 +1,16 @@
+{% extends "posts/posts_index.html" %}
+
+{% block window_title %}
+The Virtual Deconstruction Hub Blog
+{% endblock window_title %}
+
+{% block posts_content %}
+
+{% for blog in blogs_list %}
+
+	<li>{{ blog.title }}</li>
+
+{% endfor %}
+
+
+{% endblock posts_content %}

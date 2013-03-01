@@ -1,0 +1,28 @@
+{% extends "listings/listings_index.html" %}
+
+{% block window_title %}
+Create a new listing - Virtual Deconstruction Hub
+{% endblock window_title %}
+
+{% block listings_content %}
+
+<h1>Create a new listing</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+
+{# conext for directing to a app method call ->  <form action="{% url 'listings:submit_new' listing.id %}" method="post"> #}
+<form action="/" method="post">
+{% csrf_token %}
+<table>
+    {% for field in form %}
+        <tr>
+            <td>{{ field.name }}</td>
+            <td>{{ field.value }}</td>
+        </tr>
+    {% endfor %}
+</table>
+<input type="submit" value="Submit" />
+</form>
+
+{% endblock listings_content %}
