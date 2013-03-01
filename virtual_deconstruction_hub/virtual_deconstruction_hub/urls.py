@@ -4,7 +4,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = patterns('django.views.generic.simple',
     # Examples:
     # url(r'^$', 'virtual_deconstruction_hub.views.home', name='home'),
     # url(r'^virtual_deconstruction_hub/', include('virtual_deconstruction_hub.foo.urls')),
@@ -15,4 +15,8 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     #url(r'^test/', include(admin.site.))
-)
+    url(r"listings", 'direct_to_template', {"template": "listings/listings_index.html"}),
+    url(r"blog", 'direct_to_template', {"template": "posts/blog_index.html"}),
+    url(r"about", 'direct_to_template', {"template": "about.html"}),
+    url(r"^$", 'direct_to_template', {"template": "base.html"})
+    )
