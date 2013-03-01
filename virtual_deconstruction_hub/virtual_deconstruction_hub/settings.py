@@ -9,6 +9,11 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+# OS Specific path settings for project
+import os
+PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -45,7 +50,7 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = os.path.join(PROJECT_PATH, 'photo_uploads'),
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -106,7 +111,10 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    os.path.join(PROJECT_PATH, 'templates_dir'),
 )
+
+TEMPLATE_STRING_IF_INVALID = 'error getting correct variable'
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -121,6 +129,9 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'posts',
     'listings',
+    'mailer',
+    'statistics_generator',
+    'survey_system',
 )
 
 # A sample logging configuration. The only tangible logging

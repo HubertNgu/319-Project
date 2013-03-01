@@ -1,0 +1,12 @@
+{% extends listing_index.html %}
+
+{% block listings_content %}
+
+{% for listing in listings_list %}
+
+	<li>{{ listing.title }}</li>
+
+{% endfor %}
+
+
+{% endblock listings_content %}

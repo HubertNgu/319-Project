@@ -15,7 +15,13 @@ class Post(models.Model):
     verified = models.BooleanField(default=False)
     flagCount = models.SmallIntegerField("flag count", default=0)
     #type must be one of "blog", "user" or "proj"
-    type = models.CharField(max_length=4)
+    PROJ = "PROJ"
+    USER = "USER"
+    BLOG = "BLOG"
+    TYPE_CHOICES = ((PROJ, "Project Idea"),
+                    (USER, "User Story"),
+                    (BLOG, "Blog Post"))
+    type = models.CharField(max_length=4, choices=TYPE_CHOICES, default=PROJ)
     
     def __unicode__(self):
         return self.title

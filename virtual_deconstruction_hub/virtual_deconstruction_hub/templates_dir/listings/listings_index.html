@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block window_title %}
+Listings - Virtual Deconstruction Hub
+{% endblock window_title %}
+ 
+
+{% block base_nav %}
+	<nav><ul>
+		<li><a href="/">Home</a></li>
+		<li class="active"><a href="/listings">Listings</a></li> 
+		<li><a href="/blog">Blog</a></li>
+		<li><a href="/project_ideas">Project Ideas</a></li>
+		<li><a href="/user_stories">Success Stories</a></li>
+		<li><a href="/about">About</a></li>
+	</ul></nav>
+{% endblock base_nav %}
+
+{% block base_content %}
+<b> Listings Index Coming Soon...</b>
+
+{% block listings_content %}
+
+<input type="search" name="listingsearch"><input type="submit" value="Search Listings">
+
+{% endblock listings_content %}
+
+
+
+{% endblock base_content %}
