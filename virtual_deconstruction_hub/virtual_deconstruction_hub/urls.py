@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, include, url
+from django.conf import settings
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -16,11 +17,25 @@ urlpatterns = patterns('django.views.generic.simple',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     #url(r'^test/', include(admin.site.))
-    url(r"blog", 'direct_to_template', {"template": "posts/posts_index.html"}),
+    
+    # user and authentication urls
+    url(r"login", "direct_to_template", {"template": "authentication/login.html"}),
+    
+    #posts urls
+    url(r"blog", 'direct_to_template', {"template": "posts/blogs_index.html"}),
+    url(r"project_ideas", 'direct_to_template', {"template": "posts/projects_index.html"}),
+    url(r"user_stories", 'direct_to_template', {"template": "posts/stories_index.html"}),
+    
+    #about url
     url(r"about", 'direct_to_template', {"template": "about.html"}),
     
     # listings URLs
     url(r"listings/new", 'direct_to_template', {"template": "listings/listings_new.html"}),
     url(r"listings", 'direct_to_template', {"template": "listings/listings_index.html"}),
-    url(r"^$", 'direct_to_template', {"template": "base.html"})
+    
+    # root url - home page
+    url(r"^$", 'direct_to_template', {"template": "statistics/statistics_main.html"}),
+    
+    #set root for static files (css, images, etc)
+    url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
     )

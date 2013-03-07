@@ -1,17 +1,17 @@
-{% extends "posts/blog_index.html" %}
+{% extends "base.html" %}
 
 {% block window_title %}
-Create a new post - Virtual Deconstruction Hub
+Login - Virtual Deconstruction Hub
 {% endblock window_title %}
 
-{% block blogs_content %}
+{% block base_content %}
 
-<h1>Create a new listing</h1>
+<h1>Please login</h1>
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
 
-{# context for directing to a app method call ->  <form action="{% url 'listings:submit_new' listing.id %}" method="post"> #}
+{# conext for directing to a app method call ->  <form action="{% url 'listings:submit_new' listing.id %}" method="post"> #}
 <form action="/" method="post">
 {% csrf_token %}
 <table>
@@ -25,4 +25,4 @@ Create a new post - Virtual Deconstruction Hub
 <input type="submit" value="Submit" />
 </form>
 
-{% endblock blogs_content %}
+{% endblock base_content %}
