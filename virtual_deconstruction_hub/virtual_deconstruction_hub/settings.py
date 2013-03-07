@@ -1,5 +1,5 @@
 # Django settings for virtual_deconstruction_hub project.
-
+import os
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -16,12 +16,12 @@ PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'cs319sean',  # Or path to database file if using sqlite3.
-        'USER': 'cs319team4',  # Not used with sqlite3.
-        'PASSWORD': 'qwerty',  # Not used with sqlite3.
-        'HOST': '174.7.161.223',  # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',  # Set to empty string for default. Not used with sqlite3.
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'cs319dennis',                      # Or path to database file if using sqlite3.
+        'USER': 'cs319team4',                      # Not used with sqlite3.
+        'PASSWORD': 'qwerty',                  # Not used with sqlite3.
+        'HOST': '174.7.161.223',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '3306',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
 
@@ -108,7 +108,7 @@ ROOT_URLCONF = 'virtual_deconstruction_hub.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'virtual_deconstruction_hub.wsgi.application'
 
-TEMPLATE_DIRS = (
+TEMPLATE_DIRS = (  'templates',
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -124,6 +124,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'users',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
