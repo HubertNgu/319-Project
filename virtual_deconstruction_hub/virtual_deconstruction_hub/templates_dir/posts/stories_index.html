@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block window_title %}
+Success Stories - The Virtual Deconstruction Hub
+{% endblock window_title %}
+ 
+
+{% block nav_projects %}
+		<li class="active"><a href="/user_stories">Success Stories</a></li>
+{% endblock nav_projects %}
+
+{% block base_content %}
+
+<b> This part is static accross all success story pages, both single and lists </b>
+
+{% block stories_content %}
+
+Here you will find a list of success stories from users
+
+{% endblock stories_content %}
+
+{% endblock base_content %}
