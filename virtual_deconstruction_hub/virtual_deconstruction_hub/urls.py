@@ -17,7 +17,7 @@ urlpatterns = patterns('django.views.generic.simple',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     #url(r'^test/', include(admin.site.))
-    
+
     # user and authentication urls
     url(r"login", "direct_to_template", {"template": "authentication/login.html"}),
     
@@ -39,3 +39,4 @@ urlpatterns = patterns('django.views.generic.simple',
     #set root for static files (css, images, etc)
     url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
     )
+

@@ -31,3 +31,6 @@ class Post(models.Model):
     
     def setType(self, t):
         self.type = t
+    
+    
+    
