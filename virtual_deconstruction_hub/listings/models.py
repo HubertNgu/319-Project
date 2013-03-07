@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 import datetime
+import MySQLdb
 
 # Create your models here.
 class Listing(models.Model):
@@ -20,6 +21,48 @@ class Listing(models.Model):
     def __unicode__(self):
         return self.title
 
+    def getCreator(self):
+        return self.creator
+    
+    def getDateCreated(self):
+        return self.dateCreated
+    
+    def getLastModified(self):
+        return self.lastModified
+    
+    def getFlagCount(self):
+        return self.flagCount
+    
+    def markModified(self, ntitle, ncontent, nphoto1, nphoto2, nphoto3, nphoto4):
+        self.lastModified = time.time()
+        self.title = ntitle
+        self.textcontent = ncontent
+        self.photo1 = nphoto1
+        self.photo2 = nphoto2
+        self.photo3 = nphoto3
+        self.photo4 = nphoto4
+    
+#    def renderMultiple(listings):
+#        for l in listings:
+#            print l.title
+#            print l.creator
+#            print l.created
+
+               
+#    def renderSingle(self):
+  
+    def search(keyword):
+        results = Listings.objects.raw('SELECT * FROM listings WHERE title LIKE %%s%', [keyword])
+        return results
+        
+    def flag(self):
+        self.flagCount + 1
+    
     def isExpired(self):
         return self.expires <= timezone.now()
 
+
+            
+        
+        
+        
