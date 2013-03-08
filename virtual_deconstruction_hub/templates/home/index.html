@@ -1,0 +1,10 @@
+<html>
+{%  if logparams.0  == "Login"%}
+ <a href = "/users/login">{{logparams.0}}</a> 
+ <a href= "/users/signup">{{logparams.1}}</a> 
+{% else %}
+ <p> Welcome {{logparams.2}} </p>
+ <a href = "/users/logout">{{logparams.0}}</a>
+ <a href = "/users/myaccount"> {{logparams.1}} </a>
+{% endif %}
+</html>

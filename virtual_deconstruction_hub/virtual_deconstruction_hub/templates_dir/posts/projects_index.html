@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block window_title %}
+Project Ideas - The Virtual Deconstruction Hub
+{% endblock window_title %}
+ 
+
+{% block nav_projects %}
+		<li class="active"><a href="/project_ideas">Project Ideas</a></li>
+{% endblock nav_projects %}
+
+{% block base_content %}
+
+<b> This part is static accross all project idea pages, both single and lists </b>
+
+{% block projects_content %}
+
+Here you will find a list of project ideas
+
+{% endblock projects_content %}
+
+{% endblock base_content %}

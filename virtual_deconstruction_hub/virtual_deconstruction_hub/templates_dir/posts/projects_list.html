@@ -1,0 +1,12 @@
+{% extends "posts/projects_index.html" %}
+
+{% block projects_content %}
+
+{% for proj in projects_list %}
+
+	<li>{{ proj.title }}</li>
+
+{% endfor %}
+
+
+{% endblock projects_content %}

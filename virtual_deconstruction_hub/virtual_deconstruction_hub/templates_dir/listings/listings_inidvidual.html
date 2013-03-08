@@ -1,0 +1,14 @@
+{% extends "listings/listings_index.html" %}
+
+{% block window_title %}
+{{ listing.title }} - Virtual Deconstruction Hub
+{% endblock window_title %}
+
+{% block listings_content %}
+
+{{ listing.title}}
+{{ listing.created}}
+{{listing.textContent}}
+
+
+{% endblock listings_content %}
