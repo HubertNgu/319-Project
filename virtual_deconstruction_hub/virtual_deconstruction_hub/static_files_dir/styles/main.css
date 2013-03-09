@@ -1,3 +1,7 @@
+div {
+	outline: 2px;
+}
+
 /* HTML5 tags */
 header, section, footer,
 aside, nav, article, figure {
@@ -55,7 +59,9 @@ em, i {font-style: italic;}
 /* Lists */
 ul {
 	list-style: outside disc;
-	margin: 1em 0 1.5em 1.5em;
+	margin-left:auto;
+	margin-right:auto;
+/** margin: 1em 0 1.5em 1.5em; **/
 }
  
 ol {
@@ -96,7 +102,7 @@ table {margin: .5em auto 1.5em auto; width: 98%;}
 *****************/
 #banner {
 	margin: 0 auto;
-	padding: 2.5em 0 0 0;
+/** padding: 10px 0 0 0; this is the padding for the main page title bar **/
 }
  
 	/* Banner */
@@ -121,6 +127,25 @@ table {margin: .5em auto 1.5em auto; width: 98%;}
 		padding: 20px 0 0 40px;
 		display: block;
 		}
+		
+	/**** Search Bar ****/
+	#search_text {
+		width:600px;
+	}
+	
+	#select {
+		width:125px;
+	}
+	
+	#search_button {
+		width:70px;
+	}
+	
+/**** Main Content Block ****/
+#content {
+	padding: 20px 0 0 0;
+}
+
 	
 /***** Layout *****/
 .body {clear: both; margin: 0 auto; width: 800px;}
@@ -133,18 +158,26 @@ img.left, figure.left {float: right; margin: 0 0 2em 2em;}
 		font-size: 1.143em;
 		height: 40px;
 		line-height: 30px;
-		margin: 0 auto 1em auto;
+		margin: 0 auto 5px auto;
 		padding: 0;
 		text-align: center;
 		width: 800px;
-		
+				
 		border-radius: 5px;
-		-moz-border-radius: 5px;
-		-webkit-border-radius: 5px;
+		/** -moz-border-radius: 5px;
+		-webkit-border-radius: 5px; **/
 	}
 	
-	#banner nav ul {list-style: none; margin: auto; width: 800px; margin-left: auto; margin-right: auto;}
-	#banner nav li {/* float: left; */ display: inline-block; margin: 0;}
+	#banner nav ul {
+		list-style: none;
+		width: 800px;
+		}
+	#banner nav li {
+		float: left;
+		display: inline-block;
+		/** margin between nav links, can use to center **/
+		margin: 0 0 0 10px;
+		}
 	
 	#banner nav a:link, #banner nav a:visited {
 		color: #fff;
@@ -162,11 +195,11 @@ img.left, figure.left {float: right; margin: 0 0 2em 2em;}
 	
 	#banner nav li:first-child a {
 		border-top-left-radius: 5px;
-		-moz-border-radius-topleft: 5px;
-		-webkit-border-top-left-radius: 5px;
+	/**	-moz-border-radius-topleft: 5px;
+	-webkit-border-top-left-radius: 5px; **/
 		
-		border-bottom-left-radius: 5px;
+	/**	border-bottom-left-radius: 5px;
 		-moz-border-radius-bottomleft: 5px;
-		-webkit-border-bottom-left-radius: 5px;
+	-webkit-border-bottom-left-radius: 5px; **/
 	}
 	
