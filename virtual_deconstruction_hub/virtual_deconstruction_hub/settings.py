@@ -137,6 +137,7 @@ INSTALLED_APPS = (
     'userprofile',
     'verificationapp',
     'south',
+    'mailer'
 )
 
 # A sample logging configuration. The only tangible logging
