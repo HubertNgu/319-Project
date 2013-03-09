@@ -1,5 +1,10 @@
 *.sh
+.sh
 
+*.pydevproject
+*.project
 *.pyc
 *.exe
+.pyc
+.exe
 .DS_Store
