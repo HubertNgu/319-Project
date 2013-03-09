@@ -17,7 +17,8 @@ Virtual Deconstruction Hub
 
 <header id="banner" class="body">
 	<h1>
-	<a href="/">Virtual Deconstruction Hub<strong>Insert Slogan here</strong></a></h1> 
+	<a href="/">Virtual Deconstruction Hub<strong>Insert Slogan here</strong></a></h1>
+	<div id="banner_logo" class="body">Logo</div> 
 	<nav><ul>
 		{% block nav_home %}<li><a href="/">Home</a></li>{% endblock nav_home %}
 		{% block nav_listings %}<li><a href="/listings">Listings</a></li>{% endblock nav_listings %}
@@ -26,22 +27,23 @@ Virtual Deconstruction Hub
 		{% block nav_user %}<li><a href="/user_stories">Success Stories</a></li>{% endblock nav_user %}
 		{% block nav_about %}<li><a href="/about">About</a></li>{% endblock nav_about %}
 	</ul></nav>
-	<input id="search" type="search" name="listingsearch">
-	<select>
+	<input id="search_text" type="search" name="listingsearch">
+	<select id="select">
   		<option value="for_sale">Items for Sale</option>
   		<option value="wanted">Wanted Items</option>
   		<option value="blog">Blog Posts</option>
   		<option value="project">Project Ideas</option>
   		<option value="user">User Posts</option>
-  	</select><input type="submit" value="Search">
+  	</select><input id="search_button" type="submit" value="Search">
 </header>
 
-
+<div id="content" class="body">
 {% block base_content %}
 
 <b> Welcome to the Virtual Deconstruction Hub</b>
 
 {% endblock base_content %}
+</div>
 </body>
 
 </body>
