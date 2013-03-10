@@ -1,9 +1,10 @@
 from django.db import models
 from django.utils import timezone
+from django.db import models
+from django.forms import ModelForm
 import datetime
 import MySQLdb
 
-# Create your models here.
 class Listing(models.Model):
     creator = models.EmailField("creators email")
     created = models.DateTimeField("date created", auto_now_add=True)
@@ -17,50 +18,49 @@ class Listing(models.Model):
     photo4 = models.FileField(blank=True, upload_to='photos/%Y/%m/%d')
     verified = models.BooleanField(default=False)
     flagCount = models.SmallIntegerField("flag count", default=0)
-    
+    @classmethod
+    def create_listing(cls, creator, title, textContext, photo1, photo2, photo3, photo4):
+        listing = cls(creator=creator,
+                      created = timezone.now(),
+                      lastModified = timezone.now(),
+                      expires = timezone.now() + datetime.timedelta(days=30),
+                      title=title,
+                      textContext = textContext,
+                      photo1 = photo1,
+                      photo2 = photo2,
+                      photo3 = photo3,
+                      photo4 = photo4)
+    @classmethod
     def __unicode__(self):
         return self.title
-
+    @classmethod
     def getCreator(self):
         return self.creator
-    
+    @classmethod
     def getDateCreated(self):
         return self.dateCreated
-    
+    @classmethod
     def getLastModified(self):
         return self.lastModified
-    
+    @classmethod
     def getFlagCount(self):
         return self.flagCount
-    
-    def markModified(self, ntitle, ncontent, nphoto1, nphoto2, nphoto3, nphoto4):
+    @classmethod
+    def markModified(self):
         self.lastModified = time.time()
-        self.title = ntitle
-        self.textcontent = ncontent
-        self.photo1 = nphoto1
-        self.photo2 = nphoto2
-        self.photo3 = nphoto3
-        self.photo4 = nphoto4
-    
-#    def renderMultiple(listings):
-#        for l in listings:
-#            print l.title
-#            print l.creator
-#            print l.created
-
-               
-#    def renderSingle(self):
-  
-    def search(keyword):
-        results = Listings.objects.raw('SELECT * FROM listings WHERE title LIKE %%s%', [keyword])
-        return results
-        
+    @classmethod   
     def flag(self):
         self.flagCount + 1
-    
+    @classmethod
     def isExpired(self):
         return self.expires <= timezone.now()
+    
 
+class ListingForm(ModelForm):
+    class Meta:
+        model = Listing
+
+    
 
             
         

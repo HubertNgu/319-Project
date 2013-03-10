@@ -7,7 +7,9 @@ admin.autodiscover()
 
 # ORDER MATTERS!! Django will direct to first match it encounters, so make sure the most generic url regex is the lowest in the list
 urlpatterns = patterns('django.views.generic.simple',
+
     #url(r'^$','virtual_deconstruction_hub.views.index'),
+
     url(r'^users/login', 'users.views.index'),
     url(r'^users/signup', 'users.views.signup'),
     url(r'^users/logout', 'users.views.logout_user'),
@@ -22,6 +24,9 @@ urlpatterns = patterns('django.views.generic.simple',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     #url(r'^test/', include(admin.site.))
+
+    # survey system url
+    url(r"survey", "direct_to_template", {"template" : "survey_system/survey_system_index.html"}),
 
     # user and authentication urls
     url(r"login", "direct_to_template", {"template": "authentication/login.html"}),
