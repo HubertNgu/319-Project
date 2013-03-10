@@ -11,6 +11,7 @@ urlpatterns = patterns('django.views.generic.simple',
     url(r'^users/login', 'users.views.index'),
     url(r'^users/signup', 'users.views.signup'),
     url(r'^users/logout', 'users.views.logout_user'),
+    url(r'^users/myaccount', 'users.views.myaccount'),
     # Examples:
     # url(r'^$', 'virtual_deconstruction_hub.views.home', name='home'),
     # url(r'^virtual_deconstruction_hub/', include('virtual_deconstruction_hub.foo.urls')),

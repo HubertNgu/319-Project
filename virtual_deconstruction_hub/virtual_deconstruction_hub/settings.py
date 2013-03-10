@@ -134,6 +134,7 @@ INSTALLED_APPS = (
     'statistics_generator',
     'survey_system',
     'users',
+    'userprofile',
 )
 
 # A sample logging configuration. The only tangible logging
