@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+	<script language="javascript">
+		function onSurveySubmit() {
+		error = document.getElementById('error');
+		error.style.display = "none";
+
+		document.getElementById('item').style.border = "";
+		document.getElementById('quantity').style.border = "";
+		document.getElementById('price').style.border = "";
+		document.getElementById('comments').style.border = "";
+
+		if (document.getElementById('item').value == "") {
+			error.innerHTML = "Please enter a name for the item";
+			error.style.display = "inline";
+			document.getElementById('item').style.border = "1px solid #CD0A0A";
+			return false;
+		}
+
+		if (document.getElementById('quantity').value == "") {
+			error.innerHTML = "Please enter a valid number for the quantity";
+			error.style.display = "inline";
+			document.getElementById('quantity').style.border = "1px solid #CD0A0A";
+			return false;
+		}
+
+		if (document.getElementById('price').value == "") {
+			error.innerHTML = "Please enter the price you sold the item for";
+			error.style.display = "inline";
+			document.getElementById('price').style.border = "1px solid #CD0A0A";
+			return false;
+			}
+		}
+	</script>
+
+		
+	{% block base_content %}
+	<h1>Submit a Survey</h1>
+	{% if errormessage != None %}
+	{%endif%}
+	<span id = "error" style="color:red;display:none"></span>
+  	<form action="" method="post" onSubmit = "return onSurveySubmit();">
+  		{% csrf_token %}
+   	
+   		<label>Item:</label>
+   		<input type = "text" name = "item" id = "item"/><br/>
+  
+  		<label>Quantity:</label>
+  		<input type = "number" name = "quantity" id = "quantity"/><br/>
+                
+   		<label>Price($CAD):</label>
+  		<input type = "number" name = "price" id = "price"/><br/>
+  
+  		<label>Comments(optional):</label>
+  		<input type = "text" name = "comments" id = "comments"/><br/>               
+            
+   		<input type="submit" value="Submit Survey">
+ 	</form>
+{% endblock base_content %}
