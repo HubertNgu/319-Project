@@ -59,6 +59,8 @@ class Listing(models.Model):
 class ListingForm(ModelForm):
     class Meta:
         model = Listing
+        fields = ('creator', 'title', 'textContext', 
+                  'photo1', 'photo2', 'photo3', 'photo4')
 
     
 
