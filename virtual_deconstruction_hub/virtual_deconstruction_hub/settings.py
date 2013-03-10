@@ -140,6 +140,19 @@ INSTALLED_APPS = (
     'mailer'
 )
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# Host for sending e-mail
+EMAIL_HOST = '174.7.161.223'
+
+# Port for sending e-mail
+EMAIL_PORT = 25
+
+# Option SMTP authentication information for EMAIL_HOST.
+EMAIL_HOST_USER = 'graham'
+EMAIL_HOST_PASSWORD = '5uMm1775'
+EMAIL_USE_TLS = False
+
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error when DEBUG=False.

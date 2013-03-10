@@ -25,9 +25,10 @@ urlpatterns = patterns('',
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
-    # Uncomment the next line to enable the admin:
+    # mailer urls
     url(r'^admin/', include(admin.site.urls)),
-	url(r'^emails/test', 'mailer.views.testemail')
+	url(r'^mailer/send_email', 'mailer.views.send_email'),
+	url(r'^contact_seller', 'mailer.views.contact_seller'),
     #url(r'^test/', include(admin.site.))
 
     # survey system url
