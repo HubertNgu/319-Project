@@ -6,8 +6,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 # ORDER MATTERS!! Django will direct to first match it encounters, so make sure the most generic url regex is the lowest in the list
-urlpatterns = patterns('django.views.generic.simple',
-
+urlpatterns = patterns('' ,
     #url(r'^$','virtual_deconstruction_hub.views.index'),
 
     url(r'^users/login', 'users.views.index'),
@@ -26,7 +25,8 @@ urlpatterns = patterns('django.views.generic.simple',
     #url(r'^test/', include(admin.site.))
 
     # survey system url
-    url(r"survey", "direct_to_template", {"template" : "survey_system/survey_system_index.html"}),
+    url(r'^survey', 'survey_system.views.submit_survey'),
+    url(r'^survey/successful', 'survey_system.views.successful'),
 
     # user and authentication urls
     url(r"login", "direct_to_template", {"template": "authentication/login.html"}),
