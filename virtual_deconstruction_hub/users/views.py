@@ -73,19 +73,6 @@ def signup(request):
             profile.save()
             login(request,user)
             return redirect('virtual_deconstruction_hub.views.index')
-
-    if request.method == 'POST':
-        form =  UserCreationForm(request.POST)
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        password = request.POST.get('password1')
-        user = User.objects.create_user(username,email,password)
-        usernamepost = request.POST.get('username')
-        passwordpost = request.POST.get('password')
-        user = authenticate(username=usernamepost, password=passwordpost)
-        login(request,user)
-        return redirect('virtual_deconstruction_hub.views.index')
-
     else:
         
         return render_to_response("users\signup.html",context_instance=RequestContext(request))

@@ -36,8 +36,8 @@ def createListing():
         new_listing = Listing.object.create_listing(cls, creator, title, textContext, 
                                                     photo1, photo2, photo3, photo4)
         new_listing = form.save()
-        return redirect('virtual_deconstruction_hub.listings.views.index')
+        return render(request, 'virtual_deconstruction_hub/templates_dir/listings/listings_new.html')
 
 
-
+    
 
