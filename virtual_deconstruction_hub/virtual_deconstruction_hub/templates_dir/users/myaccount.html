@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block base_content %}
+<h1> Welcome {{username}}  to your account settings</h1>
+<label> Username: </label> {{username}} <br/>
+<label> First Name: </label> {{firstname}}<br/>
+<label> Last Name: </label> {{lastname}}<br/>
+<label> Email: </label>  {{email}}<br/>
+<label> Phone Number: </label> {{phone}}<br/>
+<label> Address: </label> {{address}}<br/>
+<label> City: </label> {{city}}<br/>
+<label> Province: </label> {{province}}<br/>
+
+<form action="" method="post">
+  {% csrf_token %}
+  <input type="submit" value="Edit Your Account"> 
+ </form>
+
+{% endblock base_content %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block base_content %}
+<span id = "error" style="color:red;display:none"></span>
+<form action="" method="post" onSubmit = "return onEditClick();">
+  {% csrf_token %}
+<label> Username: </label> {{username}} <br/>
+<label> Email: </label> {{email}}<br/>
+<label> First Name: </label>
+<input type = "text" name = "firstname" id = "firstname"  value={{firstname}}>  <br/> 
+<label> Last Name: </label> {{lastname}}
+<input type = "text" name = "lastname" id = "lastname" value={{lastname}} >  <br/>
+
+<label> Phone Number: </label> 
+<input type = "text" name = "phone" id = "phone" value= {{phone}} >  <br/>
+<label> Address: </label> 
+<input type = "text" name = "address" id = "address" value= {{address}} ><br/>
+<label> City: </label> 
+<input type = "text" name = "city" id = "city" value= {{city}} ><br/>
+<label> Province: </label>
+<select name = "province" id = "province">
+<option value = "" selected = "selected"></option>
+<option value="AB">Alberta</option>
+	<option value="BC">British Columbia</option>
+	<option value="MB">Manitoba</option>
+	<option value="NB">New Brunswick</option>
+	<option value="NL">Newfoundland and Labrador</option>
+	<option value="NS">Nova Scotia</option>
+	<option value="ON">Ontario</option>
+	<option value="PE">Prince Edward Island</option>
+	<option value="QC">Quebec</option>
+	<option value="SK">Saskatchewan</option>
+	<option value="NT">Northwest Territories</option>
+	<option value="NU">Nunavut</option>
+	<option value="YT">Yukon</option>
+ </select><br/>
+ 
+<input type="submit" value = "Save">  
+</form>
+<button OnClick = "return cancelButton();">Cancel</button>
+{% endblock base_content %}

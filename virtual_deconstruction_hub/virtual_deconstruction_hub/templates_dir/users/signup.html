@@ -1,168 +1,49 @@
-<html>
-<head>
-<script language="javascript">
-function onSignUpClick(){
-error = document.getElementById('error');
-error.style.display = "none";
-document.getElementById('username').style.border = "";
-document.getElementById('password').style.border = "";
-document.getElementById('confirmpassword').style.border = "";
-document.getElementById('email').style.border = "";
-document.getElementById('sameusername').style.display = "none";
-var checkemail  = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
-
-if(document.getElementById('username').value == "" ){
-	error.innerHTML = "You must select a valid username";
-	error.style.display = "inline";
-	document.getElementById('username').style.border = "1px solid #CD0A0A";
-	return false;
-}
-
-if(document.getElementById('password').value == "" ){
-	error.innerHTML = "You must select a valid password";
-	error.style.display = "inline";
-	document.getElementById('password').style.border = "1px solid #CD0A0A";
-	return false;
-}
-
-if(document.getElementById('confirmpassword').value == "" ){
-	error.innerHTML = "You must re-enter your password";
-	error.style.display = "inline";
-	document.getElementById('confirmpassword').style.border = "1px solid #CD0A0A";
-	return false;
-}
 
 
-
-
-if(document.getElementById('email').value == "" ||  checkemail.test(document.getElementById('email').value) == false){
-	error.innerHTML = "You must select a valid email address";
-	error.style.display = "inline";
-	document.getElementById('email').style.border = "1px solid #CD0A0A";
-	return false;
-}
-
-
-if(document.getElementById('address').value == "" ){
-	error.innerHTML = "You must enter an address";
-	error.style.display = "inline";
-	document.getElementById('address').style.border = "1px solid #CD0A0A";
-	return false;
-}
-
-if(document.getElementById('city').value == "" ){
-	error.innerHTML = "You must enter a city";
-	error.style.display = "inline";
-	document.getElementById('city').style.border = "1px solid #CD0A0A";
-	return false;
-}
-
-if(document.getElementById('province').value == "" ){
-	error.innerHTML = "You must select a province";
-	error.style.display = "inline";
-	document.getElementById('province').style.border = "1px solid #CD0A0A";
-	return false;
-}
-
-
-
-
-
-if(document.getElementById('password').value != document.getElementById('confirmpassword').value){
-	error.innerHTML = "Your passwords do not match";
-	error.style.display = "inline";
-	document.getElementById('password').style.border = "1px solid #CD0A0A";
-	document.getElementById('confirmpassword').style.border = "1px solid #CD0A0A";
-	return false;
-}
-
-
-
-
-
-}
-</script>
-<meta charset="utf-8" />
-
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles\main.css">
-
-<title>
-{% block window_title %}
-Virtual Deconstruction Hub
-{% endblock window_title %}
-</title>
-
-</head>
-
-
-
- 
-<body id="body" class="home">
-
-<header id="banner" class="body">
-	<h1>
-	<a href="/">Virtual Deconstruction Hub<strong>Insert Slogan here</strong></a></h1> 
-	<nav><ul>
-		{% block nav_home %}<li><a href="/">Home</a></li>{% endblock nav_home %}
-		{% block nav_listings %}<li><a href="/listings">Listings</a></li>{% endblock nav_listings %}
-		{% block nav_blog %}<li><a href="/blog">Blog</a></li>{% endblock nav_blog %}
-		{% block nav_projects %}<li><a href="/project_ideas">Project Ideas</a></li>{% endblock nav_projects %}
-		{% block nav_user %}<li><a href="/user_stories">Success Stories</a></li>{% endblock nav_user %}
-		{% block nav_about %}<li><a href="/about">About</a></li>{% endblock nav_about %}
-	</ul></nav>
-	<input id="search" type="search" name="listingsearch">
-	<select>
-  		<option value="for_sale">Items for Sale</option>
-  		<option value="wanted">Wanted Items</option>
-  		<option value="blog">Blog Posts</option>
-  		<option value="project">Project Ideas</option>
-  		<option value="user">User Posts</option>
-  	</select><input type="submit" value="Search">
-</header>
-
+{% extends "base.html" %}
 
 {% block base_content %}
-
-
-
-{% endblock base_content %}
-</body>
-
-</body>
-</html>
-
-  
-  {% block content %}
-  <h1>Create an Account</h1>
+<h1 style = "text-align:center" >Create an Account</h1>
+<div  id = "signupform" class="body">
 {% if errormessage != None %}
 <span id= "sameusername" style="color:red;display:inline">{{errormessage}}</span><br/>
 {%endif%}
 <span id = "error" style="color:red;display:none"></span>
   <form action="" method="post" onSubmit = "return onSignUpClick();">
   {% csrf_token %}
-   <label>Username:</label>
+  <div style="width:120px;text-align:right; float:left">
+   <label style = "line-height:26px">Username:</label><br/>
+    <label style = "line-height:26px">Password:</label><br/>
+    <label style = "line-height:26px">Confirm Password:</label><br/>
+    <label style = "line-height:26px">Email:</label><br/>
+    <label style = "line-height:26px">Phone Number:</label><br/>
+     <label style = "line-height:26px">Address:</label><br/>
+     <label style = "line-height:26px"> City: </label><br/>
+     <label style = "line-height:26px">Province:</label><br/>
+   </div>
+   <div style = "margin-left:4px"  >
    <input type = "text" name = "username" id = "username"/><br/>
    
-   <label>Password:</label>
+  
    <input type = "password" name = "password" id = "password"/><br/>
                  
-   <label>Confirm Password:</label>
+   
    <input type = "password" name = "confirmpassword" id = "confirmpassword"/><br/>
                  
-    <label>Email:</label>
+    
    <input type = "text" name = "email" id = "email"/><br/>
    
-   <label>Phone Number:</label>
+   
    <input type = "text" name = "phone" id = "phone"/><br/>
    
-   <label>Address:</label>
+  
    <input type = "text" name = "address" id = "address"/><br/>
    
-   <label> City: </label>
+   
      <input type = "text" name = "city" id = "city"/><br/>
    
    
-  <label>Province:</label>
+  
   <select name = "province" id = "province">
 	<option value="AB">Alberta</option>
 	<option value="BC">British Columbia</option>
@@ -178,11 +59,11 @@ Virtual Deconstruction Hub
 	<option value="NU">Nunavut</option>
 	<option value="YT">Yukon</option>
 </select><br/>
-                 
+    </div>             
                  
                  
       <input type="submit" value="Create an Account">
   </form>
-{% endblock %}
 
-</html>
+</div>
+{% endblock base_content %}

@@ -203,3 +203,10 @@ img.left, figure.left {float: right; margin: 0 0 2em 2em;}
 	-webkit-border-bottom-left-radius: 5px; **/
 	}
 	
+	/** (NOT-COMPLETE) sign up form div **/
+	#signupform {
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+	}
+	
