@@ -6,13 +6,16 @@ from django.contrib import admin
 admin.autodiscover()
 
 # ORDER MATTERS!! Django will direct to first match it encounters, so make sure the most generic url regex is the lowest in the list
-urlpatterns = patterns('' ,
-    #url(r'^$','virtual_deconstruction_hub.views.index'),
-
+urlpatterns = patterns('',
+    url(r'^$','virtual_deconstruction_hub.views.index'),
     url(r'^users/login', 'users.views.index'),
     url(r'^users/signup', 'users.views.signup'),
     url(r'^users/logout', 'users.views.logout_user'),
     url(r'^users/myaccount', 'users.views.myaccount'),
+    url(r'^users/verification', 'users.views.verification'),
+    url(r'^users/verifyfail', 'users.views.verifyfail'),
+    url(r'^users/editaccount', 'users.views.editaccount'),
+    url(r'^users/verifyemail/(?P<username>\d+)/(?P<verification>\d+)/$', 'users.views.verifyemail'),
     # Examples:
     # url(r'^$', 'virtual_deconstruction_hub.views.home', name='home'),
     # url(r'^virtual_deconstruction_hub/', include('virtual_deconstruction_hub.foo.urls')),

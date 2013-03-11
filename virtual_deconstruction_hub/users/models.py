@@ -11,4 +11,5 @@ class User(models.Model):
     lastloggedindate = models.DateTimeField('lastloggedindate')
     role = models.IntegerField('role')
     profileid = models.IntegerField('profileid')
+    isverified = models.BooleanField(default = 0)
     

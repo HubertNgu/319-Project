@@ -11,3 +11,7 @@ class UserProfile(models.Model):
     country = models.CharField(max_length = 50)
     province = models.CharField(max_length = 50)
     description = models.CharField(max_length = 500)
+    isverified = models.BooleanField(default = 0)
+
+def __unicode__(self):
+        return self.name
