@@ -7,7 +7,9 @@ admin.autodiscover()
 
 # ORDER MATTERS!! Django will direct to first match it encounters, so make sure the most generic url regex is the lowest in the list
 urlpatterns = patterns('',
-    url(r'^$','virtual_deconstruction_hub.views.index'),
+
+    #url(r'^$','virtual_deconstruction_hub.views.index'),
+
     url(r'^users/login', 'users.views.index'),
     url(r'^users/signup', 'users.views.signup'),
     url(r'^users/logout', 'users.views.logout_user'),
@@ -44,7 +46,8 @@ urlpatterns = patterns('',
     
     # listings URLs
     url(r"listings/new", 'direct_to_template', {"template": "listings/listings_new.html"}),
-    url(r"listings", 'direct_to_template', {"template": "listings/listings_index.html"}),
+    url(r"listings", 'listings.views.index'),
+    url(r"listings/individual", 'listings.views.detail'),
     
     # root url - home page
     url(r"^$", 'direct_to_template', {"template": "statistics/statistics_main.html"}),
