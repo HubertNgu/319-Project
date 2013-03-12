@@ -5,9 +5,10 @@
 {% endblock window_title %}
 
 {% block listings_content %}
+<li><a href="/listings/{{ listing.title }}/">{{ listing.title }}</a></li>
 
-{{ listing.title}}
-{{ listing.created}}
+{{listing.title}}
+{{listing.created}}
 {{listing.textContent}}
 
 
