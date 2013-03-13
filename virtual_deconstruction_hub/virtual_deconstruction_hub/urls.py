@@ -7,15 +7,33 @@ admin.autodiscover()
 
 # ORDER MATTERS!! Django will direct to first match it encounters, so make sure the most generic url regex is the lowest in the list
 urlpatterns = patterns('',
-    url(r'^$','virtual_deconstruction_hub.views.index'),
-    url(r'^users/login', 'users.views.index'),
-    url(r'^users/signup', 'users.views.signup'),
-    url(r'^users/logout', 'users.views.logout_user'),
-    url(r'^users/myaccount', 'users.views.myaccount'),
-    url(r'^users/verification', 'users.views.verification'),
-    url(r'^users/verifyfail', 'users.views.verifyfail'),
-    url(r'^users/editaccount', 'users.views.editaccount'),
-    url(r'^users/verifyemail/(?P<username>\d+)/(?P<verification>\d+)/$', 'users.views.verifyemail'),
+
+    # user and authentication URLs
+    (r'^users/', include('users.urls')),
+    # listings URLs
+    (r'^listings/', include('listings.urls')),
+    
+    # survey system URLs
+    (r'^survey/', include('survey_system.urls')),
+    
+    # posts URLs
+    (r'posts/', include('posts.urls')),
+    
+    # profile URLs
+    (r'profiles/', include('userprofiles.urls')),
+    
+    #statistics urls
+    (r'statistics/', include('statistics_generator.urls')),
+
+    # admin site url
+    url(r'^admin/', include(admin.site.urls)),
+    
+    #about url
+    url(r"about", 'direct_to_template', {"template": "about.html"}),
+    
+    # root url - home page
+    url(r"^$", include('statistics_generator.urls')),
+    
     # Examples:
     # url(r'^$', 'virtual_deconstruction_hub.views.home', name='home'),
     # url(r'^virtual_deconstruction_hub/', include('virtual_deconstruction_hub.foo.urls')),
@@ -23,32 +41,6 @@ urlpatterns = patterns('',
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
-    # Uncomment the next line to enable the admin:
-    url(r'^admin/', include(admin.site.urls)),
-    #url(r'^test/', include(admin.site.))
-
-    # survey system url
-    url(r'^survey', 'survey_system.views.submit_survey'),
-    url(r'^survey/successful', 'survey_system.views.successful'),
-
-    # user and authentication urls
-    url(r"login", "direct_to_template", {"template": "authentication/login.html"}),
-    
-    #posts urls
-    url(r"blog", 'direct_to_template', {"template": "posts/blogs_index.html"}),
-    url(r"project_ideas", 'direct_to_template', {"template": "posts/projects_index.html"}),
-    url(r"user_stories", 'direct_to_template', {"template": "posts/stories_index.html"}),
-    
-    #about url
-    url(r"about", 'direct_to_template', {"template": "about.html"}),
-    
-    # listings URLs
-    url(r"listings/new", 'direct_to_template', {"template": "listings/listings_new.html"}),
-    url(r"listings", 'direct_to_template', {"template": "listings/listings_index.html"}),
-    
-    # root url - home page
-    url(r"^$", 'direct_to_template', {"template": "statistics/statistics_main.html"}),
-    
     #set root for static files (css, images, etc)
     url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
     )
