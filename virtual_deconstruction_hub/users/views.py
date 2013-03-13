@@ -21,20 +21,19 @@ def index(request):
     elif request.method == 'POST':
         usernamepost = request.POST.get('username')
         passwordpost = request.POST.get('password')
+        if UserProfile.objects.filter(username = usernamepost).exists():
+            checkverified = UserProfile.objects.get(username= usernamepost)
+            if checkverified.isverified == False:
+                return render_to_response("users\mustverify.html",context_instance=RequestContext(request))
         user = authenticate(username=usernamepost, password=passwordpost)
-        if user is not None:
-            if user.is_active:
-                 login(request, user)
-                 return redirect('virtual_deconstruction_hub.views.index')
-            else:
-                print "Your account has been disabled!"
-        else:
-            print "Your username and password were incorrect."
-            return render_to_response("users\loginnotsuccessful.html")
+        if user is None:
+            errormessage =  "Your username and/or password were incorrect."
+            return render_to_response("users\login.html",{'errormessage':errormessage},context_instance=RequestContext(request))   
+        login(request, user)
+        return redirect('virtual_deconstruction_hub.views.index')
+   
     else:
-        form = AuthenticationForm()
-        return render_to_response("users\login.html", {
-        'form': form},context_instance=RequestContext(request))
+        return render_to_response("users\login.html",context_instance=RequestContext(request))
 
 def logout_user(request):
     logout(request)
@@ -77,7 +76,7 @@ def signup(request):
             verificationcode = id_generator()
             verificationapp = VerificationApp(username = checkusername, verificationcode = verificationcode)
             verificationapp.save()
-            #add email to include in querystring username and verification. i.e(www.example.com/users/verifyemail/username/verification code)
+            #add email to include in querystring username and verification. i.e(http://localhost:2000/users/verifyemail/?username=n&verificationcode=KU47FL3HR6)
             #verification code is under variable verification code
             return   render_to_response("users/verification.html",context_instance=RequestContext(request))
     else:
@@ -87,16 +86,19 @@ def signup(request):
 def verification(request):
      return render_to_response("users/verification.html",context_instance=RequestContext(request))
  
-def verifyemail(request,username, verification):
-    verify = VerificationApp(username = username)
+def verifyemail(request):
+    username = request.GET.get('username')
+    verification = request.GET.get('verificationcode')
+    verify = VerificationApp.objects.get(username = username)
     if verify.verificationcode == verification:
-        verifyuser = UserProfile(username = username)
-        verifyuser.isverified = true
+        verifyuser = UserProfile.objects.get(username = username)
+        verifyuser.isverified = True
         verifyuser.save()
+        verify.delete()
         return redirect('virtual_deconstruction_hub.views.index')
-    else: return redirect('virtual_deconstruction_hub.users.views.verifyfail')
+    else: return redirect('users.views.verifyfail')
 
-def verifyfail(response):
+def verifyfail(request):
       return render_to_response("users/verifyfail.html",context_instance=RequestContext(request))
      
     

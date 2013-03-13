@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils import timezone
+from django.db.models import ImageField
+from django import forms
 
 # Create your models here.
 class Post(models.Model):
@@ -8,10 +10,6 @@ class Post(models.Model):
     last_modified = models.DateTimeField("last modified", auto_now=True)
     title = models.CharField(max_length=100)
     text_content = models.TextField()
-    photo1 = models.ImageField(blank=True, upload_to='photos/%Y/%m/%d')
-    photo2 = models.ImageField(blank=True, upload_to='photos/%Y/%m/%d')
-    photo3 = models.ImageField(blank=True, upload_to='photos/%Y/%m/%d')
-    photo4 = models.ImageField(blank=True, upload_to='photos/%Y/%m/%d')
     verified = models.BooleanField(default=False)
     flag_count = models.SmallIntegerField("flag count", default=0)
     #type must be one of "blog", "user" or "proj"
@@ -37,6 +35,12 @@ class Post(models.Model):
     
     def setType(self, t):
         self.type = t
-    
+        
+  # Create the form class.
+class PostForm(ModelForm):
+    class Meta:
+        model = Post
+        exclude = ['type', 'flag_count', 'verified']
+
     
     

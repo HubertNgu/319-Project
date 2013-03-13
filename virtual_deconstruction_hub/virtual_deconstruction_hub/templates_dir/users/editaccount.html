@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block base_content %}
+ <div  class="body">
 <span id = "error" style="color:red;display:none"></span>
 <form action="" method="post" onSubmit = "return onEditClick();">
   {% csrf_token %}
@@ -12,7 +13,7 @@
 <input type = "text" name = "lastname" id = "lastname" value={{lastname}} >  <br/>
 
 <label> Phone Number: </label> 
-<input type = "text" name = "phone" id = "phone" value= {{phone}} >  <br/>
+<input type = "text" onkeypress="return isNumberKey(event)" name = "phone" id = "phone" value= {{phone}} >  <br/>
 <label> Address: </label> 
 <input type = "text" name = "address" id = "address" value= {{address}} ><br/>
 <label> City: </label> 
@@ -38,4 +39,5 @@
 <input type="submit" value = "Save">  
 </form>
 <button OnClick = "return cancelButton();">Cancel</button>
+</div>
 {% endblock base_content %}
