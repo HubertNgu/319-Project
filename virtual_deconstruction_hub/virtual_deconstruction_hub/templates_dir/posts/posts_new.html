@@ -1,4 +1,8 @@
-{% extends "posts/blog_index.html" %}
+<<<<<<< HEAD
+{% extends "posts/blogs_index.html" %}
+=======
+{% extends "base.html" %}
+>>>>>>> 10a34a4... Commiting work done by Dennis
 
 {% block window_title %}
 Create a new post - Virtual Deconstruction Hub
@@ -6,23 +10,94 @@ Create a new post - Virtual Deconstruction Hub
 
 {% block blogs_content %}
 
-<h1>Create a new listing</h1>
+<h1>Create a new post</h1>
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
 
 {# context for directing to a app method call ->  <form action="{% url 'listings:submit_new' listing.id %}" method="post"> #}
-<form action="/" method="post">
 {% csrf_token %}
-<table>
-    {% for field in form %}
-        <tr>
-            <td>{{ field.name }}</td>
-            <td>{{ field.value }}</td>
-        </tr>
-    {% endfor %}
-</table>
+<form id="new_post_form" action="/" method="post">
+{{ form.as_p }}
 <input type="submit" value="Submit" />
 </form>
 
 {% endblock blogs_content %}
+
+
+
+
+{% comment %}
+
+Stuff from Dennis' login form
+
+{% extends "base.html" %}
+
+
+{% block base_content %}
+<h1 style = "text-align:center" >Create a Post</h1>
+<div  id = "newpostform" class="body">
+{% if errormessage != None %}
+<span id= "sameusername" style="color:red;display:inline">{{errormessage}}</span><br/>
+{%endif%}
+<span id = "error" style="color:red;display:none"></span>
+  <form action="" method="post" onSubmit = "return onSignUpClick();">
+  {% csrf_token %}
+  <div style="width:120px;text-align:right; float:left">
+   <label style = "line-height:26px">Username:</label><br/>
+    <label style = "line-height:26px">Password:</label><br/>
+    <label style = "line-height:26px">Confirm Password:</label><br/>
+    <label style = "line-height:26px">Email:</label><br/>
+    <label style = "line-height:26px">Phone Number:</label><br/>
+     <label style = "line-height:26px">Address:</label><br/>
+     <label style = "line-height:26px"> City: </label><br/>
+     <label style = "line-height:26px">Province:</label><br/>
+   </div>
+   <div style = "margin-left:4px"  >
+   <input type = "text" name = "username" id = "username"/><br/>
+   
+  
+   <input type = "password" name = "password" id = "password"/><br/>
+                 
+   
+   <input type = "password" name = "confirmpassword" id = "confirmpassword"/><br/>
+                 
+    
+   <input type = "text" name = "email" id = "email"/><br/>
+   
+   
+   <input type = "text" name = "phone" id = "phone"/><br/>
+   
+  
+   <input type = "text" name = "address" id = "address"/><br/>
+   
+   
+     <input type = "text" name = "city" id = "city"/><br/>
+   
+   
+  
+  <select name = "province" id = "province">
+	<option value="AB">Alberta</option>
+	<option value="BC">British Columbia</option>
+	<option value="MB">Manitoba</option>
+	<option value="NB">New Brunswick</option>
+	<option value="NL">Newfoundland and Labrador</option>
+	<option value="NS">Nova Scotia</option>
+	<option value="ON">Ontario</option>
+	<option value="PE">Prince Edward Island</option>
+	<option value="QC">Quebec</option>
+	<option value="SK">Saskatchewan</option>
+	<option value="NT">Northwest Territories</option>
+	<option value="NU">Nunavut</option>
+	<option value="YT">Yukon</option>
+</select><br/>
+    </div>             
+                 
+                 
+      <input type="submit" value="Create an Account">
+  </form>
+
+</div>
+{% endblock base_content %}
+
+{% endcomment %}

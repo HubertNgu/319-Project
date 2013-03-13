@@ -1,12 +1,19 @@
-{% extends listing_index.html %}
+{% extends "listings/listings_index.html" %}
 
 {% block listings_content %}
 
-{% for listing in listings_list %}
-
-	<li>{{ listing.title }}</li>
-
-{% endfor %}
-
+{% if listings_list %}
+    <ul>
+    {% for listing in listings_list %}
+        <li><a href="/listings/{{ listing.title }}/">{{ listing.title }} </a>
+        	<a href="/listings/{{ listing.created}}">{{ listings.creator}} </a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No listings are available.</p>
+{% endif %}
+	
 
 {% endblock listings_content %}
+
+

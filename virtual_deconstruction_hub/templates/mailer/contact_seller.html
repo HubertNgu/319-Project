@@ -1,0 +1,34 @@
+<html>
+<head>
+	<meta charset="utf-8" >
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+</head>
+
+<h1>Contact Seller</h1>
+  <form action="" method="post">
+{% csrf_token %}
+	  {% block content %}
+	  <div>
+			<div style="line-height:26px;text-align:right;vertical-align:text-bottom;float:left;position:relative;width:200px;display:block" >
+				<label style="font-weight:bold;padding-right:20px" >Your Email</label>
+			</div>
+			<div><input type="text" name="emailTxt" id="emailTxt" ></input></div>
+			<br />
+			<div style="line-height:26px;text-align:right;vertical-align:text-bottom;float:left;position:relative;width:200px;display:block" >
+				<label style="font-weight:bold;padding-right:20px" >Email Subject</label>
+			</div>
+			<div><input type="text" name="emailSubject" id="emailSubject" ></input></div>
+			<br />
+			<div style="line-height:26px;text-align:right;vertical-align:text-bottom;float:left;position:relative;width:200px;display:block" >
+				<label style="font-weight:bold;padding-right:20px" >Email Message</label>
+			</div>
+			<div>
+				<textarea name="emailMsg" type="textarea" rows="16" style="resize:none;width:600px" id="emailMsg" ></textarea>
+			</div>
+			<br /><br />
+			<input style="margin-left:150px" type="submit" id="sendMessageBtn" name="send_email" value="Send Message">
+	  </div>
+  </form> 
+
+{% endblock %}
+</html>

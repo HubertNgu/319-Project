@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-
+<script  type="text/javascript" src="{{ STATIC_URL }}javascript\main.js"></script>
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles\main.css">
+
 
 <title>
 {% block window_title %}
@@ -29,8 +30,7 @@ Virtual Deconstruction Hub
 	</ul></nav>
 	<input id="search_text" type="search" name="listingsearch">
 	<select id="select">
-  		<option value="for_sale">Items for Sale</option>
-  		<option value="wanted">Wanted Items</option>
+  		<option value="listings">Listings</option>
   		<option value="blog">Blog Posts</option>
   		<option value="project">Project Ideas</option>
   		<option value="user">User Posts</option>
@@ -38,6 +38,23 @@ Virtual Deconstruction Hub
 </header>
 
 <div id="content" class="body">
+<div id="login_div" class="body">
+	
+{% comment %}
+This section controls what the user see's in the for login/signup prompts.
+Must be passed as a param from every call to any template if we decide to use it.
+{% endcomment %}
+
+{%  if logparams.0  == "Login"%}
+ <a href = "/users/login">{{logparams.0}}</a> 
+ <a href= "/users/signup">{{logparams.1}}</a> 
+{% else %}
+ <p> Welcome {{logparams.2}} </p>
+ <a href = "/users/logout">{{logparams.0}}</a>
+ <a href = "/users/myaccount"> {{logparams.1}} </a>
+{% endif %}
+</div>
+
 {% block base_content %}
 
 <b> Welcome to the Virtual Deconstruction Hub</b>

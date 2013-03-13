@@ -10,7 +10,9 @@ The Virtual Deconstruction Hub Blog
 {% endblock nav_blog %}
 
 {% block base_content %}
-
+{% if user == "admin"%}
+<button onclick()="createPost()" >Create New Blog</button>
+{%endif%}
 <b> This part is static accross all blog pages, both single and lists </b>
 
 {% block blogs_content %}
