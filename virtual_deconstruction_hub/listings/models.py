@@ -58,6 +58,7 @@ class Listing(models.Model):
     
 
 
+
 class ListingForm(ModelForm):
     class Meta:
         model = Listing

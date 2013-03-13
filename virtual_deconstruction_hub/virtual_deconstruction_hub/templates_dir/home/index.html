@@ -1,4 +1,7 @@
-<html>
+{% extends "base.html" %}
+
+{% block base_content %}
+<div  id = "signupform" class="body">
 {%  if logparams.0  == "Login"%}
  <a href = "/users/login">{{logparams.0}}</a> 
  <a href= "/users/signup">{{logparams.1}}</a> 
@@ -7,4 +10,5 @@
  <a href = "/users/logout">{{logparams.0}}</a>
  <a href = "/users/myaccount"> {{logparams.1}} </a>
 {% endif %}
-</html>
+</div>
+{% endblock base_content %}

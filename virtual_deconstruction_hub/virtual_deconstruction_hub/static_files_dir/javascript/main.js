@@ -92,3 +92,34 @@ if(document.getElementById('password').value != document.getElementById('confirm
  function cancelButton(){
  window.location.href="myaccount.html";
  }
+ 
+  function checkLogin(){
+ document.getElementById('username').style.border = "";
+  document.getElementById('password').style.border = "";
+ 
+ if(document.getElementById('username').value == "" ){
+	error.innerHTML = "Please enter your username";
+	error.style.display = "inline";
+	document.getElementById('password').style.border = "1px solid #CD0A0A";
+	return false;
+}
+
+ if(document.getElementById('password').value == "" ){
+	error.innerHTML = "You must enter a password";
+	error.style.display = "inline";
+	document.getElementById('password').style.border = "1px solid #CD0A0A";
+	return false;
+}
+ 
+ }
+ 
+ 
+ 
+ function isNumberKey(evt)
+      {
+         var charCode = (evt.which) ? evt.which : event.keyCode
+         if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+
+         return true;
+      }

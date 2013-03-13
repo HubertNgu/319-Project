@@ -3,11 +3,13 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.template import Context, loader
 from listings.models import Listing
+from django.shortcuts import render_to_response
 
 
 def index(request):
     listings_list = Listing.objects.order_by('created')
     context = {'listings_list': listings_list}
+
     return render(request, 'listings/listings_list.html', context)
 
 def detail(request, listing_id):
@@ -38,7 +40,6 @@ def filterListing(request, listing_type):
                      })
         return HttpResponse(HttpResponse(template.render(context)))
         
-
 def createListing(request):
     if request.method == 'POST':
         creator = request.POST.get('creator')

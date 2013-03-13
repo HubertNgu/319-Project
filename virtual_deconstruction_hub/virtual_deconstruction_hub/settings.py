@@ -49,12 +49,14 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = os.path.join(PROJECT_PATH, 'photo_uploads'),
+MEDIA_ROOT = 'photo_uploads/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
+
 MEDIA_URL = '/photos/'
+
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
@@ -107,6 +109,7 @@ ROOT_URLCONF = 'virtual_deconstruction_hub.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'virtual_deconstruction_hub.wsgi.application'
 
+
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
@@ -133,7 +136,9 @@ INSTALLED_APPS = (
     'survey_system',
     'userprofile',
     'verificationapp',
-    'mailer'
+    'south',
+    'fileupload',
+    'postpictures'
 )
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

@@ -8,6 +8,7 @@ admin.autodiscover()
 # ORDER MATTERS!! Django will direct to first match it encounters, so make sure the most generic url regex is the lowest in the list
 urlpatterns = patterns('',
 
+
     # user and authentication URLs
     (r'^users/', include('users.urls')),
     # listings URLs
@@ -27,10 +28,10 @@ urlpatterns = patterns('',
 
     # admin site url
     url(r'^admin/', include(admin.site.urls)),
+
     
     #about url
     url(r"about", 'direct_to_template', {"template": "about.html"}),
-    
     # root url - home page
     url(r"^$", include('statistics_generator.urls')),
     
@@ -43,5 +44,6 @@ urlpatterns = patterns('',
 
     #set root for static files (css, images, etc)
     url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
+    
     )
 

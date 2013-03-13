@@ -1,3 +1,4 @@
+
 # Create your views here.
 from django.http import HttpResponse
 from django.template import Context, loader
@@ -16,6 +17,9 @@ from userprofile.models import UserProfile
 from verificationapp.models import VerificationApp
 import string
 import random
+from postpictures.models import *
+from fileupload.views import handle_uploaded_file
+from django.forms import ModelForm
 
 #===============================================================================
 # def create_post(request, post_type):
@@ -96,12 +100,23 @@ def id_generator(size=10, chars=string.ascii_uppercase + string.digits):
     
 def verify_post(request):
         message = "Your post has been verified and will now be visible to others."
-        return render_to_response("posts/verification.html",context_instance=RequestContext(request), message=message)
-    
-    
-from django.forms import ModelForm
-# Create the form class.
-class PostForm(ModelForm):
-    class Meta:
-        model = Post
-        exclude = ['type', 'flag_count', 'verified']
+        return render_to_response("posts/verification.html",context_instance=RequestContext(request), message=message)
+def index(request):
+    user = None
+    if request.user.is_authenticated():
+        if request.user.username == "admin":
+            user = "admin"
+    return render_to_response("posts/blogs_index.html", {'user':user}, context_instance=RequestContext(request))
+            
+def upload_file(request):
+    if request.method == 'POST':
+        form = UploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            photo = PostPictures(photo = request.FILES['picture'], postid = 1 )
+            photo.save()
+            return render_to_response('posts/posts_new.html', {'form': form}, context_instance=RequestContext(request))
+            
+    else:
+        form = UploadForm()
+        return render_to_response('uploadfile/upload.html', {'form': form}, context_instance=RequestContext(request))# Create your views here.
+
