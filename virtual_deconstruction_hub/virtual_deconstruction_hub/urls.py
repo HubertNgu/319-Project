@@ -8,16 +8,15 @@ admin.autodiscover()
 # ORDER MATTERS!! Django will direct to first match it encounters, so make sure the most generic url regex is the lowest in the list
 urlpatterns = patterns('',
 
-    #url(r'^$','virtual_deconstruction_hub.views.index'),
-
-    url(r'^users/login', 'users.views.index'),
+    url(r'^$','virtual_deconstruction_hub.views.index'),
+url(r'^users/login', 'users.views.index'),
     url(r'^users/signup', 'users.views.signup'),
     url(r'^users/logout', 'users.views.logout_user'),
     url(r'^users/myaccount', 'users.views.myaccount'),
     url(r'^users/verification', 'users.views.verification'),
     url(r'^users/verifyfail', 'users.views.verifyfail'),
     url(r'^users/editaccount', 'users.views.editaccount'),
-    url(r'^users/verifyemail/(?P<username>\d+)/(?P<verification>\d+)/$', 'users.views.verifyemail'),
+    url(r'^users/verifyemail/$', 'users.views.verifyemail')
     # Examples:
     # url(r'^$', 'virtual_deconstruction_hub.views.home', name='home'),
     # url(r'^virtual_deconstruction_hub/', include('virtual_deconstruction_hub.foo.urls')),
@@ -39,7 +38,7 @@ urlpatterns = patterns('',
     url(r"login", "direct_to_template", {"template": "authentication/login.html"}),
     
     #posts urls
-    url(r"blog", 'direct_to_template', {"template": "posts/blogs_index.html"}),
+    url(r"^blog", 'direct_to_template', {"template": "posts/blogs_index.html"}),
     url(r"project_ideas", 'direct_to_template', {"template": "posts/projects_index.html"}),
     url(r"user_stories", 'direct_to_template', {"template": "posts/stories_index.html"}),
     
@@ -47,10 +46,13 @@ urlpatterns = patterns('',
     url(r"about", 'direct_to_template', {"template": "about.html"}),
     
     # listings URLs
-    url(r"listings/new", 'direct_to_template', {"template": "listings/listings_new.html"}),
-    url(r"listings", 'listings.views.index'),
-    url(r"listings/individual", 'listings.views.detail'),
+    url(r'^listings', 'listings.views.index'),
+    url(r'^listings/individual', 'listings.views.detail'),
+    url(r'^listings/new', 'listings.views.createListing'),
     
+    #file uploading
+    url(r'^posts/upload', 'posts.views.upload_file'),
+    url(r'^posts/new', 'posts.views.createpost'),
     # root url - home page
     url(r"^$", 'direct_to_template', {"template": "statistics/statistics_main.html"}),
     
