@@ -16,10 +16,10 @@ PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'cs319dennis',                      # Or path to database file if using sqlite3.
+        'NAME': 'cs319graham',                      # Or path to database file if using sqlite3.
         'USER': 'cs319team4',                      # Not used with sqlite3.
         'PASSWORD': 'qwerty',                  # Not used with sqlite3.
-        'HOST': '174.7.161.223',               # Set to empty string for localhost. Not used with sqlite3.
+        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
@@ -111,7 +111,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PROJECT_PATH, 'templates_dir'),
+    os.path.join(PROJECT_PATH, 'templates_dir')
 )
 
 TEMPLATE_STRING_IF_INVALID = 'error getting correct variable'
@@ -129,15 +129,26 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'posts',
-    'listings',
-    'mailer',
     'statistics_generator',
     'survey_system',
-    'users',
     'userprofile',
     'verificationapp',
     'south',
+    'mailer'
 )
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# Host for sending e-mail
+EMAIL_HOST = 'localhost'
+
+# Port for sending e-mail
+EMAIL_PORT = 25
+
+# Option SMTP authentication information for EMAIL_HOST.
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = False
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
