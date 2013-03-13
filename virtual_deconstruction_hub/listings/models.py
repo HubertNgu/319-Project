@@ -57,12 +57,12 @@ class Listing(models.Model):
         return self.expires <= timezone.now()
     
 
+
 class ListingForm(ModelForm):
     class Meta:
         model = Listing
         fields = ('creator', 'title', 'textContent', 
                   'photo1', 'photo2', 'photo3', 'photo4')
-
     
 
             
