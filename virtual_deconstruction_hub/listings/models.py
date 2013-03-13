@@ -56,9 +56,6 @@ class Listing(models.Model):
     def isExpired(self):
         return self.expires <= timezone.now()
     
-
-
-
 class ListingForm(ModelForm):
     class Meta:
         model = Listing

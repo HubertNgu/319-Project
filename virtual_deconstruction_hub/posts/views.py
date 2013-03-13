@@ -1,25 +1,21 @@
 
 # Create your views here.
-from django.http import HttpResponse
-from django.template import Context, loader
+from django.http import HttpRequest
 from django.shortcuts import render_to_response
-from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.http import Http404
 from django.template.defaulttags import csrf_token
 from django.template import RequestContext
 from django.contrib.auth.models import User
 from posts.models import Post
 from django.contrib.auth import authenticate,login,get_user
-from django.http import  HttpResponseRedirect
-from django.contrib.auth import logout
 from django.shortcuts import redirect
-from userprofile.models import UserProfile 
 from verificationapp.models import VerificationApp
-import string
-import random
 from postpictures.models import *
 from fileupload.views import handle_uploaded_file
-from django.forms import ModelForm
+from posts.models import PostForm
+from django.conf import settings
+
+PAGE_SIZE = settings.RESULTS_PAGE_SIZE
 
 #===============================================================================
 # def create_post(request, post_type):
@@ -88,26 +84,73 @@ from django.forms import ModelForm
 #===============================================================================
 
 def new_post(request, post_type):
+    #action for submit button
+    submit_action = "/posts/" + post_type + "/new"
+    if request.method == 'GET':
         post = Post()
-        post.type = post_type        
+        if request.user.is_authenticated():
+            post.verified = True     
         form = PostForm(instance=post)
-        #form = form.as_table()
-        return render_to_response("posts/posts_new.html", { 'form': form}, context_instance=RequestContext(request))
-    
-    
-def id_generator(size=10, chars=string.ascii_uppercase + string.digits):
-        return ''.join(random.choice(chars) for x in range(size))
-    
-def verify_post(request):
-        message = "Your post has been verified and will now be visible to others."
-        return render_to_response("posts/verification.html",context_instance=RequestContext(request), message=message)
-def index(request):
-    user = None
-    if request.user.is_authenticated():
-        if request.user.username == "admin":
-            user = "admin"
-    return render_to_response("posts/blogs_index.html", {'user':user}, context_instance=RequestContext(request))
+        form_args = {'form':form, 'submit_action':submit_action, 'post_type':post_type}
+        return render_to_response("posts/posts_new.html", form_args, context_instance=RequestContext(request))
+    if request.method == 'POST':
+        post_form = PostForm(request.POST)
+        if post_form.is_valid():
+            # write to db and return post object
+            post = post_form.save(commit=False)
+            post.type = post_type.lower()
+            post.save()
+            post_url = HttpRequest.build_absolute_uri(request)
+            form_args = {'post':post, 'post_url': post_url}
             
+            #===================================================================
+            # ## fill in test data in db: writes 100 post objects of same type as whatever new form you are entering
+            # email = 'sean@testing.com'
+            # title = ' Test Title '
+            # content = ' - Bah blah blah blahahab labalaba hbaalavhgvsha balobuebfuewbfuebfue jefbuefuewbfuewbfuwefbuwebfuweb fiunbefiuwef uefbuwefbwuefbeufb;efuebf'
+            # for i in xrange(0,100):
+            #    p = Post(creator=email, title=post_type.upper()+title+str(i),text_content=str(i)+content, type=post_type.lower())
+            #    p.save()
+            #===================================================================
+
+            # This will need to change to return ?? A direct URL to the post that was just created??
+            return render_to_response("posts/new_post_success.html", form_args, context_instance=RequestContext(request))
+        else:
+            form_args = {'form':post_form, 'submit_action':submit_action}
+            return render_to_response("posts/posts_new.html", form_args, context_instance=RequestContext(request))
+        
+#===============================================================================
+# def id_generator(size=10, chars=string.ascii_uppercase + string.digits): 
+#    return ''.join(random.choice(chars) for x in range(size))
+#===============================================================================
+
+#===============================================================================
+# def verify_post(request):        
+#    message = "Your post has been verified and will now be visible to others."
+#    return render_to_response("posts/verification.html",context_instance=RequestContext(request), message=message)
+#===============================================================================
+#===============================================================================
+# def index(request):
+#    user = None
+#    if request.user.is_authenticated():
+#        if request.user.username == "admin":
+#            user = "admin"
+#    return render_to_response("posts/blogs_index.html", {'user':user}, context_instance=RequestContext(request))
+#===============================================================================
+            
+    
+def blog_index(request):
+    blog_query = Post.objects.filter(type="blog").order_by('-created')    
+    return render_to_response('posts/blogs_list.html',{'blogs_list': blog_query}, context_instance=RequestContext(request))
+ 
+def proj_index(request):
+    proj_query = Post.objects.filter(type="proj").order_by('-created')       
+    return render_to_response('posts/projects_list.html',{'projects_list': proj_query}, context_instance=RequestContext(request))
+ 
+def story_index(request):
+    story_query = Post.objects.filter(type="stry").order_by('-created')     
+    return render_to_response('posts/stories_list.html', {'stories_list': story_query}, context_instance=RequestContext(request))
+    
 def upload_file(request):
     if request.method == 'POST':
         form = UploadForm(request.POST, request.FILES)

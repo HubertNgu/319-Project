@@ -8,7 +8,9 @@ The Virtual Deconstruction Hub Blog
 
 {% for blog in blogs_list %}
 
-	<li>{{ blog.title }}</li>
+	<li><b>{{ blog.title }}</b></li>
+	<p><i>{{ blog.created }}</i></p>
+	<p>{{ blog.text_content|truncatechars:100 }}</p>
 
 {% endfor %}
 

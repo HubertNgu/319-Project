@@ -11,6 +11,7 @@ urlpatterns = patterns('',
 
     # user and authentication URLs
     (r'^users/', include('users.urls')),
+    
     # listings URLs
     (r'^listings/', include('listings.urls')),
     
@@ -21,7 +22,7 @@ urlpatterns = patterns('',
     (r'posts/', include('posts.urls')),
     
     # profile URLs
-    (r'profiles/', include('userprofiles.urls')),
+    (r'profiles/', include('userprofile.urls')),
     
     #statistics urls
     (r'statistics/', include('statistics_generator.urls')),
@@ -29,9 +30,9 @@ urlpatterns = patterns('',
     # admin site url
     url(r'^admin/', include(admin.site.urls)),
 
-    
     #about url
     url(r"about", 'direct_to_template', {"template": "about.html"}),
+    
     # root url - home page
     url(r"^$", include('statistics_generator.urls')),
     
