@@ -1,0 +1,20 @@
+{% extends "posts/blogs_index.html" %}
+
+{% block window_title %}
+Your post was successful! - Virtual Deconstruction Hub
+{% endblock window_title %}
+
+{% block blogs_content %}
+
+{% if post.verified %}
+
+	Your post was successful and can be viewed at {{ post_url }}
+	
+{% else %}
+
+	Your post was successful, please verify your post by clicking the verification link that has been sent to you email: {{ post.creator }}
+	
+
+{% endif %}
+
+{% endblock blogs_content %}

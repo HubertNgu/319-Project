@@ -12,11 +12,6 @@ def index(request):
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
     
-<<<<<<< HEAD
     return render_to_response("statistics/statistics_main.html",{'logparams': logparams},
-                              context_instance=RequestContext(request)                   
-=======
-    return render_to_response("home/index.html",{'logparams': logparams},context_instance=RequestContext(request)                    
->>>>>>> 10a34a4... Commiting work done by Dennis
-        )
+                              context_instance=RequestContext(request))
     

@@ -1,24 +1,39 @@
-<<<<<<< HEAD
 {% extends "posts/blogs_index.html" %}
-=======
-{% extends "base.html" %}
->>>>>>> 10a34a4... Commiting work done by Dennis
 
 {% block window_title %}
 Create a new post - Virtual Deconstruction Hub
 {% endblock window_title %}
 
+{% comment %}
+{% ifnotequal "{{post_type}}" blog %}
+{% block nav_blog %}
+{% endblock nav_blog %}
+{% endifnotequal %}
+
+{% ifequal "{{post_type}}" "stry" %}
+{% block nav_story %}
+class="active"
+{% endblock nav_story %}
+{% endifequal %}
+
+{% ifequal "{{post_type}}" proj %}
+{% block nav_projects %}
+class="active"
+{% endblock nav_projects %}
+{% endifequal %}
+{% endcomment %}
+
 {% block blogs_content %}
 
 <h1>Create a new post</h1>
 
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-
-
 {# context for directing to a app method call ->  <form action="{% url 'listings:submit_new' listing.id %}" method="post"> #}
+
+<form id="new_post_form" action="{{ submit_action }}" method="post" {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}>
 {% csrf_token %}
-<form id="new_post_form" action="/" method="post">
-{{ form.as_p }}
+<table>
+{{ form.as_table }}
+</table>
 <input type="submit" value="Submit" />
 </form>
 
