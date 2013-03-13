@@ -16,7 +16,7 @@ PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'cs319graham',                      # Or path to database file if using sqlite3.
+        'NAME': 'cs319sean',                      # Or path to database file if using sqlite3.
         'USER': 'cs319team4',                      # Not used with sqlite3.
         'PASSWORD': 'qwerty',                  # Not used with sqlite3.
         'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -54,7 +54,7 @@ MEDIA_ROOT = os.path.join(PROJECT_PATH, 'photo_uploads'),
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-MEDIA_URL = ''
+MEDIA_URL = '/photos/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
@@ -133,8 +133,8 @@ INSTALLED_APPS = (
     'survey_system',
     'userprofile',
     'verificationapp',
-    'south',
     'mailer'
+
 )
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

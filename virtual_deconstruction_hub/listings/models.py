@@ -48,7 +48,7 @@ class Listing(models.Model):
         return self.flagCount
 
     def markModified(self):
-        self.lastModified = timezone.time()
+        self.lastModified = timezone.now()
 
     def flag(self):
         self.flagCount + 1
