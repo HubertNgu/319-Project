@@ -134,7 +134,6 @@ INSTALLED_APPS = (
     'userprofile',
     'verificationapp',
     'mailer'
-
 )
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
