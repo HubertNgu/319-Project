@@ -1,8 +1,7 @@
-
 # Create your views here.
 from django.http import HttpRequest
-from django.shortcuts import render_to_response
 from django.http import Http404
+from django.shortcuts import render_to_response
 from django.template.defaulttags import csrf_token
 from django.template import RequestContext
 from django.contrib.auth.models import User
@@ -13,7 +12,10 @@ from verificationapp.models import VerificationApp
 from postpictures.models import *
 from fileupload.views import handle_uploaded_file
 from posts.models import PostForm
+from django import forms
 from django.conf import settings
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+import re
 
 PAGE_SIZE = settings.RESULTS_PAGE_SIZE
 
@@ -87,22 +89,30 @@ def new_post(request, post_type):
     #action for submit button
     submit_action = "/posts/" + post_type + "/new"
     if request.method == 'GET':
-        post = Post()
-        if request.user.is_authenticated():
-            post.verified = True     
-        form = PostForm(instance=post)
+        form = PostForm(instance=Post())
         form_args = {'form':form, 'submit_action':submit_action, 'post_type':post_type}
         return render_to_response("posts/posts_new.html", form_args, context_instance=RequestContext(request))
     if request.method == 'POST':
         post_form = PostForm(request.POST)
+        #if post_form valid, process new post
         if post_form.is_valid():
             # write to db and return post object
             post = post_form.save(commit=False)
             post.type = post_type.lower()
+            post.url = re.sub(r'\W+', '', post.title.lower().replace (" ", "_"))
+            #===================================================================
+            # need to put a check here that url is unique in db, if url already exists
+            # append a random hash of some kind?
+            # title has max char of 100, url max of 110 so have 10 extra char for this
+            # purpose
+            #===================================================================
+            post_url = post.url
+            post_url = HttpRequest.build_absolute_uri(request, post_url)
+            if request.user.is_authenticated():
+                post.verified = True  
             post.save()
-            post_url = HttpRequest.build_absolute_uri(request)
             form_args = {'post':post, 'post_url': post_url}
-            
+           
             #===================================================================
             # ## fill in test data in db: writes 100 post objects of same type as whatever new form you are entering
             # email = 'sean@testing.com'
@@ -112,10 +122,17 @@ def new_post(request, post_type):
             #    p = Post(creator=email, title=post_type.upper()+title+str(i),text_content=str(i)+content, type=post_type.lower())
             #    p.save()
             #===================================================================
-
-            # This will need to change to return ?? A direct URL to the post that was just created??
+               
+            #===================================================================
+            # if post.verified:
+            #    # if post is already verified, redirect user to their newly created post
+            #    return render_to_response(post.url, form_args, context_instance=RequestContext(request))
+            # else:
+            #    #otherwise direct to success message page
+            #===================================================================
             return render_to_response("posts/new_post_success.html", form_args, context_instance=RequestContext(request))
         else:
+            # if form submission not valid, redirect back to form with error messages
             form_args = {'form':post_form, 'submit_action':submit_action}
             return render_to_response("posts/posts_new.html", form_args, context_instance=RequestContext(request))
         
@@ -139,18 +156,32 @@ def new_post(request, post_type):
 #===============================================================================
             
     
-def blog_index(request):
-    blog_query = Post.objects.filter(type="blog").order_by('-created')    
-    return render_to_response('posts/blogs_list.html',{'blogs_list': blog_query}, context_instance=RequestContext(request))
- 
-def proj_index(request):
-    proj_query = Post.objects.filter(type="proj").order_by('-created')       
-    return render_to_response('posts/projects_list.html',{'projects_list': proj_query}, context_instance=RequestContext(request))
- 
-def story_index(request):
-    story_query = Post.objects.filter(type="stry").order_by('-created')     
-    return render_to_response('posts/stories_list.html', {'stories_list': story_query}, context_instance=RequestContext(request))
-    
+def posts_index(request, post_type):
+    query = Post.objects.filter(type=post_type).order_by('-created')
+    paginator = Paginator(query , PAGE_SIZE)
+    page = request.GET.get('page')
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        posts = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        posts= paginator.page(paginator.num_pages)
+    template_paths = {'proj': 'posts/projects_list.html', 'blog': 'posts/blogs_list.html', 'stry': 'posts/stories_list.html'}
+    return render_to_response(template_paths.get(post_type),{'posts': posts}, context_instance=RequestContext(request))
+        
+def posts_specific(request, post_type, tag):
+    tag.lower()
+    if request.method == 'GET':
+        query = Post.objects.get(url=tag, type=post_type)
+        if query:
+            form = PostForm(instance=query)
+            template_paths = {'proj': 'posts/projects_individual.html', 'blog': 'posts/blogs_individual.html', 'stry': 'posts/stories_individual.html'}
+            return render_to_response(template_paths.get(post_type),{'post': form}, context_instance=RequestContext(request))
+        else:
+            raise Http404()        
+                                                                                                        
 def upload_file(request):
     if request.method == 'POST':
         form = UploadForm(request.POST, request.FILES)
