@@ -14,10 +14,8 @@ urlpatterns = patterns('posts.views',
 
     # looks for url patter domain.com/posts/4CHARTYPESTRING/new, calls posts.views.create_post(request, post_type='4CHARTYPESTRING')
     url(r"(?P<post_type>[a-z]{4})/new", 'new_post'),
-    #url(r"(?P<post_type>[a-z]{4})/verification", 'posts.views.verify_post'),
-    url(r"blog", 'blog_index'),
-    url(r"proj", 'proj_index'),
-    url(r"stry", 'story_index'),
-
+    # displys the appropriate index page for any of our three types of posts
+    url(r"(?P<post_type>[a-z]{4})/(?P<tag>\w+)", 'posts_specific'),
+    url(r"(?P<post_type>[a-z]{4})", 'posts_index'),
     )
 
