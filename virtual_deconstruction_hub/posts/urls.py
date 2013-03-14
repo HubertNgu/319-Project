@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import patterns, url
 from django.conf import settings
 
 # ORDER MATTERS!! Django will direct to first match it encounters, so make sure the most generic url regex is the lowest in the list

@@ -93,6 +93,7 @@ def new_post(request, post_type):
         form_args = {'form':form, 'submit_action':submit_action, 'post_type':post_type}
         return render_to_response("posts/posts_new.html", form_args, context_instance=RequestContext(request))
     if request.method == 'POST':
+                
         post_form = PostForm(request.POST)
         #if post_form valid, process new post
         if post_form.is_valid():
@@ -112,6 +113,14 @@ def new_post(request, post_type):
                 post.verified = True  
             post.save()
             form_args = {'post':post, 'post_url': post_url}
+            
+            if request.GET.get('photo_upload') is 1:
+            # if phot_upload tag triggered, save the current post as object in db
+            # thentake current photo from form, save to child db table for post
+            # photo and hold on to form, but render a new photo upload form and 
+            # repeat as long as photo_pload tag triggered, once photo_upload no longer
+            # trigered, redirect to success page  
+                pass
            
             #===================================================================
             # ## fill in test data in db: writes 100 post objects of same type as whatever new form you are entering
@@ -189,8 +198,7 @@ def upload_file(request):
             photo = PostPictures(photo = request.FILES['picture'], postid = 1 )
             photo.save()
             return render_to_response('posts/posts_new.html', {'form': form}, context_instance=RequestContext(request))
-            
     else:
         form = UploadForm()
-        return render_to_response('uploadfile/upload.html', {'form': form}, context_instance=RequestContext(request))# Create your views here.
+        return render_to_response('uploadfile/upload.html', {'form': form}, context_instance=RequestContext(request))
 
