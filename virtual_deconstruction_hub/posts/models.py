@@ -59,4 +59,14 @@ class PostForm(ModelForm):
         return cleaned_data
 
     
-    
+# PhotoStroage model
+class Photo(models.Model):
+   post = models.ForeignKey(Post)
+   photo =  models.ImageField(upload_to='photos/%Y/%B/%d/')
+   caption = models.CharField(max_length=200)
+   
+class UploadForm(forms.Form):
+    class Meta:
+        model = Photo
+        exclude = ['post']
+        fields = ['photo', 'caption']
