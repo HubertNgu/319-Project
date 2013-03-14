@@ -16,10 +16,10 @@ PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'cs319dennis',                      # Or path to database file if using sqlite3.
+        'NAME': 'cs319sean',                      # Or path to database file if using sqlite3.
         'USER': 'cs319team4',                      # Not used with sqlite3.
         'PASSWORD': 'qwerty',                  # Not used with sqlite3.
-        'HOST': '174.7.161.223',               # Set to empty string for localhost. Not used with sqlite3.
+        'HOST': '174.7.161.223',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
@@ -49,12 +49,14 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = os.path.join(PROJECT_PATH, 'photo_uploads'),
+MEDIA_ROOT = 'photo_uploads/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-MEDIA_URL = ''
+
+MEDIA_URL = '/photos/'
+
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
@@ -107,11 +109,12 @@ ROOT_URLCONF = 'virtual_deconstruction_hub.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'virtual_deconstruction_hub.wsgi.application'
 
+
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PROJECT_PATH, 'templates_dir'),
+    os.path.join(PROJECT_PATH, 'templates_dir')
 )
 
 TEMPLATE_STRING_IF_INVALID = 'error getting correct variable'
@@ -129,15 +132,26 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'posts',
-    'listings',
-    'mailer',
     'statistics_generator',
     'survey_system',
-    'users',
     'userprofile',
     'verificationapp',
-    'south',
+    'fileupload',
+    'postpictures',
+
 )
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# Host for sending e-mail
+EMAIL_HOST = 'localhost'
+# Port for sending e-mail
+EMAIL_PORT = 25
+# Option SMTP authentication information for EMAIL_HOST.
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = False
+
+RESULTS_PAGE_SIZE = 100
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

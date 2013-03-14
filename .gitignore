@@ -1,10 +1,6 @@
 *.sh
-.sh
 
-*.pydevproject
-*.project
+*.project*.pydevproject
 *.pyc
 *.exe
-.pyc
-.exe
-.DS_Store
+*org.eclipse.ltk.core.refactoring.prefs

@@ -6,9 +6,11 @@ The Virtual Deconstruction Hub Blog
 
 {% block blogs_content %}
 
-{% for blog in blogs_list %}
+{% for blog in posts %}
 
-	<li>{{ blog.title }}</li>
+	<li><b>{{ blog.title }}</b></li>
+	<p><i>{{ blog.created }}</i></p>
+	<p>{{ blog.text_content|truncatechars:100 }}</p>
 
 {% endfor %}
 

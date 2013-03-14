@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block base_content %}
+ <div  class="body">
 <h1> Welcome {{username}}  to your account settings</h1>
 <label> Username: </label> {{username}} <br/>
 <label> First Name: </label> {{firstname}}<br/>
@@ -15,5 +16,5 @@
   {% csrf_token %}
   <input type="submit" value="Edit Your Account"> 
  </form>
-
+</div>
 {% endblock base_content %}

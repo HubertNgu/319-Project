@@ -1,10 +1,16 @@
 {% extends "posts/projects_index.html" %}
 
+{% block window_title %}
+Project Ideas - Virtual Deconstruction Hub
+{% endblock window_title %}
+
 {% block projects_content %}
 
-{% for proj in projects_list %}
+{% for proj in posts %}
 
-	<li>{{ proj.title }}</li>
+	<li><b>{{ proj.title }}</b></li>
+	<p><i>{{ proj.created }}</i></p>
+	<p>{{ proj.text_content|truncatechars:100 }}</p>
 
 {% endfor %}
 

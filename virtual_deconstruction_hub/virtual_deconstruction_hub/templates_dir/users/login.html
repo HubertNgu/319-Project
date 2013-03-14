@@ -1,11 +1,25 @@
-<html>
- {% block content %}
-  <h1>Login</h1>
+{% extends "base.html" %}
 
-  <form action="" method="post">
+{% block base_content %}
+  <h1 style = "text-align:center" >Login</h1>
+  <div  class="body">
+  {% if errormessage != None %}
+<span id= "sameusername" style="color:red;display:inline">{{errormessage}}</span><br/>
+{%endif%}
+<span id = "error" style="color:red;display:none"></span>
+  <form action="" method="post" onSubmit = "return checkLogin();">
   {% csrf_token %}
-      {{ form.as_p }}
+  <div style="width:120px;text-align:right; float:left">
+      <label style = "line-height:26px">Username:</label><br/>
+      <label style = "line-height:26px">Password:</label><br/>
       <input type="submit" value="Login">
+      </div>
+       <div style = "margin-left:4px"  >
+ <input type="text" name= "username" id = "username"></input><br/>    
+ <input type = "password" name = "password" id = "password"></input><br/> 
+ 
+ </div>
+
   </form>
-{% endblock %}
-</html>
+  </div>
+{% endblock base_content %}

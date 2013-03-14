@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-
+<script  type="text/javascript" src="{{ STATIC_URL }}javascript\main.js"></script>
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles\main.css">
-<script src="{{STATIC_URL}}javascript\main.js" type="text/javascript"></script>
+
 
 <title>
 {% block window_title %}
@@ -21,24 +21,40 @@ Virtual Deconstruction Hub
 	<a href="/">Virtual Deconstruction Hub<strong>Insert Slogan here</strong></a></h1>
 	<div id="banner_logo" class="body">Logo</div> 
 	<nav><ul>
-		{% block nav_home %}<li><a href="/">Home</a></li>{% endblock nav_home %}
-		{% block nav_listings %}<li><a href="/listings">Listings</a></li>{% endblock nav_listings %}
-		{% block nav_blog %}<li><a href="/blog">Blog</a></li>{% endblock nav_blog %}
-		{% block nav_projects %}<li><a href="/project_ideas">Project Ideas</a></li>{% endblock nav_projects %}
-		{% block nav_user %}<li><a href="/user_stories">Success Stories</a></li>{% endblock nav_user %}
-		{% block nav_about %}<li><a href="/about">About</a></li>{% endblock nav_about %}
+		<li {% block nav_home %}{% endblock nav_home %}><a href="/">Home</a></li>
+		<li {% block nav_listings %}{% endblock nav_listings %}><a href="/listings">Listings</a></li>
+		<li {% block nav_blog %}{% endblock nav_blog %}><a href="/posts/blog">Blog</a></li>
+		<li {% block nav_projects %}{% endblock nav_projects %}><a href="/posts/proj">Project Ideas</a></li>
+		<li {% block nav_story %}{% endblock nav_story %}><a href="/posts/stry">Success Stories</a></li>
+		<li {% block nav_about %}{% endblock nav_about %}><a href="/about">About</a></li>
 	</ul></nav>
 	<input id="search_text" type="search" name="listingsearch">
 	<select id="select">
-  		<option value="for_sale">Items for Sale</option>
-  		<option value="wanted">Wanted Items</option>
+  		<option value="listings">Listings</option>
   		<option value="blog">Blog Posts</option>
-  		<option value="project">Project Ideas</option>
-  		<option value="user">User Posts</option>
+  		<option value="proj">Project Ideas</option>
+  		<option value="stry">Success Stories</option>
   	</select><input id="search_button" type="submit" value="Search">
 </header>
 
 <div id="content" class="body">
+<div id="login_div" class="body">
+	
+{% comment %}
+This section controls what the user see's in the for login/signup prompts.
+Must be passed as a param from every call to any template if we decide to use it.
+{% endcomment %}
+
+{%  if logparams.0  == "Login"%}
+ <a href = "/users/login">{{logparams.0}}</a> 
+ <a href= "/users/signup">{{logparams.1}}</a> 
+{% else %}
+ <p> Welcome {{logparams.2}} </p>
+ <a href = "/users/logout">{{logparams.0}}</a>
+ <a href = "/users/myaccount"> {{logparams.1}} </a>
+{% endif %}
+</div>
+
 {% block base_content %}
 
 <b> Welcome to the Virtual Deconstruction Hub</b>

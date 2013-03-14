@@ -1,6 +1,6 @@
-from django.template import Context, loader
+from django.template import RequestContext
 from django.shortcuts import render_to_response
-
+from django.template import RequestContext
 def index(request):
     if request.user.is_authenticated():
         logtext = "Logout"
@@ -12,6 +12,6 @@ def index(request):
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
     
-    return render_to_response("home/index.html",{'logparams': logparams}                    
-        )
+    return render_to_response("statistics/statistics_main.html",{'logparams': logparams},
+                              context_instance=RequestContext(request))
     

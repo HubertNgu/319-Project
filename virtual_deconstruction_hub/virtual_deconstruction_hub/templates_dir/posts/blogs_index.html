@@ -6,11 +6,17 @@ The Virtual Deconstruction Hub Blog
  
 
 {% block nav_blog %}
-		<li class="active"><a href="/blog">Blog</a></li>
+class="active"
 {% endblock nav_blog %}
+{% block nav_projects %}
+{% endblock nav_projects %}
+{% block nav_story %}
+{% endblock nav_story %}
 
 {% block base_content %}
-
+{% if user == "admin"%}
+<button onclick()="createPost()" >Create New Blog</button>
+{%endif%}
 <b> This part is static accross all blog pages, both single and lists </b>
 
 {% block blogs_content %}
