@@ -3,14 +3,19 @@
 {% block listings_content %}
 
 {% if listings_list %}
+
     <ul>
+    
     {% for listing in listings_list %}
-        <li><a href="/listings/{{ listing.title }}/">{{ listing.title }} </a>
-        	<a href="/listings/{{ listing.created}}">{{ listings.creator}} </a></li>
+        <li> <a href="{% url  'detail' listing.id %}">{{ listing.title }} </a> </li>
     {% endfor %}
+    
     </ul>
+    
 {% else %}
+
     <p>No listings are available.</p>
+    
 {% endif %}
 	
 

@@ -18,22 +18,10 @@ class Listing(models.Model):
     photo4 = models.FileField(blank=True, upload_to='photos/%Y/%m/%d')
     verified = models.BooleanField(default=False)
     flagCount = models.SmallIntegerField("flag count", default=0)
-    
-    
-#    def create_listing(self, creator, title, textContext, photo1, photo2, photo3, photo4):
-#        listing = (creator=creator,
-#                   created = timezone.now(),
-#                   lastModified = timezone.now(),
-#                   expires = timezone.now() + datetime.timedelta(days=30),
-#                   title=title,
-#                   textContext = textContext,
-#                   photo1 = photo1,
-#                   photo2 = photo2,
-#                   photo3 = photo3,
-#                   photo4 = photo4)
    
     def __unicode__(self):
-        return self.title
+        return 'creator: %s, created: %s, title: %s, textContent: %s' \
+            % (self.creator, self.created, self.title, self.textContent)
     
     def getCreator(self):
         return self.creator

@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, include, url
+sfrom django.conf.urls import patterns, include, url
 from django.conf import settings
 
 # Uncomment the next two lines to enable the admin:
@@ -7,7 +7,6 @@ admin.autodiscover()
 
 # ORDER MATTERS!! Django will direct to first match it encounters, so make sure the most generic url regex is the lowest in the list
 urlpatterns = patterns('',
-
 
     # user and authentication URLs
     (r'^users/', include('users.urls')),
@@ -32,7 +31,7 @@ urlpatterns = patterns('',
 
     #about url
     url(r"about", 'direct_to_template', {"template": "about.html"}),
-    
+
     # root url - home page
     url(r"^$", include('statistics_generator.urls')),
     
