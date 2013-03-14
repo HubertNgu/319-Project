@@ -1,7 +1,6 @@
 *.sh
 
-*.pydevproject
-*.project
+*.project*.pydevproject
 *.pyc
 *.exe
 *org.eclipse.ltk.core.refactoring.prefs
