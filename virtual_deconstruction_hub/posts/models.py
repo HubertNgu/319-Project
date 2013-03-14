@@ -5,6 +5,7 @@ from django.forms import ModelForm
 
 # Create your models here.
 class Post(models.Model):
+    url = models.CharField(max_length=110)
     creator = models.EmailField()
     created = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
@@ -42,7 +43,7 @@ class PostForm(ModelForm):
     class Meta:
         model = Post
         #sets hidden attributes that we don't want individual users filling out
-        exclude = ['flag_count', 'verified','type']
+        exclude = ['flag_count', 'verified','type', 'url']
         #sets the order in which fields displayed when form rendered
         fields = ['creator', 'email_verification', 'title', 'text_content']
         
