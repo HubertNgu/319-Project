@@ -1,0 +1,24 @@
+{% extends "listings/listings_index.html" %}
+
+{% block window_title %}
+Your listing was successful! - Virtual Deconstruction Hub
+{% endblock window_title %}
+
+{% block listings_content %}
+
+{% if listing.verified %}
+	
+	</br>
+	</br>
+	Your post was successful and can be viewed at {{ listing_url }}
+	
+{% else %}
+
+	</br>
+	</br>
+	Your listing was successful, please verify your post by clicking the verification link that has been sent to you email: {{ listing.creator }}
+	
+
+{% endif %}
+
+{% endblock listings_content %}

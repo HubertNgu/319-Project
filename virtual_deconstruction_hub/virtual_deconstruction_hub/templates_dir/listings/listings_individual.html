@@ -1,0 +1,29 @@
+{% extends "listings/listings_index.html" %}
+
+
+{% block window_title %}
+{{ listing.title }} - Virtual Deconstruction Hub
+{% endblock window_title %}
+
+{% block listings_content %}
+
+<h1>{{ listing.title }}</h1>
+<ul>
+
+     <li>Created: {{ listing.created }}</li>
+     <li>Price: {{ listing.price }}</li> 
+     <li>Category: {{ listing.category }}</li>
+     <li>Location: {{ listing.location }}</li>
+      <li>Description: </li> </br>
+      
+      	{{ listing.textContent }}
+      
+</ul>
+
+</br> <a href="/listings/new/"> Create </a> <a href="/listings/"> Go Back </a>
+ 
+
+
+{% endblock listings_content %}
+
+

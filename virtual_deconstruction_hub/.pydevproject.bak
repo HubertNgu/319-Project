@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?eclipse-pydev version="1.0"?>
+
+<pydev_project>
+<<<<<<< HEAD
+<pydev_property name="org.python.pydev.PYTHON_PROJECT_INTERPRETER">Default</pydev_property>
+=======
+<pydev_property name="org.python.pydev.PYTHON_PROJECT_INTERPRETER">python</pydev_property>
+>>>>>>> Commiting work done by evelyn
+<pydev_property name="org.python.pydev.PYTHON_PROJECT_VERSION">python 2.7</pydev_property>
+<pydev_variables_property name="org.python.pydev.PROJECT_VARIABLE_SUBSTITUTION">
+<key>DJANGO_MANAGE_LOCATION</key>
+<value>manage.py</value>
+</pydev_variables_property>
+<pydev_pathproperty name="org.python.pydev.PROJECT_SOURCE_PATH">
+<path>/virtual_deconstruction_hub</path>
+</pydev_pathproperty>
+<<<<<<< HEAD
+</pydev_project>
+=======
+<pydev_pathproperty name="org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH">
+<path>/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/PIL-1.1.7-py2.7-macosx-10.6-intel.egg</path>
+</pydev_pathproperty>
+</pydev_project>
+>>>>>>> Commiting work done by evelyn

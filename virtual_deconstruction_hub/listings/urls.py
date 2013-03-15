@@ -11,8 +11,11 @@ urlpatterns = patterns('',
     # declare a r"new" in urls below and that will trigger the redirect for 
     # domain.com/listings/new
     #===========================================================================    
-    url(r"new", 'direct_to_template', {"template": "listings/listings_new.html"}),
-    url(r"^$", 'direct_to_template', {"template": "listings/listings_index.html"}),
+
+    url(r"^$", 'listings.views.index'),
+    url(r'^new', 'listings.views.createListing'),
+    url(r'^(?P<listing_id>\d+)/$', 'listings.views.detail', name='detail'),
+    url(r'^edit/(?P<listing_id>\d+)/$', 'listings.views.editListing'),
 
     )
 

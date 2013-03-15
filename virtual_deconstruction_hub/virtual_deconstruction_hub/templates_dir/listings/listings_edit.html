@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block base_content %}
+ <div  class="body">
+<span id = "error" style="color:red;display:none"></span>
+<form action="" method="post">
+  {% csrf_token %}
+<label> Email Address: </label> {{creator}} <br/>
+<label> Title: </label> {{title}}<br/>
+<input type = "text" name = "title" id = "title" size = "35" value = {{title}}><br/>
+<label> Text Cotent: </label>
+<textarea rows="20" cols="70" name = "textContent" id = "textContent" value={{textContent}}> </textarea><br/>
+   Photo 1: <input type = "file" name = "photo1" id = "photo1" /><br/>
+   Photo 2: <input type = "file" name = "photo2" id = "photo2"/><br/>
+   Photo 3: <input type = "file" name = "photo3" id = "photo3"/><br/>
+   Photo 4: <input type = "file" name = "photo4" id = "phot4"/><br/>
+
+<input type="submit" value = "Save">  
+</form>
+<button OnClick = "return cancelButton();">Cancel</button>
+</div>
+{% endblock base_content %}
