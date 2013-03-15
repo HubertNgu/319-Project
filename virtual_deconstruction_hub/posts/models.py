@@ -1,7 +1,10 @@
 from django.db import models
 from django import forms
 from django.forms import ModelForm
+import uuid
 
+def make_uuid():
+    return str(uuid.uuid4())
 
 # Create your models here.
 class Post(models.Model):
@@ -21,6 +24,7 @@ class Post(models.Model):
                     (STORY, "Success Story"),
                     (BLOG, "Blog Post"))
     type = models.CharField(max_length=4, choices=TYPE_CHOICES, default=PROJ)
+    uuid = models.CharField(max_length=36, default=make_uuid())
     
     def mark_verified(self):
         self.verified = True
@@ -43,7 +47,7 @@ class PostForm(ModelForm):
     class Meta:
         model = Post
         #sets hidden attributes that we don't want individual users filling out
-        exclude = ['flag_count', 'verified','type', 'url']
+        exclude = ['flag_count', 'verified','type', 'url', 'auth_code']
         #sets the order in which fields displayed when form rendered
         fields = ['creator', 'email_verification', 'title', 'text_content']
         

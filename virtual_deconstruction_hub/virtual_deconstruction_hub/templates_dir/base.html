@@ -38,13 +38,15 @@ Virtual Deconstruction Hub
 </header>
 
 <div id="content" class="body">
+{% comment %}
 <div id="login_div" class="body">
 	
-{% comment %}
+
 This section controls what the user see's in the for login/signup prompts.
 Must be passed as a param from every call to any template if we decide to use it.
 {% endcomment %}
 
+{% comment %}
 {%  if logparams.0  == "Login"%}
  <a href = "/users/login">{{logparams.0}}</a> 
  <a href= "/users/signup">{{logparams.1}}</a> 
@@ -54,6 +56,7 @@ Must be passed as a param from every call to any template if we decide to use it
  <a href = "/users/myaccount"> {{logparams.1}} </a>
 {% endif %}
 </div>
+{% endcomment %}
 
 {% block base_content %}
 
