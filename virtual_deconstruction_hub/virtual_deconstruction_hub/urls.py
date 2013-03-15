@@ -12,7 +12,7 @@ urlpatterns = patterns('',
     (r'^users/', include('users.urls')),
     
     # listings URLs
-    (r'^listings/', include('listings.urls')),
+    (r'listings/', include('listings.urls')),
     
     # survey system URLs
     (r'^survey/', include('survey_system.urls')),
