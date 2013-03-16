@@ -10,7 +10,7 @@
 
     <ul>
     {% for listing in listings %}
-        <li> <a href="{{ listing.id }}">{{ listing.title }} </a> </li>
+        <li> <a href="{{ listing.id }}">{{ listing.title }} {{listing.created}}</a> </li>
     {% endfor %}
     </ul>
     
