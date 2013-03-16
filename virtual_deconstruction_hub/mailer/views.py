@@ -15,12 +15,14 @@ SUBJECT_MAPPINGS = {'signup' : 'Virtual Deconstruction Hub - Sign Up Verificatio
                     'survey' : 'Virtual Deconstruction Hub - Survey',
                     'proj' : 'Virtual Deconstruction - New Project Idea',
                     'blog' : 'Virtual Deconstruction - New Blog Post',
-                    'stry' : 'Virtual Deconstruction - New Success Story'}
+                    'stry' : 'Virtual Deconstruction - New Success Story',
+                    'list' : 'Virtual Deconstruction - New Listing'}
                  
     
 POST_MAPPINGS = {'proj': 'Project Idea', 
                  'blog' : 'Blog Post', 
-                 'stry' : 'Success Story'}
+                 'stry' : 'Success Story',
+                 'list' : 'Listing'}
     
 # Page to Contact a seller
 def send_contact_email(fromEmail, subject, message):
