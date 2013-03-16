@@ -17,4 +17,4 @@ urlpatterns = patterns('survey_system.views',
     url(r'^expired/%s$' % UUID_REGEX, 'survey'),
     url(r'^%s$' % UUID_REGEX, 
         'survey'),
-    )
+   ) 

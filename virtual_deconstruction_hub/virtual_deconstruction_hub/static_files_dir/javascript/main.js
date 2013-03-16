@@ -123,3 +123,15 @@ if(document.getElementById('password').value != document.getElementById('confirm
 
          return true;
       }
+      
+ function addAnotherPicture()
+ {
+ 
+ document.getElementById('pictureform').value = "1";
+ }
+ 
+  function setSubmitTrue()
+ {
+ 
+ document.getElementById('issubmit').value = "1";
+ }

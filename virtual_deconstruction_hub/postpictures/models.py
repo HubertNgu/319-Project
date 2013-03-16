@@ -6,5 +6,5 @@ class PostPictures(models.Model):
    photo =  models.ImageField(upload_to='photos/%Y/%B/%d/')
    
 class UploadForm(forms.Form):
-        picture  = forms.ImageField(label='Select a file',)
+        picture  = forms.ImageField(label='Add a picture:',)
 

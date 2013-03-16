@@ -32,12 +32,24 @@ Can't seem to get this working, they all evaluate true all the time!!???
 
 {# context for directing to a app method call ->  <form action="{% url 'listings:submit_new' listing.id %}" method="post"> #}
 
-<form id="new_post_form" action="{{ submit_action }}" method="post" {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}>
+<form id="new_post_form" action="{{ submit_action }}" method="post" enctype="multipart/form-data">
 {% csrf_token %}
+<input type = "hidden" name = "pictureform" id = "pictureform" value = "0"></input>
+<input type = "hidden" name = "issubmit" id = "issubmit" value = "0"></input>
+<input type = "hidden" name = "addanotherpicture" id = "addanotherpicture" value ={{addanotherprevious}}></input>
 <table>
 {{ form.as_table }}
+
 </table>
-<input type="submit" value="Submit" />
+{% if addanotherpicture != None %}
+<p> {% if addanotherprevious != None %}{{addanotherprevious}},{%endif%} Added {{addanotherpicture}} </p>
+<input type="hidden" name= "notnewpost" id = "notnewpost" value = "0"></input>
+<input type="hidden" name= "postid" id = "postid" value = {{postid}}></input>
+<input type = "hidden" name="paragraphtag" id = "paragraphtag" value = "1"></input>
+{% endif %}
+{{pictureform.as_p}}
+<input type="submit" value="Submit"  onclick="setSubmitTrue()"/>
+<button onclick= "addAnotherPicture()">Add Another Picture</button>
 </form>
 
 {% endblock posts_content %}
