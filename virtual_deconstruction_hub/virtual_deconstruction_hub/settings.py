@@ -12,17 +12,17 @@ MANAGERS = ADMINS
 import os
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'cs319graham',                      # Or path to database file if using sqlite3.
-	'USER': 'cs319team4',                      # Not used with sqlite3.
-	'PASSWORD': 'qwerty',                  # Not used with sqlite3.
-	'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
-	'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        'NAME': 'cs319evelyn',                      # Or path to database file if using sqlite3.
+        'USER': 'cs319team4',                      # Not used with sqlite3.
+        'PASSWORD': 'qwerty',                  # Not used with sqlite3.
+        'HOST': '174.7.161.223',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
+
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -88,13 +88,13 @@ STATICFILES_FINDERS = (
 SECRET_KEY = 'kmf^mp7umaxeazrlwcmf*8ys2!y+(c6f473#ug&amp;w00iplyxl7&amp;'
 
 # List of callables that know how to import templates from various sources.
-		TEMPLATE_LOADERS = (
+TEMPLATE_LOADERS = (
 			'django.template.loaders.filesystem.Loader',
 			'django.template.loaders.app_directories.Loader',
 #     'django.template.loaders.eggs.Loader',
 			)
 
-		MIDDLEWARE_CLASSES = (
+MIDDLEWARE_CLASSES = (
 			'django.middleware.common.CommonMiddleware',
 			'django.contrib.sessions.middleware.SessionMiddleware',
 			'django.middleware.csrf.CsrfViewMiddleware',
@@ -104,7 +104,7 @@ SECRET_KEY = 'kmf^mp7umaxeazrlwcmf*8ys2!y+(c6f473#ug&amp;w00iplyxl7&amp;'
 			'django.middleware.clickjacking.XFrameOptionsMiddleware',
 			)
 
-		ROOT_URLCONF = 'virtual_deconstruction_hub.urls'
+ROOT_URLCONF = 'virtual_deconstruction_hub.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'virtual_deconstruction_hub.wsgi.application'
@@ -139,8 +139,8 @@ INSTALLED_APPS = (
 		'verificationapp',
 		'fileupload',
 		'postpictures',
-                'chart_tools'
-                'mailer'
+#        'chart_tools'
+        'mailer',
 )
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -183,3 +183,5 @@ LOGGING = {
         },
     }
 }
+
+

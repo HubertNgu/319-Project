@@ -9,31 +9,32 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import timezone
 import re
 from listings.views import Listing
-from statistics_generator.models import Statistics, StatisticCategoryRank
+from statistics_generator.models import Statistics, StatisticsCategory
 
 
 
-
+#
 def index(request):
-	statistics = Statistics.objects.latest('id')
-	statistics_categories = StatisticsCategory.objects.get(statistics_id=statistics.id)
-
-	successful_transaction_amount = statistics.successful_transaction_amount
-	average_transaction_time = statistics.average_transaction_time
-	transaction_success_rate = statistics.transaction_success_rate
-
-	categories, survey_count, buyer_counter, seller_count, amount = \
-		list(), list(), list(), list(), 0
-
-	# Create parallel lists
-	for statistic_category in statistics_categories:
-		cateogies.append(statistic_category.category)
-		survey_count.append(statistic_category.survey_count)
-		
-							
-	labels = str(cateogies)[1:-1].replace(', ', '|')
-
-		
-	return render(request, 'statistics_generator/statistics_main.html', 
-		{'successful_transaction_amount' : successful_transaction_amount, 
-		'labels' : labels})
+	return HttpResponse("Stat gen for now")
+#	statistics = Statistics.objects.latest('id')
+#	statistics_categories = StatisticsCategory.objects.get(statistics_id=statistics.id)
+#
+#	successful_transaction_amount = statistics.successful_transaction_amount
+#	average_transaction_time = statistics.average_transaction_time
+#	transaction_success_rate = statistics.transaction_success_rate
+#
+#	categories, survey_count, buyer_counter, seller_count, amount = \
+#		list(), list(), list(), list(), 0
+#
+#	# Create parallel lists
+#	for statistic_category in statistics_categories:
+#		cateogies.append(statistic_category.category)
+#		survey_count.append(statistic_category.survey_count)
+#		
+#							
+#	labels = str(cateogies)[1:-1].replace(', ', '|')
+#
+#		
+#	return render(request, 'statistics_generator/statistics_main.html', 
+#		{'successful_transaction_amount' : successful_transaction_amount, 
+#		'labels' : labels})
