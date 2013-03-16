@@ -16,10 +16,10 @@ PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'cs319sean',                      # Or path to database file if using sqlite3.
+        'NAME': 'cs319jason',                      # Or path to database file if using sqlite3.
         'USER': 'cs319team4',                      # Not used with sqlite3.
         'PASSWORD': 'qwerty',                  # Not used with sqlite3.
-        'HOST': '174.7.161.223',                      # Set to empty string for localhost. Not used with sqlite3.
+        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
@@ -139,6 +139,7 @@ INSTALLED_APPS = (
     'verificationapp',
     'fileupload',
     'postpictures',
+    'chart_tools'
 
 )
 
