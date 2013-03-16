@@ -1,10 +1,13 @@
-{% extends "posts/projects_index.html" %}
+{% extends "posts/posts_index.html" %}
 
 {% block window_title %}
-Project Ideas - Virtual Deconstruction Hub
+Project Ideas
 {% endblock window_title %}
 
-{% block projects_content %}
+{% block nav_projects %}class="active"{% endblock nav_projects %}
+{% block proj_option %}selected="selected"{% endblock proj_option %}
+
+{% block posts_content %}
 
 {% for proj in posts %}
 
@@ -15,4 +18,4 @@ Project Ideas - Virtual Deconstruction Hub
 {% endfor %}
 
 
-{% endblock projects_content %}
+{% endblock posts_content %}

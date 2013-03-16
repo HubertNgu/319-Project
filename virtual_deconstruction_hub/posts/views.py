@@ -2,33 +2,51 @@
 from django.http import HttpRequest
 from django.http import Http404
 from django.shortcuts import render_to_response
-from django.template.defaulttags import csrf_token
+#from django.template.defaulttags import csrf_token
 from django.template import RequestContext
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
 from posts.models import Post
-from django.contrib.auth import authenticate,login,get_user
+#from django.contrib.auth import authenticate,login,get_user
 from django.shortcuts import redirect
-from verificationapp.models import VerificationApp
-from postpictures.models import *
-from fileupload.views import handle_uploaded_file
-from posts.models import PostForm
-from django import forms
+#from verificationapp.models import VerificationApp
+#from postpictures.models import *
+#from fileupload.views import handle_uploaded_file
+from posts.models import PostForm, EditPostForm
+#from django import forms
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import get_object_or_404
 import re
 import string
 import random
+from postpictures.models import UploadForm, PostPictures
 
 PAGE_SIZE = settings.RESULTS_PAGE_SIZE
+TEMPLATE_PATHS = {'proj_list': 'posts/projects_list.html', 'blog_list': 'posts/blogs_list.html', 'stry_list': 'posts/stories_list.html',
+                  'proj_single': 'posts/projects_individual.html', 'blog_single': 'posts/blogs_individual.html', 'stry_single': 'posts/stories_individual.html',
+                  'posts_new': 'posts/posts_new.html',
+                  'posts_success':'posts/new_post_success.html',
+                  'posts_upload': 'uploadfile/upload.html',
+                  }
+URL_PATHS = {'posts_edit-verify': '/posts/edit-verify',
+             'posts_root': '/posts/',
+             'blog_new': '/posts/blog/new',
+             'proj_new': '/posts/proj/new',
+             'stry_new': '/posts/stry/new'}
+
+POST_TYPE_TITLES = {'blog': "Blog", 'proj': "Project Ideas", "stry": "Success Stories", 'upload': "Upload"}
+
+MESSAGES = {'verified_post': "Your post has been verified and will be displayed on the site. You can make changes to your post here if you wish.",
+            'edit_success': "Your changes have been saved. You can make further changes to your post if you wish."}
 
 def new_post(request, post_type):
+    post_type = str(post_type.lower())
     #action for submit button
-    submit_action = "/posts/" + post_type + "/new"
+    submit_action = URL_PATHS.get(post_type+'_new')
     if request.method == 'GET':
         form = PostForm(instance=Post())
-        form_args = {'form':form, 'submit_action':submit_action, 'post_type':post_type}
-        return render_to_response("posts/posts_new.html", form_args, context_instance=RequestContext(request))
+        form_args = {'form':form, 'submit_action':submit_action, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post_type)}
+        return render_to_response(TEMPLATE_PATHS.get("posts_new"), form_args, context_instance=RequestContext(request))
     if request.method == 'POST':
                 
         post_form = PostForm(request.POST)
@@ -36,14 +54,9 @@ def new_post(request, post_type):
         if post_form.is_valid():
             # write to db and return post object
             post = post_form.save(commit=False)
-            post.type = post_type.lower()
-            post.url = tag_maker("_", post.title)
-            #check that url is unique in db, if url already exists
-            # append a random 10 char string to the end
-            if Post.objects.filter(url=post.url).count() > 0:
-                post.url = tag_maker("_", post.url + ' ' + random_string_generator(10))
-
-            post_url = post.url
+            post.set_type(post_type.lower())
+            post.set_url( tag_maker("_", post) )
+            post_url = post.get_url()
             post_url = HttpRequest.build_absolute_uri(request, post_url)
             
             #===================================================================
@@ -51,7 +64,7 @@ def new_post(request, post_type):
             #    post.verified = True  
             #===================================================================
             post.save()
-            form_args = {'post':post, 'post_url': post_url}
+            form_args = {'post':post, 'post_url': post_url, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post_type)}
             
             if request.GET.get('photo_upload') is 1:
             # if phot_upload tag triggered, save the current post as object in db
@@ -61,59 +74,75 @@ def new_post(request, post_type):
             # trigered, redirect to success page  
                 pass
            
+           #====================================================================
+           # Testing - REMOVE LATER - this just creates x # of posts of a given
+           # type whenever a single one is created from the web, just used to 
+           # populate db for testing purposes
+           #====================================================================
+            multiple_entries_for_testing(100, post_type)
 
-            ## fill in test data in db: writes 100 post objects of same type as whatever new form you are entering
-            email = 'sean@testing.com'
-            title = ' Test Title '
-            content = ' - Bah blah blah blahahab labalaba hbaalavhgvsha balobuebfuewbfuebfue jefbuefuewbfuewbfuwefbuwebfuweb fiunbefiuwef uefbuwefbwuefbeufb;efuebf'
-            for i in xrange(0,100):
-                p = Post(creator=email, title=post_type.upper()+title+str(i),text_content=str(i)+content, type=post_type.lower(), verified=True)
-                p.save()
-
-            if post.verified:
+            if post.is_verified():
                 # if post is already verified, redirect user to their newly created post
-                return redirect(post.url, context_instance=RequestContext(request))
+                return redirect(post.get_url(), context_instance=RequestContext(request))
 
             # create a verification/edit link and send with mailer then direct to success message page
             #still need ot do the verification link
-            return render_to_response("posts/new_post_success.html", form_args, context_instance=RequestContext(request))
+            return render_to_response(TEMPLATE_PATHS.get("posts_success"), form_args, context_instance=RequestContext(request))
         else:
             # if form submission not valid, redirect back to form with error messages
-            form_args = {'form':post_form, 'submit_action':submit_action}
-            return render_to_response("posts/posts_new.html", form_args, context_instance=RequestContext(request))
+            form_args = {'form':post_form, 'submit_action':submit_action, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post_type)}
+            return render_to_response(TEMPLATE_PATHS.get("posts_new"), form_args, context_instance=RequestContext(request))
 
 
-def verify_post(request, post_type):        
-    #message = "Your post has been verified and will now be visible to others."
+def edit_verify_post(request):  
     post_id = request.GET.get('post_id')
     uuid = request.GET.get('uuid')
+    #action for submit button
+    submit_action = URL_PATHS.get('posts_edit-verify') + '?post_id=' + post_id + '&uuid=' + uuid
+    post_url = None
     post = None
+    message = None
     try:
         post = get_object_or_404(Post, id=str(post_id))
     except:
         raise Http404
-    
-    if post and (post.uuid == str(uuid)):
-        post.verified = True
-        post.save()
-        post_url = HttpRequest.build_absolute_uri(request, post.url)
-        return redirect(post_url,context_instance=RequestContext(request))
-    else:
-        # redirect to a failure page of some kind?
-        raise Http404
-
-#===============================================================================
-# def index(request):
-#    user = None
-#    if request.user.is_authenticated():
-#        if request.user.username == "admin":
-#            user = "admin"
-#    return render_to_response("posts/blogs_index.html", {'user':user}, context_instance=RequestContext(request))
-#===============================================================================
-            
+        
+    if request.method == 'GET':      
+        if not post.is_verified():   
+            if post and (post.get_uuid() == str(uuid)):
+                post.mark_verified()
+                post.save()
+                message = MESSAGES.get('verified_post')
+#                post_url = HttpRequest.build_absolute_uri(request, post.get_url())
+#                return redirect(post_url,context_instance=RequestContext(request))
+            else:
+                # the post_id and uuid provided do not match anything in db correctly
+                # so redirect to 404 as this page doesn't exist for this combination
+                raise Http404
+        #post verified by this point, render edit page with message
+        edit_form = EditPostForm(instance=post)
+        form_args = {'form':edit_form, 'message': message, 'submit_action': submit_action, 'post_type_title':POST_TYPE_TITLES.get(post.get_type())}
+        return render_to_response(TEMPLATE_PATHS.get("posts_new"), form_args, context_instance=RequestContext(request))
+        
+    if request.method == 'POST':
+        edit_form = EditPostForm(request.POST, instance=post)
+        #if post_form valid, process new post
+        if edit_form.is_valid():
+            post_url = HttpRequest.build_absolute_uri(request, edit_form.cleaned_data.get('url'))
+            edit_form.save()
+            # This redirects back to edit form, should change to a render_to_response with a message that edit successful
+            #return redirect(post_url,context_instance=RequestContext(request))
+            #return render_to_response(post_url,context_instance=RequestContext(request))
+            form_args = {'form':edit_form, 'submit_action':submit_action, 'message':MESSAGES.get('edit_success'), 'post_type_title':POST_TYPE_TITLES.get(post.get_type()), 'post_url': post_url}
+            return render_to_response(TEMPLATE_PATHS.get("posts_new"), form_args, context_instance=RequestContext(request))
+        else:
+            # if form submission not valid, redirect back to form with error messages
+            form_args = {'form':edit_form, 'submit_action':submit_action, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post.get_type())}
+            return render_to_response(TEMPLATE_PATHS.get("posts_new"), form_args, context_instance=RequestContext(request))   
     
 def posts_index(request, post_type):
-    query = Post.objects.filter(type=post_type).filter(verified=True).order_by('-created')
+    post_type = str(post_type.lower())
+    query = Post.objects.filter(type=post_type).filter(verified=True).order_by('-last_modified')
     paginator = Paginator(query , PAGE_SIZE)
     page = request.GET.get('page')
     try:
@@ -124,18 +153,19 @@ def posts_index(request, post_type):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         posts= paginator.page(paginator.num_pages)
-    template_paths = {'proj': 'posts/projects_list.html', 'blog': 'posts/blogs_list.html', 'stry': 'posts/stories_list.html'}
-    return render_to_response(template_paths.get(post_type),{'posts': posts}, context_instance=RequestContext(request))
+    form_args = {'posts':posts, 'message': None, 'post_type_title':POST_TYPE_TITLES.get(post_type)}
+    return render_to_response(TEMPLATE_PATHS.get(post_type+'_list'),form_args, context_instance=RequestContext(request))
         
 def posts_specific(request, post_type, tag):
+    post_type = str(post_type.lower())
     tag.lower()
     if request.method == 'GET':
         query = get_object_or_404(Post, url=tag)
         #query = Post.objects.get(url=tag, type=post_type)
-        if query.verified:
+        if query.is_verified():
             form = PostForm(instance=query)
-            template_paths = {'proj': 'posts/projects_individual.html', 'blog': 'posts/blogs_individual.html', 'stry': 'posts/stories_individual.html'}
-            return render_to_response(template_paths.get(post_type),{'post': form}, context_instance=RequestContext(request))
+            form_args = {'post':form, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post_type)}
+            return render_to_response( TEMPLATE_PATHS.get(post_type+"_single"),form_args, context_instance=RequestContext(request))
         else:
             raise Http404()        
                                                                                                         
@@ -145,20 +175,40 @@ def upload_file(request):
         if form.is_valid():
             photo = PostPictures(photo = request.FILES['picture'], postid = 1 )
             photo.save()
-            return render_to_response('posts/posts_new.html', {'form': form}, context_instance=RequestContext(request))
+            form_args = {'form':form, 'message': None, 'post_type_title':POST_TYPE_TITLES.get('upload') }
+            return render_to_response(TEMPLATE_PATHS.get('posts_new'), form_args, context_instance=RequestContext(request))
     else:
         form = UploadForm()
-        return render_to_response('uploadfile/upload.html', {'form': form}, context_instance=RequestContext(request))
+        form_args = {'form':form, 'message': None, 'post_type_title':POST_TYPE_TITLES.get('upload') }
+        return render_to_response(TEMPLATE_PATHS.get('posts_upload'), form_args, context_instance=RequestContext(request))
+    
+def search_posts(request, post_type):
+    post_type = str(post_type.lower())
+    pass
         
 #===============================================================================
-# Takes in a string and removes any no a-z,A-Z,0-9 characters and replaces all
-# spaces with the given Space_replacement_char then returns the string in all
-# lowercase.
+# Takes in a post and removes any no a-z,A-Z,0-9 characters in the title,
+# replaces all spaces with the given Space_replacement_char then returns a
+# unique string in all lowercase to use as the relative url
 #===============================================================================
-def tag_maker(space_replacement_char, tag_string):
-    return re.sub(r'\W+', '', tag_string.lower().replace (" ", space_replacement_char ))
+def tag_maker(space_replacement_char, post):
+    tag = re.sub(r'\W+', '', post.get_title().lower().replace (" ", space_replacement_char ))
+    #check that url is unique in db, if url already exists
+    # append a random 10 char string to the end
+    if Post.objects.filter(url=tag).count() > 0:
+        tag = tag + space_replacement_char + random_string_generator(10)
+    return tag
 
 def random_string_generator(size, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
->>>>>>> Commiting work done by Sean
 
+def multiple_entries_for_testing(number, type):
+    ## fill in test data in db: writes 100 post objects of same type as whatever new form you are entering
+    email = 'sean@testing.com'
+    title = ' Test Title '
+    content = ' - Bah blah blah blahahab labalaba hbaalavhgvsha balobuebfuewbfuebfue jefbuefuewbfuewbfuwefbuwebfuweb fiunbefiuwef uefbuwefbwuefbeufb;efuebf'
+    for i in xrange(0,number):
+        p = Post(creator=email, title=type.upper()+title,text_content=str(i)+content, type=type.lower(), verified=True)
+        p.set_url( tag_maker('_', p) )
+        p.save()
+    return

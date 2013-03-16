@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block window_title %}
+Posts
+{% endblock window_title %}
+ 
+
+{% block nav_blog %}
+{% endblock nav_blog %}
+{% block nav_projects %}
+{% endblock nav_projects %}
+{% block nav_story %}
+{% endblock nav_story %}
+
+
+{% block blog_option %}{% endblock blog_option %}
+{% block stry_option %}{% endblock stry_option %}
+{% block proj_option %}{% endblock proj_option %}
+{% block base_content %}
+
+{% if message %}
+
+<p id="system_message" class="body"> {{ message }} </p>
+
+{% endif %}
+
+{% block posts_content %}
+
+Here you will find various posts content <<== this message should never be visible
+
+{% endblock posts_content %}
+
+{% endblock base_content %}

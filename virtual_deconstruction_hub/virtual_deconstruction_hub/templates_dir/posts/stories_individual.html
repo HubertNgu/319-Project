@@ -1,11 +1,11 @@
-{% extends "posts/stories_index.html" %}
+{% extends "posts/stories_list.html" %}
 
 {% block window_title %}
-{{ post.title }} - The Virtual Deconstruction Hub
+{{ post.title }}
 {% endblock window_title %}
 
 
-{% block stories_content %}
+{% block posts_content %}
 <table>
     {% for field in post %}
         <tr>
@@ -15,4 +15,4 @@
     {% endfor %}
 </table>
 
-{% endblock stories_content %}
+{% endblock posts_content %}

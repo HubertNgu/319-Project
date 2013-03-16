@@ -1,11 +1,12 @@
-{% extends "posts/blogs_index.html" %}
+{% extends "posts/posts_index.html" %}
 
 {% block window_title %}
-{{ posts.title }} - The Virtual Deconstruction Hub Blog
+{{ posts.title }} - Blog
 {% endblock window_title %}
 
+{% block nav_blog %}class="active"{% endblock nav_blog %}
 
-{% block blogs_content %}
+{% block posts_content %}
 
 <table>
     {% for field in post %}
@@ -17,4 +18,4 @@
 </table>
 
 
-{% endblock blogs_content %}
+{% endblock posts_content %}
