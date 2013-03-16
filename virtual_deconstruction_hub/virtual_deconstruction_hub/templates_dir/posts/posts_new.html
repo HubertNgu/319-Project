@@ -1,31 +1,34 @@
-{% extends "posts/blogs_index.html" %}
+{% extends "posts/posts_index.html" %} 
 
 {% block window_title %}
-Create a new post - Virtual Deconstruction Hub
+Create a New {{ post_type_title }} Post
 {% endblock window_title %}
 
 {% comment %}
-{% ifnotequal "{{post_type}}" blog %}
-{% block nav_blog %}
-{% endblock nav_blog %}
-{% endifnotequal %}
 
-{% ifequal "{{post_type}}" "stry" %}
-{% block nav_story %}
-class="active"
-{% endblock nav_story %}
+Can't seem to get this working, they all evaluate true all the time!!???
+
+{% ifequal post_type "blog" %}
+{% block nav_blog %}class="active"{% endblock nav_blog %}
+{% block blog_option %}selected="selected"{% endblock blog_option %}
+{% endif %}
+
+{% ifequal post_type "stry" %}
+{% block nav_story %}class="active"{% endblock nav_story %}
+{% block stry_option %}selected="selected"{% endblock stry_option %}
 {% endifequal %}
 
-{% ifequal "{{post_type}}" proj %}
-{% block nav_projects %}
-class="active"
-{% endblock nav_projects %}
+{% ifequal post_type "proj" %}
+{% block nav_projects %}class="active"{% endblock nav_projects %}
+{% block proj_option %}selected="selected"{% endblock proj_option %}
 {% endifequal %}
 {% endcomment %}
 
-{% block blogs_content %}
 
-<h1>Create a new post</h1>
+
+{% block posts_content %}
+
+<h1>Create a new {{post_type_title|lower}} post:</h1>
 
 {# context for directing to a app method call ->  <form action="{% url 'listings:submit_new' listing.id %}" method="post"> #}
 
@@ -37,5 +40,5 @@ class="active"
 <input type="submit" value="Submit" />
 </form>
 
-{% endblock blogs_content %}
+{% endblock posts_content %}
 
