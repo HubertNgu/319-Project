@@ -1,0 +1,5 @@
+insert into survey_system_survey values (1, 'banana', 'Bricks', 10, 100, 'Metrotown', 'I like bricks', 1, 4343);
+
+insert into listings_listing values (1,'1','hubertngu@gmail.com','1111-11-11 11:11:11', '1111-11-11 11:11:11','1','1',1,'Bricks','1', 1, 'street', 'vancouver', 'v5j 3a9', 'metro', 5,'1111-11-11 11:11:11',0,'47b54d20-8e78-11e2-9e96-0800200c9a66',NULL);
+
+insert into listings_listing values (2,'1','hubertngu@gmail.com','1111-11-11 11:11:11', '1111-11-11 11:11:11','1','1',1,'Bricks','1', 1, 'street', 'vancouver', 'v5j 3a9', 'metro', 5,'1111-11-11 11:11:11',0,'47b54d20-8e78-11e2-9e96-0800200c9a64',NULL);

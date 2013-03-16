@@ -5,14 +5,23 @@
 		error.style.display = "none";
 
 		document.getElementById('item').style.border = "";
+		document.getElementById('category').style.border = "";
 		document.getElementById('quantity').style.border = "";
 		document.getElementById('price').style.border = "";
+		document.getElementById('location').style.border = "";
 		document.getElementById('comments').style.border = "";
 
 		if (document.getElementById('item').value == "") {
 			error.innerHTML = "Please enter a name for the item";
 			error.style.display = "inline";
 			document.getElementById('item').style.border = "1px solid #CD0A0A";
+			return false;
+		}
+
+		if (document.getElementById('category').value == "") {
+			error.innerHTML = "Please enter a category for the item";
+			error.style.display = "inline";
+			document.getElementById('category').style.border = "1px solid #CD0A0A";
 			return false;
 		}
 
@@ -30,6 +39,13 @@
 			return false;
 			}
 		}
+
+		if (document.getElementById('location').value == "") {
+			error.innerHTML = "Please enter a location of the transaction";
+			error.style.display = "inline";
+			document.getElementById('location').style.border = "1px solid #CD0A0A";
+			return false;
+		}
 	</script>
 
 		
@@ -38,20 +54,27 @@
 	{% if errormessage != None %}
 	{%endif%}
 	<span id = "error" style="color:red;display:none"></span>
-  	<form action="" method="post" onSubmit = "return onSurveySubmit();">
+  	<form action="/survey/successful/{{ survey_id }}" 
+  			method="post" onSubmit = "return onSurveySubmit();">
   		{% csrf_token %}
    	
    		<label>Item:</label>
    		<input type = "text" name = "item" id = "item"/><br/>
+
+   		<label>Category:</label>
+   		<input type = "text" name = "category" id = "category"/></br />
   
   		<label>Quantity:</label>
   		<input type = "number" name = "quantity" id = "quantity"/><br/>
                 
    		<label>Price($CAD):</label>
   		<input type = "number" name = "price" id = "price"/><br/>
+
+  		<label>Location:</label>
+  		<input type = "text" name = "location" id = "location"/><br />
   
   		<label>Comments(optional):</label>
-  		<input type = "text" name = "comments" id = "comments"/><br/>               
+  		<input type = "text" name = "comments" id = "comments"/><br/>
             
    		<input type="submit" value="Submit Survey">
  	</form>
