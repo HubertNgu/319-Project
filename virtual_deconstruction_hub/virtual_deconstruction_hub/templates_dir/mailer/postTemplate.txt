@@ -1,0 +1,9 @@
+Hi
+
+You have created a new {{ object }}!
+
+Please follow the link below to verify your {{ object }}.  Once the verification is complete, you will be able to edit and update your post.
+
+{{ url }}
+
+Thank you

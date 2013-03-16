@@ -1,0 +1,9 @@
+Hi
+
+Have you recently purchased or sold material using us?
+
+If so please follow the link below to provide us with some information regarding your transaction!  This information will help us generate statistics for everyone to view on our website.
+
+{{ url }}
+
+Thank you

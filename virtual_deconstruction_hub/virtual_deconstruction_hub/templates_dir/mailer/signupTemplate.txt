@@ -1,0 +1,9 @@
+Hi
+
+Thanks for creating an account with us!
+
+In order to take advantage of account features, please click the link below to verify your account.
+
+{{ url }}
+
+Thank you
