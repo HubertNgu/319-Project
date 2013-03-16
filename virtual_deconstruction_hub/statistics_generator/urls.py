@@ -13,7 +13,8 @@ urlpatterns = patterns('',
     #===========================================================================    
 
     #set root for static files (css, images, etc)
-    url(r'^$', 'virtual_deconstruction_hub.views.index'),
+    url(r'^$', 'statistics_generator.views.index'),
+    #url(r'^$', 'virtual_deconstruction_hub.views.index'),
 
     )
 
