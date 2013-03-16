@@ -23,7 +23,7 @@ def index(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         listings = paginator.page(paginator.num_pages)
 #    return render_to_response('listings/listings_list.html', {"listings": listings})
-    return render(request, 'listings/listings_list.html', {"listings": listings})
+    return render(request, 'listings/listings_list.html', { "listings" : listings })
 
 
 def detail(request, listing_id):
@@ -78,7 +78,19 @@ def createListing(request):
             if request.GET.get('photo_upload') is 1:
                 pass
             
+            
+#            ## fill in test data in db: writes 100 post objects of same type as whatever new form you are entering
+#            email = 'evelyn@testing.com'
+#            title = ' Test Title '
+#            content = ' - Bah blah blah blahahab labalaba hbaalavhgvsha balobuebfuewbfuebfue jefbuefuewbfuewbfuwefbuwebfuweb fiunbefiuwef uefbuwefbwuefbeufb;efuebf'
+#            
+#            for i in xrange(0,100):
+#                l = Listing(creator=email, title=title+str(i),textContent=str(i)+content, category = 'PARTBD', price = str(i), verified=True)
+#                l.save()
+            
+            
             return render_to_response('listings/new_listing_success.html', form_args, context_instance=RequestContext(request))
+        
         else:
             form_args = {'form':listing_form, 'submit_action': submit_action}
             return render_to_response("listings/listings_new.html", form_args, context_instance=RequestContext(request))

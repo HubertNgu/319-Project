@@ -4,6 +4,8 @@ from django.forms import ModelForm
 from django import forms
 import datetime
 
+
+
 class Listing(models.Model):
     
     url = models.CharField(max_length=110)
@@ -39,7 +41,12 @@ class Listing(models.Model):
                    (CABINT, "Cabinetry"), (SCRAPM, "Scrap metal"), (APPLIA, "Appliances"), (OTHER, "Other"),)
     category = models.CharField(max_length=6, choices = CAT_CHOICES, default = WOOD)
     price = models.CharField(max_length=20, blank=True)
-    location = models.CharField(max_length=100, blank=True)
+    num = models.IntegerField()
+    street = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
+    state = 'British Columbia'
+    zipcode = models.CharField(max_length=6)
+    
 
    
     def __unicode__(self):
@@ -55,12 +62,18 @@ class Listing(models.Model):
     def isExpired(self):
         return self.expires <= timezone.now()
     
+
+
+
 class ListingForm(ModelForm):
     email_verification = forms.EmailField(required=True)
     class Meta:
         model = Listing
         exclude = ['url', 'verified', 'flagCount']
-        fields = ['creator', 'email_verification', 'title','category', 'price', 'location', 'textContent']
+        fields = ['creator', 'email_verification', 'title','category', 'price', 'num', 
+                  'street', 'city', 'zipcode', 'textContent']
+        
+        
     def clean(self):
         cleaned_data = self.cleaned_data
         creator_email = cleaned_data.get('creator')
