@@ -1,8 +1,33 @@
+import uuid
+import datetime
+
 from django.db import models
 from django.utils import timezone
 from django.forms import ModelForm
 from django import forms
-import datetime
+
+WOOD = 'wood'
+BRICKS = 'bricks'
+SHINGL = 'shingl'
+DRYWAL = 'drywal'
+TOILET = 'toilet'
+SINKS = 'sinks'
+TUBS = 'tubs'
+WINDOW = 'window'
+DOORS = 'doors'
+FIXTUR = 'fixtur'
+CABWIR = 'cabWir'
+PARTBD = 'partBd' 
+CARDBD = 'cardBd'
+SCRAPM = 'scrapM'
+CABINT = 'cabint'
+APPLIA = 'applian'
+OTHER = 'other'
+CAT_CHOICES = ((WOOD, "Woods"), (BRICKS, "Bricks"), (SHINGL, "Shingles"),
+    (DRYWAL, "Drywall"), (TOILET, "Toilets"), (SINKS, "Sinks"),
+    (TUBS, "Tubs"), (WINDOW, "Windows"), (DOORS, "Doors"),(FIXTUR, "Fixtures"),
+    (CABWIR, "Cable and Wiring"), (PARTBD, "Particle board"), (CARDBD, "Cardboard"),
+    (CABINT, "Cabinetry"), (SCRAPM, "Scrap metal"), (APPLIA, "Appliances"), (OTHER, "Other"),)
 
 
 
@@ -12,33 +37,9 @@ class Listing(models.Model):
     creator = models.EmailField("creators email")
     created = models.DateTimeField("date created", auto_now_add=True)
     lastModified = models.DateTimeField("last modified", auto_now=True)
-    expires = models.DateTimeField("expiry date", default=(timezone.now() + datetime.timedelta(days=30)), editable=True)
     title = models.CharField(max_length=100)
     textContent = models.TextField()
     verified = models.BooleanField(default=False)
-    flagCount = models.SmallIntegerField("flag count", default=0)
-    WOOD = 'wood'
-    BRICKS = 'bricks'
-    SHINGL = 'shingl'
-    DRYWAL = 'drywal'
-    TOILET = 'toilet'
-    SINKS = 'sinks'
-    TUBS = 'tubs'
-    WINDOW = 'window'
-    DOORS = 'doors'
-    FIXTUR = 'fixtur'
-    CABWIR = 'cabWir'
-    PARTBD = 'partBd' 
-    CARDBD = 'cardBd'
-    SCRAPM = 'scrapM'
-    CABINT = 'cabint'
-    APPLIA = 'applian'
-    OTHER = 'other'
-    CAT_CHOICES = ((WOOD, "Woods"), (BRICKS, "Bricks"), (SHINGL, "Shingles"),
-                   (DRYWAL, "Drywall"), (TOILET, "Toilets"), (SINKS, "Sinks"),
-                   (TUBS, "Tubs"), (WINDOW, "Windows"), (DOORS, "Doors"),(FIXTUR, "Fixtures"),
-                   (CABWIR, "Cable and Wiring"), (PARTBD, "Particle board"), (CARDBD, "Cardboard"),
-                   (CABINT, "Cabinetry"), (SCRAPM, "Scrap metal"), (APPLIA, "Appliances"), (OTHER, "Other"),)
     category = models.CharField(max_length=6, choices = CAT_CHOICES, default = WOOD)
     price = models.CharField(max_length=20, blank=True)
     num = models.IntegerField()
@@ -46,8 +47,14 @@ class Listing(models.Model):
     city = models.CharField(max_length=100)
     state = 'British Columbia'
     zipcode = models.CharField(max_length=6)
-    
-
+    location = models.CharField(max_length=100, blank=True)
+    flagCount = models.SmallIntegerField("flag count", default=0)
+    expires = models.DateTimeField("expiry date", 
+        default=(timezone.now() + datetime.timedelta(days=30)), editable=True)
+    expired = models.BooleanField(default=False)
+    survey_id = models.CharField(max_length=36, default=uuid.uuid4)
+    survey_time_sent = models.DateTimeField("survey time sent", blank=True, 
+        null=True)
    
     def __unicode__(self):
         return 'creator: %s, created: %s, title: %s, textContent: %s' \

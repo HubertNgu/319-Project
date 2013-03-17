@@ -1,4 +1,8 @@
+import uuid
+import datetime
+
 from django.db import models
+from django.utils import timezone
 
 class Survey(models.Model):
 	item = models.CharField(max_length = 30)
