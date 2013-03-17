@@ -139,8 +139,8 @@ INSTALLED_APPS = (
 		'verificationapp',
 		'fileupload',
 		'postpictures',
-#        'chart_tools'
-        'mailer',
+                'chart_tools',
+                'mailer',
 )
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

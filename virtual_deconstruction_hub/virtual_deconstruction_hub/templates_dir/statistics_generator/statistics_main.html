@@ -15,35 +15,54 @@ Home/Statistics Page
 
 {% block stats_content %}
 
-Here you will find a lsome statistical information
+Here you will find some statistical information
 
 <div class="category_stat">
-   <span class="step-links">
+   <span class="survey_count">
       {% load chart_tags %}
       {% chart %}
-          ?chs=300x400
+         ?chs=400x400
    		 &cht=p3
-   		 &chco={{ values }}
-   		 &chd={{ values }}
+   		 &chd={{ category_survey_values }}
    		 &chdl={{ labels }}
+   		 &chtt=Survey+Count
+      {% endchart %}
+   </span>
+   
+   <span class="amount">
+   	{% load chart_tags %}
+      {% chart %}
+         ?chs=400x400
+   		 &cht=p3
+   		 &chd={{ category_amount_values }}
+   		 &chdl={{ labels }}
+   		 &chtt=Transaction+Amount
+      {% endchart %}
+   </span>
+ </div>
+
+<div class="succesrate">
+	<span class="successrate">
+   	{% load chart_tags %}
+      {% chart %}
+        ?chxr=0,0,1
+   		&chxt=y
+   		&chbh=a,0,0
+  		&chs=300x225
+   		&cht=bvg
+   		&chco=A2C180,3D7930
+  		&chds=0,1,0,1
+   		&chd=t:0.2|0.1
+  		&chg=0,-1
+  		&chtt=Trasaction+success+rate
+  		&chts=676767,10.5
       {% endchart %}
    </span>
 </div>
 
-{% chart %}
-	?chxt=y
-   &chbh=a,3,2
-   &chs=300x225
-   &cht=bvg
-   &chco=A2C180,3D7930,FF9900
-   &chd=e:gA27u4ysfAo-ig,f.mZ..ZmMzZmTM,
-   &chtt=Category
-   &chts=676767,9.5
-{% endchart %}
-
-
 {{ form.map }}
 {{ form.media.js }}
+
 
 {% endblock stats_content %}
 
