@@ -13,7 +13,6 @@ from django.shortcuts import redirect
 from userprofile.models import UserProfile 
 from verificationapp.models import VerificationApp
 from mailer.views import send_signup_verification_email
-from django.contrib.sites.models import Site
 import string
 import random
 
@@ -78,8 +77,7 @@ def signup(request):
             verificationcode = id_generator()
             verificationapp = VerificationApp(username = checkusername, verificationcode = verificationcode)
             verificationapp.save()
-            server = Site.objects.get_current()
-            send_signup_verification_email("http://" + server + ":8080/users/verifyemail/?username=n&verificationcode=KU47FL3HR6", email)
+            send_signup_verification_email("http://localhost:8080/users/verifyemail/?username=n&verificationcode=KU47FL3HR6", email)
             return render_to_response("users/verification.html",context_instance=RequestContext(request))
     else:
         

@@ -8,12 +8,11 @@ from django.template import RequestContext
 from posts.models import Post
 #from django.contrib.auth import authenticate,login,get_user
 from django.shortcuts import redirect
-#from verificationapp.models import VerificationApp
-#from postpictures.models import *
-#from fileupload.views import handle_uploaded_file
-from posts.models import PostForm, EditPostForm
-#from django import forms
-from util import constants
+from verificationapp.models import VerificationApp
+from postpictures.models import *
+from fileupload.views import handle_uploaded_file
+from posts.models import PostForm, Photo
+from django import forms
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import get_object_or_404
@@ -47,16 +46,16 @@ MESSAGES = {'verified_post': "Your post has been verified and will be displayed 
 def new_post(request, post_type):
     post_type = str(post_type.lower())
     #action for submit button
+    pictureform = UploadForm()
     submit_action = URL_PATHS.get(post_type+'_new')
     if request.method == 'GET':
         form = PostForm(instance=Post())
-        form_args = {'form':form, 'submit_action':submit_action, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post_type)}
+        form_args = {'form':form, 'submit_action':submit_action, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post_type), 'pictureform':pictureform}
         return render_to_response(TEMPLATE_PATHS.get("posts_new"), form_args, context_instance=RequestContext(request))
     if request.method == 'POST':
-                
         post_form = PostForm(request.POST)
         #if post_form valid, process new post
-        if post_form.is_valid():
+        if post_form.is_valid() and request.POST.get("notnewpost") == None:
             # write to db and return post object
             post = post_form.save(commit=False)
             post.set_type(post_type.lower())
@@ -69,15 +68,42 @@ def new_post(request, post_type):
             #    post.verified = True  
             #===================================================================
             post.save()
-            form_args = {'post':post, 'post_url': post_url, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post_type)}
-            
-            if request.GET.get('photo_upload') is 1:
+            postid = post.id
+        
+        form = UploadForm(request.POST, request.FILES)
+        if request.POST.get("notnewpost") != None:
+                postid = request.POST.get("postid")
+                post = Post.objects.get(id = postid )
+                post.set_type(post_type.lower())
+                post.set_url( tag_maker("_", post) )
+                post_url = post.get_url()
+        form_args = {'form':post_form, 'submit_action':submit_action, 'post_url' : post_url, 'post':post}
+        if(request.POST.get("issubmit") == "1" and request.POST.get("notnewpost") != None):
+            post.creator = request.POST.get('creator')
+            post.title = request.POST.get("title")
+            post.text_content = request.POST.get('text_content')
+            post.save()
+        
+        if form.is_valid():
+            form_args = {'post':post, 'post_url': post_url}
+            photo = Photo(photo = request.FILES['picture'], post = post )
+            photo.save()            
+            if request.POST.get('pictureform') == "1":
+                addanotherprevious = None
+                addanotherpicture = request.FILES['picture']
+                if(request.POST.get('paragraphtag') != None):
+                    addanotherprevious = request.POST.get('addanotherpicture')
+                form_args = {'form':post_form, 'submit_action':submit_action, 
+                             'addanotherpicture' :addanotherpicture, 'pictureform': pictureform,
+                             'postid' :postid, 'addanotherprevious' : addanotherprevious}
+                return render_to_response("posts/posts_new.html", form_args, context_instance=RequestContext(request))
+                
             # if phot_upload tag triggered, save the current post as object in db
             # thentake current photo from form, save to child db table for post
             # photo and hold on to form, but render a new photo upload form and 
             # repeat as long as photo_pload tag triggered, once photo_upload no longer
             # trigered, redirect to success page  
-                pass
+               
            
            #====================================================================
            # Testing - REMOVE LATER - this just creates x # of posts of a given
@@ -86,9 +112,9 @@ def new_post(request, post_type):
            #====================================================================
             multiple_entries_for_testing(100, post_type)
 
-            if post.is_verified():
+        if post.is_verified():
                 # if post is already verified, redirect user to their newly created post
-                return redirect(post.get_url(), context_instance=RequestContext(request))
+            return redirect(post.get_url(), context_instance=RequestContext(request))
 
             # create a verification/edit link and send with mailer then direct to success message page
             user_email = post.get_creator()
@@ -97,7 +123,7 @@ def new_post(request, post_type):
             return render_to_response(TEMPLATE_PATHS.get("posts_success"), form_args, context_instance=RequestContext(request))
         else:
             # if form submission not valid, redirect back to form with error messages
-            form_args = {'form':post_form, 'submit_action':submit_action, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post_type)}
+            form_args = {'form':post_form, 'submit_action':submit_action, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post_type), 'pictureform': pictureform}
             return render_to_response(TEMPLATE_PATHS.get("posts_new"), form_args, context_instance=RequestContext(request))
 
 

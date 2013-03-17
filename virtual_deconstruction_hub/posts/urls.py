@@ -19,4 +19,3 @@ urlpatterns = patterns('posts.views',
     url(r"(?P<post_type>[a-zA-Z]{4})/(?P<tag>\w+)", 'posts_specific'),
     url(r"(?P<post_type>[a-zA-Z]{4})",'posts_index'),
     )
-
