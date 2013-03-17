@@ -20,7 +20,7 @@ urlpatterns = patterns('',
     (r'^survey/', include('survey_system.urls')),
     
     # posts URLs
-    (r'posts/', include('posts.urls')),
+    (r'^posts', include('posts.urls')),
     
     # profile URLs
     (r'profiles/', include('userprofile.urls')),
