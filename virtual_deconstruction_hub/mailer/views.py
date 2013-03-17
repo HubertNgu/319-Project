@@ -25,10 +25,9 @@ POST_MAPPINGS = {'proj': 'Project Idea',
                  'list' : 'Listing'}
     
 # Page to Contact a seller
-def send_contact_email(fromEmail, subject, message):
-    send_mail(sub, msg, fromEmail, ['gharoldson@gmail.com'], fail_silently=False)
-			
-    email = Email(to_email='gharoldson@gmail.com', from_email=fromEmail,subject=sub,message=msg,email_type=CONTACT_EMAIL)
+def send_contact_email(toEmail, fromEmail, subject, message):
+    send_mail(subject, message, fromEmail, toEmail, fail_silently=False)
+    email = Email(to_email=toEmail , from_email=fromEmail,subject=subject,message=message,email_type=CONTACT_EMAIL)
     email.save()		
     return    
         

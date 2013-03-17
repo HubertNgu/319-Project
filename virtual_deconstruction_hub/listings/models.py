@@ -29,6 +29,8 @@ CAT_CHOICES = ((WOOD, "Woods"), (BRICKS, "Bricks"), (SHINGL, "Shingles"),
     (CABWIR, "Cable and Wiring"), (PARTBD, "Particle board"), (CARDBD, "Cardboard"),
     (CABINT, "Cabinetry"), (SCRAPM, "Scrap metal"), (APPLIA, "Appliances"), (OTHER, "Other"),)
 
+
+
 class Listing(models.Model):
     
     url = models.CharField(max_length=110)
@@ -61,6 +63,7 @@ class Listing(models.Model):
     
     def is_verified(self):
         return self.verified
+   
    
     def __unicode__(self):
         return 'creator: %s, created: %s, title: %s, textContent: %s' \
@@ -120,9 +123,21 @@ class Listing(models.Model):
     def get_uuid(self):
         return self.uuid
 
-
 class ListingForm(ModelForm):
+    
     email_verification = forms.EmailField(required=True)
+    
+    def __init__(self, *args, **kwargs):
+        super(ListingForm, self).__init__(*args, **kwargs)
+        self.fields['creator'].label = "Email address"
+        self.fields['email_verification'].label = "Verify email"
+        self.fields['num'].label = "Street Number"
+        self.fields['street'].label = "Street Name"
+        self.fields['city'].label = "City"
+        self.fields['zipcode'].label = "Postal code"
+        self.fields['textContent'].label = "Description"
+        
+    
     class Meta:
         model = Listing
         exclude = ['url', 'verified', 'flagCount']
@@ -135,10 +150,13 @@ class ListingForm(ModelForm):
         creator_email = cleaned_data.get('creator')
         verified_email = cleaned_data.get('email_verification')
         category = cleaned_data.get('category')
+        zipcode = cleaned_data.get('zipcode')
+        
         if creator_email != verified_email:
             self._errors["email_verification"] = self.error_class(["The email and verification entered do not match"])
         if not category:
             self._errors["category"] = self.error_class(["You must choose category"])
+    
         return cleaned_data
         
 class EditListingForm(ModelForm):

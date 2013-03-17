@@ -4,6 +4,8 @@ from django.template import Context, loader, RequestContext
 from django.template.defaulttags import csrf_token
 from django import forms
 from listings.models import Listing, ListingForm, EditListingForm
+from mailer.models import Email
+from mailer.views import send_contact_email
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import timezone
 from django.contrib.sites.models import Site
@@ -41,7 +43,6 @@ def index(request):
         listings = paginator.page(paginator.num_pages)
 #    return render_to_response('listings/listings_list.html', {"listings": listings})
     return render(request, TEMPLATE_PATHS.get('listings_list'), { "listings" : listings })
-
 
 def detail(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
@@ -166,3 +167,31 @@ def tag_maker(space_replacement_char, tag_string):
 def random_string_generator(size, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
+
+def contactSeller(request, listing_id):
+    submit_action = '/listings/contactSeller/' + listing_id + '/'
+    
+    if request.method == 'GET':
+        form_args = {'submit_action':submit_action}
+        return render_to_response("listings/contact_seller.html", form_args, context_instance=RequestContext(request))
+    if request.method == "POST":
+        form_args = {'submit_action':submit_action}
+        listing = Listing.objects.get(pk = listing_id) 
+        toemail = [listing.creator]
+        fromemail = request.POST.get('emailTxt')
+        subject = request.POST.get('emailSubject')
+        message = request.POST.get('emailMsg')
+        send_contact_email(toemail, fromemail, subject, message)
+        return render_to_response('listings/new_listing_success.html', form_args, context_instance=RequestContext(request))
+         
+
+def multiple_entries_for_testing(number):
+    ## fill in test data in db: writes 100 post objects of same type as whatever new form you are entering
+    email = 'tisevelyn@gmail.com'
+    title = ' Furniture for sale '
+    content = ' - Bah blah blah blahahab labalaba hbaalavhgvsha balobuebfuewbfuebfue jefbuefuewbfuewbfuwefbuwebfuweb fiunbefiuwef uefbuwefbwuefbeufb;efuebf'
+    for i in xrange(0,number):
+        l = Listing(creator=email, title = title, textContent=content, category = 'wood', 
+                    num = 22, street = 'blah', city = 'Vancouver', zipcode = 'V6T1Z4', verified = True)
+        l.save()
+    return
