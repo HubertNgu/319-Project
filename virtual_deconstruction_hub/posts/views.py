@@ -13,6 +13,7 @@ from django.shortcuts import redirect
 #from fileupload.views import handle_uploaded_file
 from posts.models import PostForm, EditPostForm
 #from django import forms
+from util import constants
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import get_object_or_404
@@ -20,8 +21,12 @@ import re
 import string
 import random
 from postpictures.models import UploadForm, PostPictures
+from mailer.views import send_post_verification_email
+from django.contrib.sites.models import Site
 
+#PAGE_SIZE = int(constants.RESULTS_PAGE_SIZE)
 PAGE_SIZE = settings.RESULTS_PAGE_SIZE
+
 TEMPLATE_PATHS = {'proj_list': 'posts/projects_list.html', 'blog_list': 'posts/blogs_list.html', 'stry_list': 'posts/stories_list.html',
                   'proj_single': 'posts/projects_individual.html', 'blog_single': 'posts/blogs_individual.html', 'stry_single': 'posts/stories_individual.html',
                   'posts_new': 'posts/posts_new.html',
@@ -86,7 +91,9 @@ def new_post(request, post_type):
                 return redirect(post.get_url(), context_instance=RequestContext(request))
 
             # create a verification/edit link and send with mailer then direct to success message page
-            #still need ot do the verification link
+            user_email = post.get_creator()
+            verify_url = '%s/edit-verify?post_id=%s&uuid=%s' % (Site.objects.get_current(), post.id, post.get_uuid())
+            send_post_verification_email(verify_url, user_email, post_type)
             return render_to_response(TEMPLATE_PATHS.get("posts_success"), form_args, context_instance=RequestContext(request))
         else:
             # if form submission not valid, redirect back to form with error messages
@@ -206,8 +213,9 @@ def multiple_entries_for_testing(number, type):
     ## fill in test data in db: writes 100 post objects of same type as whatever new form you are entering
     email = 'sean@testing.com'
     title = ' Test Title '
-    content = ' - Bah blah blah blahahab labalaba hbaalavhgvsha balobuebfuewbfuebfue jefbuefuewbfuewbfuwefbuwebfuweb fiunbefiuwef uefbuwefbwuefbeufb;efuebf'
+
     for i in xrange(0,number):
+        content = str(number) + ' - Bah blah blah blahahab labalaba hbaalavhgvsha balobuebfuewbfuebfue jefbuefuewbfuewbfuwefbuwebfuweb fiunbefiuwef uefbuwefbwuefbeufb;efuebf'
         p = Post(creator=email, title=type.upper()+title,text_content=str(i)+content, type=type.lower(), verified=True)
         p.set_url( tag_maker('_', p) )
         p.save()

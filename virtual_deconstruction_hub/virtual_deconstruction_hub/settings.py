@@ -14,12 +14,12 @@ PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 
 DATABASES = {
     'default': {
-    'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-    'NAME': 'cs319graham',                      # Or path to database file if using sqlite3.
-	'USER': 'cs319team4',                      # Not used with sqlite3.
-	'PASSWORD': 'qwerty',                  # Not used with sqlite3.
-	'HOST': '174.7.161.223',                      # Set to empty string for localhost. Not used with sqlite3.
-	'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'cs319sean',                      # Or path to database file if using sqlite3.
+        'USER': 'cs319team4',                      # Not used with sqlite3.
+        'PASSWORD': 'qwerty',                  # Not used with sqlite3.
+        'HOST': '174.7.161.223',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
 
@@ -56,7 +56,6 @@ MEDIA_ROOT = 'photo_uploads/'
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
 
 MEDIA_URL = '/photos/'
-
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
