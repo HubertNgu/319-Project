@@ -3,10 +3,27 @@ from django.shortcuts import redirect,get_object_or_404, render_to_response, ren
 from django.template import Context, loader, RequestContext
 from django.template.defaulttags import csrf_token
 from django import forms
-from listings.models import Listing, ListingForm
+from listings.models import Listing, ListingForm, EditListingForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import timezone
+from django.contrib.sites.models import Site
+from mailer.views import send_post_verification_email
 import re
+import string
+import random
+
+TEMPLATE_PATHS = {'listings_list': 'listings/listings_list.html',
+                  'listings_single': 'listings/listings_individual.html',
+                  'listings_new': 'listings/listings_new.html',
+                  'listings_success':'listings/new_listing_success.html'
+                  #'listings_upload': 'uploadfile/upload.html',
+                  }
+URL_PATHS = {'listings_edit-verify': '/listings/edit-verify',
+             'listings_root': '/listings/',
+             'listing_new': '/listing/new'}
+
+MESSAGES = {'verified_listing': "Your listing has been verified and will be displayed on the site. You can make changes to your listing here if you wish.",
+            'edit_success': "Your changes have been saved. You can make further changes to your listing if you wish."}
 
 
 def index(request):
@@ -23,15 +40,12 @@ def index(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         listings = paginator.page(paginator.num_pages)
 #    return render_to_response('listings/listings_list.html', {"listings": listings})
-    return render(request, 'listings/listings_list.html', { "listings" : listings })
+    return render(request, TEMPLATE_PATHS.get('listings_list'), { "listings" : listings })
 
 
 def detail(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
-#    return render_to_response('listings/listings_individual.html', {'listing': listing })
-    return render(request, 'listings/listings_individual.html', {"listing": listing})
-    
-      
+    return render(request, TEMPLATE_PATHS.get('listings_single'), {"listing": listing})  
 
 #def searchListing(request):
 #    if request.method == 'SEARCH':
@@ -62,80 +76,21 @@ def createListing(request):
     if request.method == 'GET':
         form = ListingForm(instance=Listing())
         form_args = {'form':form, 'submit_action':submit_action}
-        return render_to_response("listings/listings_new.html", form_args, context_instance=RequestContext(request))
+        return render_to_response(TEMPLATE_PATHS.get('listings_new'), form_args, context_instance=RequestContext(request))
     if request.method == 'POST':
         listing_form = ListingForm(request.POST)
         if listing_form.is_valid():
             listing = listing_form.save(commit=False)
             listing.url = re.sub(r'\W+', '', listing.title.lower().replace (" ", "_"))
             listing_url = listing.url
-            listing_url = HttpRequest.build_absolute_uri(request, listing_url)
-#            if request.user.is_authenticated():
-#                listing.verified = True
-            listing.save()
-            form_args = {'listing':listing, 'listing_url':listing_url}
+            #check that url is unique in db, if url already exists
+            # append a random 10 char string to the end
+            if Listing.objects.filter(url=listing.url).count() > 0:
+                listing.url = tag_maker("_", listing.url + ' ' + random_string_generator(10))
             
-            if request.GET.get('photo_upload') is 1:
-                pass
-            
-            
-#            ## fill in test data in db: writes 100 post objects of same type as whatever new form you are entering
-#            email = 'evelyn@testing.com'
-#            title = ' Test Title '
-#            content = ' - Bah blah blah blahahab labalaba hbaalavhgvsha balobuebfuewbfuebfue jefbuefuewbfuewbfuwefbuwebfuweb fiunbefiuwef uefbuwefbwuefbeufb;efuebf'
-#            
-#            for i in xrange(0,100):
-#                l = Listing(creator=email, title=title+str(i),textContent=str(i)+content, category = 'PARTBD', price = str(i), verified=True)
-#                l.save()
-            
-            
-            return render_to_response('listings/new_listing_success.html', form_args, context_instance=RequestContext(request))
-        
-        else:
-            form_args = {'form':listing_form, 'submit_action': submit_action}
-            return render_to_response("listings/listings_new.html", form_args, context_instance=RequestContext(request))
-
-#        creator = request.POST.get('creator')
-#        title = request.POST.get('title')
-#        textContent = request.POST.get('textContent')
-#        if creator == None:
-#            errormessage = "You must put in your email"
-#            return render_to_response("listings/listings_new.html",{'errormessage':errormessage},context_instance=RequestContext(request))
-#        if len(title) < 5:
-#            errormessage = "Title must be at least 5 characters or long!"
-#            return render_to_response("listings/listings_new.html",{'errormessage':errormessage},context_instance=RequestContext(request))
-#        if len(textContent) < 5:
-#            errormessage = "Information on the item must be at least 5 characters or long!"
-#            return render_to_response("listings/listings_new.html",{'errormessage':errormessage},context_instance=RequestContext(request))
-#        try: 
-#             Listing.objects.get(title = title) 
-#             errormessage = "There is exactly the same listing created already"
-#             return render_to_response("listings/listings_new.html",{'errormessage':errormessage},context_instance=RequestContext(request))
-#        except:    
-#            new_listing = Listing(creator = creator, title = title, textContent = textContent)
-#            new_listing.verified = False;
-#            new_listing.save()
-#            return redirect('/listings/')
-#    else:
-#            return render_to_response("listings/listings_new.html",context_instance=RequestContext(request))
-
-def editListing(request, listing_id):
-    
-    submit_action = '/listings/edit/' + listing_id + '/'
-    listing = Listing.objects.get(pk = listing_id) 
-    
-    if request.method == 'GET':
-        form = ListingForm(instance=listing)
-        form_args = {'form':form, 'submit_action':submit_action}
-        return render_to_response("listings/listings_new.html", form_args, context_instance=RequestContext(request))
-    
-    if request.method == "POST":
-        listing_form = ListingForm(request.POST, instance = listing)
-        if listing_form.is_valid():
-            listing = listing_form.save(commit=False)
-            listing.url = re.sub(r'\W+', '', listing.title.lower().replace (" ", "_"))
             listing_url = listing.url
             listing_url = HttpRequest.build_absolute_uri(request, listing_url)
+            
 #            if request.user.is_authenticated():
 #                listing.verified = True
             listing.save()
@@ -143,23 +98,71 @@ def editListing(request, listing_id):
             
             if request.GET.get('photo_upload') is 1:
                 pass
+                      
+            if listing.verified:
+                # if post is already verified, redirect user to their newly created post
+                return redirect(listing.url, context_instance=RequestContext(request))
+            
+             # create a verification/edit link and send with mailer then direct to success message page
+            user_email = listing.get_creator()
+            verify_url = '%s/edit-verify?listing_id=%s&uuid=%s' % (Site.objects.get_current(), listing.id, listing.get_uuid())
+            send_post_verification_email(verify_url, user_email, 'list')
+            
+            return render_to_response(TEMPLATE_PATHS.get('listings_success'), form_args, context_instance=RequestContext(request))
         
-            return render_to_response('listings/new_listing_success.html', form_args, context_instance=RequestContext(request)) 
         else:
             form_args = {'form':listing_form, 'submit_action': submit_action}
-            return render_to_response("listings/listings_new.html", form_args, context_instance=RequestContext(request)) 
+            return render_to_response(TEMPLATE_PATHS.get('listings_new'), form_args, context_instance=RequestContext(request))
+
+def edit_verify_listing(request):  
+    listing_id = request.GET.get('listing_id')
+    uuid = request.GET.get('uuid')
+    #action for submit button
+    submit_action = URL_PATHS.get('listings_edit-verify') + '?listing_id=' + listing_id + '&uuid=' + uuid
+    listing_url = None
+    listing = None
+    message = None
+    try:
+        listing = get_object_or_404(Listing, id=str(listing_id))
+    except:
+        raise Http404
         
-#        title = request.POST.get('title')
-#        textContent = request.POST.get('textContent')
-#        listing.title = title
-#        listing.textContent = textContent
-#        listing.lastModified = timezone.now()
-#        listing.save()
-#        return redirect('/listings/') 
-#    else:
-#        creator = listing.creator
-#        title = listing.title
-#        textContent = listing.textContent
-#        return render_to_response("users\editaccount.html",{'creator':creator,'title':title,'textContent':textContent,},
-#                                  context_instance=RequestContext(request))
+    if request.method == 'GET':      
+        if not listing.is_verified():   
+            if listing and (listing.get_uuid() == str(uuid)):
+                listing.mark_verified()
+                listing.save()
+                message = MESSAGES.get('verified_listing')
+#                post_url = HttpRequest.build_absolute_uri(request, listing.get_url())
+#                return redirect(post_url,context_instance=RequestContext(request))
+            else:
+                # the listing_id and uuid provided do not match anything in db correctly
+                # so redirect to 404 as this page doesn't exist for this combination
+                raise Http404
+        #post verified by this point, render edit page with message
+        edit_form = EditListingForm(instance=listing)
+        form_args = {'form':edit_form, 'message': message, 'submit_action': submit_action}
+        return render_to_response(TEMPLATE_PATHS.get("listings_new"), form_args, context_instance=RequestContext(request))
+        
+    if request.method == 'POST':
+        edit_form = EditListingForm(request.POST, instance=listing)
+        #if post_form valid, process new post
+        if edit_form.is_valid():
+            post_url = HttpRequest.build_absolute_uri(request, edit_form.cleaned_data.get('url'))
+            edit_form.save()
+            # This redirects back to edit form, should change to a render_to_response with a message that edit successful
+            #return redirect(post_url,context_instance=RequestContext(request))
+            #return render_to_response(post_url,context_instance=RequestContext(request))
+            form_args = {'form':edit_form, 'submit_action':submit_action, 'message':MESSAGES.get('edit_success'), 'listing_url': listing_url}
+            return render_to_response(TEMPLATE_PATHS.get("listings_new"), form_args, context_instance=RequestContext(request))
+        else:
+            # if form submission not valid, redirect back to form with error messages
+            form_args = {'form':edit_form, 'submit_action':submit_action, 'message':None}
+            return render_to_response(TEMPLATE_PATHS.get("listings_new"), form_args, context_instance=RequestContext(request)) 
+
+def tag_maker(space_replacement_char, tag_string):
+    return re.sub(r'\W+', '', tag_string.lower().replace (" ", space_replacement_char ))
+
+def random_string_generator(size, chars=string.ascii_uppercase + string.digits):
+    return ''.join(random.choice(chars) for x in range(size))
 

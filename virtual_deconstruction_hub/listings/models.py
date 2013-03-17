@@ -29,8 +29,6 @@ CAT_CHOICES = ((WOOD, "Woods"), (BRICKS, "Bricks"), (SHINGL, "Shingles"),
     (CABWIR, "Cable and Wiring"), (PARTBD, "Particle board"), (CARDBD, "Cardboard"),
     (CABINT, "Cabinetry"), (SCRAPM, "Scrap metal"), (APPLIA, "Appliances"), (OTHER, "Other"),)
 
-
-
 class Listing(models.Model):
     
     url = models.CharField(max_length=110)
@@ -52,9 +50,17 @@ class Listing(models.Model):
     expires = models.DateTimeField("expiry date", 
         default=(timezone.now() + datetime.timedelta(days=30)), editable=True)
     expired = models.BooleanField(default=False)
+    # TODO: For survey change this to uuid
     survey_id = models.CharField(max_length=36, default=uuid.uuid4)
     survey_time_sent = models.DateTimeField("survey time sent", blank=True, 
         null=True)
+    uuid = models.CharField(max_length=36, default=uuid.uuid4)
+
+    def mark_verified(self):
+        self.verified = True
+    
+    def is_verified(self):
+        return self.verified
    
     def __unicode__(self):
         return 'creator: %s, created: %s, title: %s, textContent: %s' \
@@ -69,7 +75,50 @@ class Listing(models.Model):
     def isExpired(self):
         return self.expires <= timezone.now()
     
+    def renew(self):
+        self.save()
 
+    def get_type(self):
+        return self.type
+     
+    def set_type(self, t):
+        self.type = t
+        
+    def set_url(self, u):
+        self.url = u
+        
+    def get_url(self):
+        return self.url
+    
+    def get_creator(self):
+        return self.creator
+    
+    def get_created_time(self):
+        return self.created
+
+    def get_last_modified_time(self):
+        return self.last_modified
+
+    def get_title(self):
+        return self.title
+    
+    def set_title(self, t):
+        self.title = t
+
+    def get_text_content(self):
+        return self.text_content
+    
+    def set_text_content(self, t):
+        self.text_content = t
+    
+    def increment_flags(self):
+        self.flag_count += 1
+    
+    def get_flag_count(self):
+        return self.flag_count
+    
+    def get_uuid(self):
+        return self.uuid
 
 
 class ListingForm(ModelForm):
@@ -91,6 +140,12 @@ class ListingForm(ModelForm):
         if not category:
             self._errors["category"] = self.error_class(["You must choose category"])
         return cleaned_data
+        
+class EditListingForm(ModelForm):
+    class Meta:
+        model = Listing
+        #exclude = ['flag_count', 'verified','type', 'url', 'uuid','creator']
+        fields = ['title', 'category', 'price', 'num', 'street', 'city', 'zipcode', 'textContent']
 
     
 

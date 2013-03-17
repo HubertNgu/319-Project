@@ -10,13 +10,16 @@ class="active"
 {% endblock nav_listings %}
 
 {% block base_content %}
-<b> Listings page - thes section is static across ALL listings pages</b>
+
+{% if message %}
+
+<p id="system_message" class="body"> {{ message }} </p>
+
+{% endif %}
 
 {% block listings_content %}
 
 
 {% endblock listings_content %}
-
-
 
 {% endblock base_content %}
