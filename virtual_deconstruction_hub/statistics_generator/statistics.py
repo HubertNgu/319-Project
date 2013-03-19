@@ -1,6 +1,6 @@
 # Statistics Class
 from survey_system.models import Survey
-from listings.models import Listing
+from listings.models import Listing, CAT_CHOICES
 from statistics_generator.models import Statistics, StatisticsCategory
 
 from util import ValueCounter
@@ -27,7 +27,7 @@ def survey_transaction_total_amount(surveys):
 def average_time_successful_transaction(survey_listings):
 	transaction_times = list()
 	for survey, listing in survey_listings.items():
-		transaction_times.append(listing.date_created - survey.time_submitted)
+		transaction_times.append((listing.created - survey.time_submitted).seconds)
 	return sum(transaction_times) / len(transaction_times) \
 			if len(transaction_times) > 0 else 0
 
@@ -45,8 +45,7 @@ def generate_statistics():
 	surveys = Survey.objects.all()
 	#buyer_listings = Listing.objects.get(type=='buyer')
 	#seller_listings = Listing.objects.get(type=='seller')
-	survey_listings = {survey : Listing.objects.get(id==survey.listing_id) 
-						for survey in surveys}
+	survey_listings = {survey : Listing.objects.get(id=survey.listing_id) for survey in surveys}
 
 	# Maps of category data
 	survey_category_rank_stats = survey_category_rank(surveys)
@@ -66,7 +65,7 @@ def generate_statistics():
 					transaction_success_rate=100)
 	statistics.save()
 
-	for name, category in Listing.CAT_CHOICES:
+	for name, category in CAT_CHOICES:
 		statistics_category = \
 			StatisticsCategory(statistics_id=statistics.id, 
 				category=category, 
