@@ -14,8 +14,9 @@ def get_repeat_send_delay():
 
 def is_survey_ready(listing):
 	return (listing.survey_time_sent is None and 
-		datetime.utcnow() > listing.created + get_initial_send_delay()) or \
-		(datetime.utcnow() > listing.survey_time_sent + get_repeat_send_delay())
+		    datetime.utcnow() > listing.created + get_initial_send_delay()) or \
+               (listing.survey_time_sent is not None and 
+                    datetime.utcnow() > listing.survey_time_sent + get_repeat_send_delay())
 
 def filter_ready_surveys(listings):
 	return [listing for listing in listings if is_survey_ready(listing)]
@@ -32,3 +33,5 @@ def mail_surveys():
 	for listing in ready_surveys:
 		survey_url = '%s/survey/%s' % (constants.SITE, listing.survey_id)	
 		send_survey_email(survey_url, listing.creator)
+                listing.survey_time_sent = datetime.utcnow()
+                listing.save()

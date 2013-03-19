@@ -1,81 +1,21 @@
-{% extends "base.html" %}
-	<script language="javascript">
-		function onSurveySubmit() {
-		error = document.getElementById('error');
-		error.style.display = "none";
+{% extends "base.html" %}		
 
-		document.getElementById('item').style.border = "";
-		document.getElementById('category').style.border = "";
-		document.getElementById('quantity').style.border = "";
-		document.getElementById('price').style.border = "";
-		document.getElementById('location').style.border = "";
-		document.getElementById('comments').style.border = "";
+{% block window_title %}
+Submit a Survey - Virtual Deconstruction Hub
+{% endblock window_title %}
 
-		if (document.getElementById('item').value == "") {
-			error.innerHTML = "Please enter a name for the item";
-			error.style.display = "inline";
-			document.getElementById('item').style.border = "1px solid #CD0A0A";
-			return false;
-		}
+{% block base_content %}
 
-		if (document.getElementById('category').value == "") {
-			error.innerHTML = "Please enter a category for the item";
-			error.style.display = "inline";
-			document.getElementById('category').style.border = "1px solid #CD0A0A";
-			return false;
-		}
-
-		if (document.getElementById('quantity').value == "") {
-			error.innerHTML = "Please enter a valid number for the quantity";
-			error.style.display = "inline";
-			document.getElementById('quantity').style.border = "1px solid #CD0A0A";
-			return false;
-		}
-
-		if (document.getElementById('price').value == "") {
-			error.innerHTML = "Please enter the price you sold the item for";
-			error.style.display = "inline";
-			document.getElementById('price').style.border = "1px solid #CD0A0A";
-			return false;
-			}
-		}
-
-		if (document.getElementById('location').value == "") {
-			error.innerHTML = "Please enter a location of the transaction";
-			error.style.display = "inline";
-			document.getElementById('location').style.border = "1px solid #CD0A0A";
-			return false;
-		}
-	</script>
-
-		
-	{% block base_content %}
 	<h1>Submit a Survey</h1>
-	{% if errormessage != None %}
-	{%endif%}
-	<span id = "error" style="color:red;display:none"></span>
-  	<form action="/survey/successful/{{ survey_id }}" 
-  			method="post" onSubmit = "return onSurveySubmit();">
-  		{% csrf_token %}
-   	
-   		<label>Item:</label>
-   		<input type = "text" name = "item" id = "item"/><br/>
 
-   		<label>Category:</label>
-   		<input type = "text" name = "category" id = "category"/></br />
-  
-  		<label>Quantity:</label>
-  		<input type = "number" name = "quantity" id = "quantity"/><br/>
-                
-   		<label>Price($CAD):</label>
-  		<input type = "number" name = "price" id = "price"/><br/>
+	<form id="submit_survey" action="{{ submit_action }}" 
+		method="post" {% if form.is_multipart %}
+		enctype="multipart/form-data"{% endif %}>
+		{% csrf_token %}
+		<table>
+			{{ form.as_table }}
+		</table>
+		<input type="submit" value="Submit" />
+	</form>
 
-  		<label>Location:</label>
-  		<input type = "text" name = "location" id = "location"/><br />
-  
-  		<label>Comments(optional):</label>
-  		<input type = "text" name = "comments" id = "comments"/><br/>
-            
-   		<input type="submit" value="Submit Survey">
- 	</form>
 {% endblock base_content %}
