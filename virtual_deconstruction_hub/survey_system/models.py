@@ -11,7 +11,7 @@ FIELDS = ['item', 'category', 'quantity', 'price', 'street_number', 'street_name
 
 class Survey(models.Model):
 	item = models.CharField(max_length=30)
-	category = models.CharField(max_length=6, choices = CAT_CHOICES, default = CAT_CHOICES[0][0])
+	category = models.CharField(max_length=20, choices=CAT_CHOICES, default=CAT_CHOICES[0][0])
 	quantity = models.IntegerField()
 	price = models.FloatField()
 	street_number = models.IntegerField()

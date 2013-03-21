@@ -16,7 +16,7 @@ from django.shortcuts import redirect
 
 def survey(request, survey_id):
 	try:
-		listing = Listing.objects.get(survey_id=survey_id)
+		listing = Listing.objects.get(uuid=survey_id)
 	except:
 		raise Http404
 
@@ -30,9 +30,6 @@ def survey(request, survey_id):
 							'submit_action' : '/survey_system/survey/%s' % survey_id}
 			return render_to_response('survey_system/survey.html', form_args,
 				context_instance=RequestContext(request))
-			#return render_to_response("survey_system/survey.html",
-			#	{ 'survey_id' : survey_id },
-			#	context_instance=RequestContext(request))
 	elif request.method == 'POST':
 		survey_form = SurveyForm(request.POST)
 		if survey_form.is_valid():

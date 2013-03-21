@@ -31,7 +31,7 @@ def mail_surveys():
 	listings = Listing.objects.filter(expired=False)
 	ready_surveys = filter_ready_surveys(listings)
 	for listing in ready_surveys:
-		survey_url = '%s/survey/%s' % (constants.SITE, listing.survey_id)	
+		survey_url = '%s/survey/%s' % (constants.SITE, listing.uuid)	
 		send_survey_email(survey_url, listing.creator)
                 listing.survey_time_sent = datetime.utcnow()
                 listing.save()

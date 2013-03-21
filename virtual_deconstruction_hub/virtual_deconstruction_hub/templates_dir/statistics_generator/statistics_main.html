@@ -18,55 +18,95 @@ Home/Statistics Page
 Here you will find some statistical information
 
 <div class="category_stat">
-   <span class="survey_count">
+   <span class="survey_category_rank">
       {% load chart_tags %}
       {% chart %}
-      	?chf=a,s,000000
-        ?chs=400x400
-   		&cht=p3
-   		&chco=3399CC 
-   		&chd=s:Uf9a
-   		&chd={{ category_survey_values }}
-   		&chdl={{ labels }}
-   		&chtt=Survey+Count
+         ?chs=400x400
+                 &cht=p3
+                 &chd={{ category_survey_values }}
+                 &chdl={{ labels }}
+                 &chtt=Survey+Category+Rank
       {% endchart %}
    </span>
    
-   
-   
+   <span class="buyer_category_rank">
+      {% load chart_tags %}
+      {% chart %}
+         ?chs=400x400
+                 &cht=p3
+                 &chd={{ category_buyer_values }}
+                 &chdl={{ labels }}
+                 &chtt=Buyer+Category+Rank
+      {% endchart %}
+   </span>
+
+   <span class="seller_category_rank">
+      {% load chart_tags %}
+      {% chart %}
+         ?chs=400x400
+                 &cht=p3
+                 &chd={{ category_seller_values }}
+                 &chdl={{ labels }}
+                 &chtt=Seller+Category+Rank
+      {% endchart %}
+   </span>
+      
    <span class="amount">
    	{% load chart_tags %}
       {% chart %}
-      	?chf=a,s,000000
-        ?chs=400x400
-   		&cht=p3
-   		&chco=008000
+      &chxt=y
+   		&chbh=a,3
+      &chds=0,{{ category_amount_max }}
+  		&chs=300x225
+   		&cht=bvs
+   		&chco=aaaaaa
    		&chd={{ category_amount_values }}
    		&chdl={{ labels }}
-   		&chtt=Transaction+Amount
-   		&chma=0,5,5|0,200
+   		&chtt=Category+Transaction+Amounts
       {% endchart %}
    </span>
- </div
-   
-<div class="succesrate">
-	<span class="successrate">
+ </div>
+
+<div class="amountsellerbuyer">
+	<span class="amountsellerbuyer">
    	{% load chart_tags %}
       {% chart %}
-      	?chf=bg,s,00000000
    		&chxt=y
    		&chbh=a,3
   		&chs=300x225
    		&cht=bvs
-   		&chco=FF9900,FFCC33
-  		&chds= 20,10 | 100,100
+      &chco=4D89F9
+  		&chds= 0,{{ successful_transaction_amount }}
   		&chts=676767,10.5
-   		&chd=t:0.2|0.1
   		&chg=-1,0
-  		&chtt=Trasaction+success+rate
+      &chd=t:{{ buyer_transaction_amount }},{{ seller_transaction_amount}},{{successful_transaction_amount}}
+      &chdl=Buyers|Sellers|Total
+  		&chtt=Transaction+Amounts+(Average:${{average_transaction_amount}}CAD)
+      {% endchart %}
+   </span>
+
+   <h1>Average Transaction Time: {{ average_transaction_time }}</h1>
+
+   <div class="succesrate">
+  <span class="successrate">
+    {% load chart_tags %}
+      {% chart %}
+      ?chxr=0,0,{{number_listings}}
+      &chxt=y
+      &chbh=a
+      &chds=0,{{ number_listings }}
+      &chs=500x300
+      &cht=bvg
+      &chco=A2C180,3D7930,4D89F9,C6D9fD,aaaaaa,bbbbbb
+      &chd=t:{{number_buyer_surveys}}|{{number_buyer_listings}}|{{number_seller_surveys}}|{{number_seller_listings}}|{{number_surveys}}|{{number_listings}}
+      &chdl=Buyer+Surveys|Buyer+Listing|Seller+Surveys|Seller+Listings|Surveys|Listings
+      &chtt=Transaction+Success+Rate
       {% endchart %}
    </span>
 </div>
+</div>
+
+
 
 {{ form.map }}
 {{ form.media.js }}
