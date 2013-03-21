@@ -128,6 +128,10 @@ if(document.getElementById('password').value != document.getElementById('confirm
  {
  
  document.getElementById('pictureform').value = "1";
+ if (document.getElementById('id_picture').value == ""){
+ alert("You must choose a file to add");
+ return false;
+ }
  }
  
   function setSubmitTrue()
@@ -135,3 +139,4 @@ if(document.getElementById('password').value != document.getElementById('confirm
  
  document.getElementById('issubmit').value = "1";
  }
+ 

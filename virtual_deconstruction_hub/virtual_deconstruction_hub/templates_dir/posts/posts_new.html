@@ -36,20 +36,25 @@ Can't seem to get this working, they all evaluate true all the time!!???
 {% csrf_token %}
 <input type = "hidden" name = "pictureform" id = "pictureform" value = "0"></input>
 <input type = "hidden" name = "issubmit" id = "issubmit" value = "0"></input>
-<input type = "hidden" name = "addanotherpicture" id = "addanotherpicture" value ={{addanotherprevious}}></input>
+
+
 <table>
 {{ form.as_table }}
 
 </table>
-{% if addanotherpicture != None %}
-<p> {% if addanotherprevious != None %}{{addanotherprevious}},{%endif%} Added {{addanotherpicture}} </p>
+{% if addanotherprevious != None %}
+{% for item in addanotherprevious %}
+<li> Added {{item}} </li>
+
+{% endfor %}
+
 <input type="hidden" name= "notnewpost" id = "notnewpost" value = "0"></input>
 <input type="hidden" name= "postid" id = "postid" value = {{postid}}></input>
 <input type = "hidden" name="paragraphtag" id = "paragraphtag" value = "1"></input>
 {% endif %}
 {{pictureform.as_p}}
 <input type="submit" value="Submit"  onclick="setSubmitTrue()"/>
-<button onclick= "addAnotherPicture()">Add Another Picture</button>
+<button onclick= "return addAnotherPicture()">Add Another Picture</button>
 </form>
 
 {% endblock posts_content %}
