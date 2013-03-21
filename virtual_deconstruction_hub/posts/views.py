@@ -1,5 +1,5 @@
 # Create your views here.
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 from django.http import Http404
 from django.shortcuts import render_to_response
 #from django.template.defaulttags import csrf_token
@@ -55,6 +55,7 @@ def new_post(request, post_type):
     if request.method == 'POST':
         post_form = PostForm(request.POST)
         #if post_form valid, process new post
+        
         if post_form.is_valid() and request.POST.get("notnewpost") == None:
             # write to db and return post object
             post = post_form.save(commit=False)
@@ -78,23 +79,19 @@ def new_post(request, post_type):
                 post.set_url( tag_maker("_", post) )
                 post_url = post.get_url()
         form_args = {'form':post_form, 'submit_action':submit_action, 'post_url' : post_url, 'post':post}
-        if(request.POST.get("issubmit") == "1" and request.POST.get("notnewpost") != None):
-            post.creator = request.POST.get('creator')
-            post.title = request.POST.get("title")
-            post.text_content = request.POST.get('text_content')
-            post.save()
         
         if form.is_valid():
             form_args = {'post':post, 'post_url': post_url}
             photo = Photo(photo = request.FILES['picture'], post = post )
             photo.save()            
-            if request.POST.get('pictureform') == "1":
-                addanotherprevious = None
-                addanotherpicture = request.FILES['picture']
-                if(request.POST.get('paragraphtag') != None):
-                    addanotherprevious = request.POST.get('addanotherpicture')
+            if request.POST.get('pictureform') == "1" and request.POST.get("issubmit") != 1:
+                photolist = Photo.objects.filter(post_id = post.id)
+                addanotherprevious = list()
+                for o in Photo.objects.filter(post_id = post.id): 
+                    addanotherprevious.append(o.photo.name)
+            
                 form_args = {'form':post_form, 'submit_action':submit_action, 
-                             'addanotherpicture' :addanotherpicture, 'pictureform': pictureform,
+                              'pictureform': pictureform,
                              'postid' :postid, 'addanotherprevious' : addanotherprevious}
                 return render_to_response("posts/posts_new.html", form_args, context_instance=RequestContext(request))
                 
@@ -117,14 +114,14 @@ def new_post(request, post_type):
             return redirect(post.get_url(), context_instance=RequestContext(request))
 
             # create a verification/edit link and send with mailer then direct to success message page
-            user_email = post.get_creator()
-            verify_url = '%s/edit-verify?post_id=%s&uuid=%s' % (Site.objects.get_current(), post.id, post.get_uuid())
-            send_post_verification_email(verify_url, user_email, post_type)
-            return render_to_response(TEMPLATE_PATHS.get("posts_success"), form_args, context_instance=RequestContext(request))
-        else:
+        user_email = post.get_creator()
+        verify_url = '%s/edit-verify?post_id=%s&uuid=%s' % (Site.objects.get_current(), post.id, post.get_uuid())
+        send_post_verification_email(verify_url, user_email, post_type)
+        return render_to_response(TEMPLATE_PATHS.get("posts_success"), form_args, context_instance=RequestContext(request))
+        #else:
             # if form submission not valid, redirect back to form with error messages
-            form_args = {'form':post_form, 'submit_action':submit_action, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post_type), 'pictureform': pictureform}
-            return render_to_response(TEMPLATE_PATHS.get("posts_new"), form_args, context_instance=RequestContext(request))
+           # form_args = {'form':post_form, 'submit_action':submit_action, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post_type), 'pictureform': pictureform}
+           # return render_to_response("posts/verification.html", form_args, context_instance=RequestContext(request))
 
 
 def edit_verify_post(request):  
