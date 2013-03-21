@@ -29,9 +29,9 @@
 	</ul></nav>
 	{% block nav_search %}
 	<form id="header_search_form" action={% block search_action %}"/search"{% endblock search_action %} method="get" >
-		<input id="search_text" type="search" name="search_query">
+		<input id="search_text" type="search" name="q">
 		<select id="select" name="type">
-	  		<option value="listings" {% block listings_option %}{% endblock listings_option %}>Listings</option>
+	  		<option value="list" {% block listings_option %}{% endblock listings_option %}>Listings</option>
 	  		<option value="blog" {% block blog_option %}{% endblock blog_option %}>Blog Posts</option>
 	  		<option value="proj" {% block proj_option %}{% endblock proj_option %}>Project Ideas</option>
 	  		<option value="stry" {% block stry_option %}{% endblock stry_option %}>Success Stories</option>

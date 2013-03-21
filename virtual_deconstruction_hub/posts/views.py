@@ -5,13 +5,10 @@ from django.shortcuts import render_to_response
 #from django.template.defaulttags import csrf_token
 from django.template import RequestContext
 #from django.contrib.auth.models import User
-from posts.models import Post
+from posts.models import *
 #from django.contrib.auth import authenticate,login,get_user
 from django.shortcuts import redirect
-from verificationapp.models import VerificationApp
 from postpictures.models import *
-from fileupload.views import handle_uploaded_file
-from posts.models import PostForm, Photo
 from django import forms
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -22,12 +19,13 @@ import random
 from postpictures.models import UploadForm, PostPictures
 from mailer.views import send_post_verification_email
 from django.contrib.sites.models import Site
+from haystack.query import SearchQuerySet
 
-#PAGE_SIZE = int(constants.RESULTS_PAGE_SIZE)
+#PAGE_SIZE = int(constants.results_page_size)
 PAGE_SIZE = settings.RESULTS_PAGE_SIZE
 
-TEMPLATE_PATHS = {'proj_list': 'posts/projects_list.html', 'blog_list': 'posts/blogs_list.html', 'stry_list': 'posts/stories_list.html',
-                  'proj_single': 'posts/projects_individual.html', 'blog_single': 'posts/blogs_individual.html', 'stry_single': 'posts/stories_individual.html',
+TEMPLATE_PATHS = {'proj_list': 'posts/posts_list.html', 'blog_list': 'posts/posts_list.html', 'stry_list': 'posts/posts_list.html',
+                  'proj_single': 'posts/posts_single.html', 'blog_single': 'posts/posts_single.html', 'stry_single': 'posts/posts_single.html',
                   'posts_new': 'posts/posts_new.html',
                   'posts_success':'posts/new_post_success.html',
                   'posts_upload': 'uploadfile/upload.html',
@@ -118,21 +116,21 @@ def new_post(request, post_type):
            # type whenever a single one is created from the web, just used to 
            # populate db for testing purposes
            #====================================================================
-            multiple_entries_for_testing(100, post_type)
+           #multiple_entries_for_testing(100, post_type)
 
-        if post.is_verified():
-                # if post is already verified, redirect user to their newly created post
-            return redirect(post.get_url(), context_instance=RequestContext(request))
+            if post.is_verified():
+                    # if post is already verified, redirect user to their newly created post
+                return redirect(post.get_url(), context_instance=RequestContext(request))
 
             # create a verification/edit link and send with mailer then direct to success message page
-        user_email = post.get_creator()
-        verify_url = '%s/edit-verify?post_id=%s&uuid=%s' % (Site.objects.get_current(), post.id, post.get_uuid())
-        send_post_verification_email(verify_url, user_email, post_type)
-        return render_to_response(TEMPLATE_PATHS.get("posts_success"), form_args, context_instance=RequestContext(request))
-        #else:
+            user_email = post.get_creator()
+            verify_url = '%s/posts/%s?post_id=%s&uuid=%s' % (Site.objects.get_current(), URL_PATHS.get('posts_edit-verify'), post.id, post.get_uuid())
+            send_post_verification_email(verify_url, user_email, post_type)
+            return render_to_response(TEMPLATE_PATHS.get("posts_success"), form_args, context_instance=RequestContext(request))
+        else:
             # if form submission not valid, redirect back to form with error messages
-           # form_args = {'form':post_form, 'submit_action':submit_action, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post_type), 'pictureform': pictureform}
-           # return render_to_response("posts/verification.html", form_args, context_instance=RequestContext(request))
+            form_args = {'form':post_form, 'submit_action':submit_action, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post_type), 'pictureform': pictureform, 'post_type': post_type}
+            return render_to_response(TEMPLATE_PATHS.get("posts_new"), form_args, context_instance=RequestContext(request))
 
 
 def edit_verify_post(request): 
@@ -171,7 +169,7 @@ def edit_verify_post(request):
                 raise Http404
         #post verified by this point, render edit page with message
         edit_form = EditPostForm(instance=post)
-        form_args = {'form':edit_form, 'message': message, 'submit_action': submit_action, 'post_type_title':POST_TYPE_TITLES.get(post.get_type()), 'logparams': logparams}
+        form_args = {'form':edit_form, 'message': message, 'submit_action': submit_action, 'post_type_title':POST_TYPE_TITLES.get(post.get_type()), 'logparams': logparams, 'post_type': post.get_type()}
         return render_to_response(TEMPLATE_PATHS.get("posts_new"), form_args, context_instance=RequestContext(request))
         
     if request.method == 'POST':
@@ -183,11 +181,11 @@ def edit_verify_post(request):
             # This redirects back to edit form, should change to a render_to_response with a message that edit successful
             #return redirect(post_url,context_instance=RequestContext(request))
             #return render_to_response(post_url,context_instance=RequestContext(request))
-            form_args = {'form':edit_form, 'submit_action':submit_action, 'message':MESSAGES.get('edit_success'), 'post_type_title':POST_TYPE_TITLES.get(post.get_type()), 'post_url': post_url, 'logparams' : logparams}
+            form_args = {'form':edit_form, 'submit_action':submit_action, 'message':MESSAGES.get('edit_success'), 'post_type_title':POST_TYPE_TITLES.get(post.get_type()), 'post_url': post_url, 'post_type': post.get_type(), 'logparams' : logparams}
             return render_to_response(TEMPLATE_PATHS.get("posts_new"), form_args, context_instance=RequestContext(request))
         else:
             # if form submission not valid, redirect back to form with error messages
-            form_args = {'form':edit_form, 'submit_action':submit_action, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post.get_type()), 'logparams':logparams}
+            form_args = {'form':edit_form, 'submit_action':submit_action, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post.get_type()), 'post_type': post.get_type(),  'logparams':logparams}
             return render_to_response(TEMPLATE_PATHS.get("posts_new"), form_args, context_instance=RequestContext(request))   
     
 def posts_index(request, post_type):
@@ -212,7 +210,7 @@ def posts_index(request, post_type):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         posts= paginator.page(paginator.num_pages)
-    form_args = {'posts':posts, 'message': None, 'post_type_title':POST_TYPE_TITLES.get(post_type), 'logparams': logparams}
+    form_args = {'posts':posts, 'message': None, 'post_type_title':POST_TYPE_TITLES.get(post_type), 'post_type': post_type, 'logparams': logparams}
     return render_to_response(TEMPLATE_PATHS.get(post_type+'_list'),form_args, context_instance=RequestContext(request))
         
 def posts_specific(request, post_type, tag):
@@ -232,7 +230,8 @@ def posts_specific(request, post_type, tag):
         #query = Post.objects.get(url=tag, type=post_type)
         if query.is_verified():
             form = PostForm(instance=query)
-            form_args = {'post':form, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post_type)}
+            photos = query.photo_set.all()
+            form_args = {'post':form, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post_type), 'post_type': post_type, 'photos': photos}
             return render_to_response( TEMPLATE_PATHS.get(post_type+"_single"),form_args, context_instance=RequestContext(request))
         else:
             raise Http404()        
@@ -243,16 +242,13 @@ def upload_file(request):
         if form.is_valid():
             photo = PostPictures(photo = request.FILES['picture'], postid = 1 )
             photo.save()
-            form_args = {'form':form, 'message': None, 'post_type_title':POST_TYPE_TITLES.get('upload') }
+            form_args = {'form':form, 'message': None, 'post_type_title':POST_TYPE_TITLES.get('upload'), 'post_type': form.post.get_type() }
             return render_to_response(TEMPLATE_PATHS.get('posts_new'), form_args, context_instance=RequestContext(request))
     else:
         form = UploadForm()
-        form_args = {'form':form, 'message': None, 'post_type_title':POST_TYPE_TITLES.get('upload') }
+        form_args = {'form':form, 'message': None, 'post_type_title':POST_TYPE_TITLES.get('upload'), 'post_type': form.post.get_type() }
         return render_to_response(TEMPLATE_PATHS.get('posts_upload'), form_args, context_instance=RequestContext(request))
     
-def search_posts(request, post_type):
-    post_type = str(post_type.lower())
-    pass
         
 #===============================================================================
 # Takes in a post and removes any no a-z,A-Z,0-9 characters in the title,

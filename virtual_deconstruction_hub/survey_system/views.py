@@ -6,7 +6,6 @@ views.py class for the survey survey_system
 import logging
 from listings.models import Listing
 from survey_system.models import Survey, SurveyForm
-
 from django.contrib.sites.models import Site
 from django.http import Http404
 from django.shortcuts import render_to_response, get_object_or_404

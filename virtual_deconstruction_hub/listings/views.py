@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpResponse, HttpRequest, Http404
 from django.shortcuts import redirect,get_object_or_404, render_to_response, render
 from django.template import Context, loader, RequestContext
 from django.template.defaulttags import csrf_token
@@ -67,30 +67,6 @@ def detail(request, listing_id):
         logparams=[logtext,accounttext]
     listing = get_object_or_404(Listing, pk=listing_id)
     return render(request, TEMPLATE_PATHS.get('listings_single'), {"listing": listing, 'logonparams':logparams})  
-
-#def searchListing(request):
-#    if request.method == 'SEARCH':
-#        keyword = request.SEARCH.get('keyword')
-#        listings_results = Listing.objects.raw('SELECT * FROM listings WHERE title LIKE %%s%', [keyword])
-#        context=Context({
-#                     'listings_list' : listings_results,
-#                     })
-#        return HttpResponse(HttpResponse(template.render(context)))
-#
-#def filterListing(request, listing_type):
-#    if(listing_type == 'Items for sale'):
-#        listings_results = Listing.objects.raw('SELECT * FROM listings WHERE type == "Items for sale" ')
-#        context=Context({
-#                     'listings_list' : listings_results,
-#                     })
-#        return HttpResponse(HttpResponse(template.render(context)))
-#    if(listings_type == 'Wanted items'):
-#        listings_results = Listing.objects.raw('SELECT * FROM listings WHERE type == "Wanted Items" ')
-#        context=Context({
-#                     'listings_list' : listings_results,
-#                     })
-#        return HttpResponse(HttpResponse(template.render(context)))
-        
         
 def createListing(request):
     if request.user.is_authenticated():
@@ -258,7 +234,8 @@ def multiple_entries_for_testing(number):
     title = ' Furniture for sale '
     content = ' - Bah blah blah blahahab labalaba hbaalavhgvsha balobuebfuewbfuebfue jefbuefuewbfuewbfuwefbuwebfuweb fiunbefiuwef uefbuwefbwuefbeufb;efuebf'
     for i in xrange(0,number):
-        l = Listing(creator=email, title = title, textContent=content, category = 'wood', 
+        l = Listing(creator=email, title = title, text_content=content, category = 'wood', for_sale=True,
                     num = 22, street = 'blah', city = 'Vancouver', zipcode = 'V6T1Z4', verified = True)
         l.save()
     return
+

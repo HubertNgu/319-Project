@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.conf import settings
 from django.conf.urls.defaults import *
+#from search.views import PostSearchView
 
 
 # Uncomment the next two lines to enable the admin:
@@ -20,7 +21,7 @@ urlpatterns = patterns('',
     (r'^survey/', include('survey_system.urls')),
     
     # posts URLs
-    (r'^posts', include('posts.urls')),
+    (r'^posts/', include('posts.urls')),
     
     # profile URLs
     (r'profiles/', include('userprofile.urls')),
@@ -46,8 +47,13 @@ urlpatterns = patterns('',
 
     url(r"^contact_seller", 'mailer.views.contact_seller'),
     
+    # search application
+    url(r'^search/', 'search.views.search'),    
+    
     #set root for static files (css, images, etc)
     url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
+    #set root for uploaded photo files
+    url(r'^photos/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     
     )
 
