@@ -116,8 +116,8 @@ class EditPostForm(ModelForm):
     
 # PhotoStroage model
 class Photo(models.Model):
-   post = models.ForeignKey(Post)
-   photo =  models.ImageField(upload_to='photos/%Y/%B/%d/')
+   listing = models.ForeignKey(Post)
+   photo =  models.ImageField(upload_to='photos/posts/%Y/%B/%d/')
    caption = models.CharField(max_length=200)
    
    def imagename(self):

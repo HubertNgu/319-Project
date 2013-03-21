@@ -165,7 +165,16 @@ class EditListingForm(ModelForm):
         #exclude = ['flag_count', 'verified','type', 'url', 'uuid','creator']
         fields = ['title', 'category', 'price', 'num', 'street', 'city', 'zipcode', 'textContent']
 
-    
+# PhotoStroage model
+class Photo(models.Model):
+   listing = models.ForeignKey(Listing)
+   photo =  models.ImageField(upload_to='photos/listings/%Y/%B/%d/')
+   caption = models.CharField(max_length=200)
+   
+   def imagename(self):
+       return os.path.basename(self.photo.name)
+   
+
 
             
         

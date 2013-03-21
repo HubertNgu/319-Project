@@ -11,12 +11,27 @@ Create a new listing - Virtual Deconstruction Hub
 
 {# context for directing to a app method call ->  <form action="{% url 'listings:submit_new' listing.id %}" method="post"> #}
 
-<form id="new_post_form" action="{{ submit_action }}" method="post" {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}>
+<form id="new_post_form" action="{{ submit_action }}" method="post" enctype="multipart/form-data">
 {% csrf_token %}
+<input type = "hidden" name = "pictureform" id = "pictureform" value = "0"></input>
+<input type = "hidden" name = "issubmit" id = "issubmit" value = "0"></input>
+
 <table>
 {{ form.as_table }}
 </table>
+{{pictureform.as_p}}
+{% if addanotherprevious != None %}
+{% for item in addanotherprevious %}
+<li> Added {{item}} </li>
+
+{% endfor %}
+
+<input type="hidden" name= "notnewlisting" id = "notnewlistingg" value = "0"></input>
+<input type="hidden" name= "listingid" id = "listingid" value = {{listingid}}></input>
+<input type = "hidden" name="paragraphtag" id = "paragraphtag" value = "1"></input>
+{% endif %}
 <input type="submit" value="Submit" />
+<button onclick= "return addAnotherPicture()">Add Another Picture</button>
 </form>
 
 {% endblock listings_content %}

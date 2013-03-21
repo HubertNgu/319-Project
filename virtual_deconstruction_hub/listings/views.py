@@ -13,6 +13,8 @@ from mailer.views import send_post_verification_email
 import re
 import string
 import random
+from listings.models import Photo
+from postpictures.models import UploadForm, PostPictures
 
 TEMPLATE_PATHS = {'listings_list': 'listings/listings_list.html',
                   'listings_single': 'listings/listings_individual.html',
@@ -74,13 +76,14 @@ def detail(request, listing_id):
         
 def createListing(request):
     submit_action = '/listings/new'
+    pictureform = UploadForm()
     if request.method == 'GET':
         form = ListingForm(instance=Listing())
-        form_args = {'form':form, 'submit_action':submit_action}
+        form_args = {'form':form, 'submit_action':submit_action, 'pictureform': pictureform}
         return render_to_response(TEMPLATE_PATHS.get('listings_new'), form_args, context_instance=RequestContext(request))
     if request.method == 'POST':
         listing_form = ListingForm(request.POST)
-        if listing_form.is_valid():
+        if listing_form.is_valid() and request.POST.get("notnewlisting") == None:
             listing = listing_form.save(commit=False)
             listing.url = re.sub(r'\W+', '', listing.title.lower().replace (" ", "_"))
             listing_url = listing.url
@@ -95,25 +98,43 @@ def createListing(request):
 #            if request.user.is_authenticated():
 #                listing.verified = True
             listing.save()
-            form_args = {'listing':listing, 'listing_url':listing_url}
+            listingid = listing.id
+        
             
-            if request.GET.get('photo_upload') is 1:
-                pass
+        form = UploadForm(request.POST, request.FILES)
+        if request.POST.get("notnewlisting") != None:
+                listingid = request.POST.get("listingid")
+                listing = Listing.objects.get(id = listingid )
+                listing_url = listing.get_url()
+        form_args = {'form':listing_form, 'submit_action':submit_action, 'listing_url' : listing_url, 'listing':listing}
+       
+        if form.is_valid():
+            form_args = {'listing':listing, 'listing_url': listing_url}
+            photo = Photo(photo = request.FILES['picture'], listing = listing )
+            photo.save()            
+            if request.POST.get('pictureform') == "1" and request.POST.get("issubmit") != 1:
+                photolist = Photo.objects.filter(listing_id = listing.id)
+                addanotherprevious = list()
+                for o in Photo.objects.filter(listing_id = listing.id): 
+                    addanotherprevious.append(o.photo.name)
+            
+                form_args = {'form':listing_form, 'submit_action':submit_action, 
+                              'pictureform': pictureform,
+                             'listingid' :listingid, 'addanotherprevious' : addanotherprevious}
+                return render_to_response("listings/listings_new.html", form_args, context_instance=RequestContext(request))
                       
-            if listing.verified:
+        if listing.verified:
                 # if post is already verified, redirect user to their newly created post
-                return redirect(listing.url, context_instance=RequestContext(request))
+            return redirect(listing.url, context_instance=RequestContext(request))
             
              # create a verification/edit link and send with mailer then direct to success message page
-            user_email = listing.get_creator()
-            verify_url = '%s/edit-verify?listing_id=%s&uuid=%s' % (Site.objects.get_current(), listing.id, listing.get_uuid())
-            send_post_verification_email(verify_url, user_email, 'list')
+        user_email = listing.get_creator()
+        verify_url = '%s/edit-verify?listing_id=%s&uuid=%s' % (Site.objects.get_current(), listing.id, listing.get_uuid())
+        send_post_verification_email(verify_url, user_email, 'list')
             
-            return render_to_response(TEMPLATE_PATHS.get('listings_success'), form_args, context_instance=RequestContext(request))
+        return render_to_response(TEMPLATE_PATHS.get('listings_success'), form_args, context_instance=RequestContext(request))
         
-        else:
-            form_args = {'form':listing_form, 'submit_action': submit_action}
-            return render_to_response(TEMPLATE_PATHS.get('listings_new'), form_args, context_instance=RequestContext(request))
+        
 
 def edit_verify_listing(request):  
     listing_id = request.GET.get('listing_id')
