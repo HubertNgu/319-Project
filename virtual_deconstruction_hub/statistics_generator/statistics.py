@@ -30,7 +30,9 @@ def average_time_successful_transaction(survey_listings):
 		transaction_times.append((listing.created - survey.time_submitted).seconds)
 	return sum(transaction_times) / len(transaction_times) \
 			if len(transaction_times) > 0 else 0
-
+			
+		
+		
 def listing_transaction_success_rate(survey_listings, buyer_listings, seller_listings):
 	buyers, sellers = list(), list()
 	for survey, listing in survey_listings:

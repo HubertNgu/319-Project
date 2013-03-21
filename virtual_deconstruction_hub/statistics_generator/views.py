@@ -19,6 +19,10 @@ logger = logging.getLogger(__name__)
 class MapForm(forms.Form):
     map = forms.Field(widget=GoogleMap(attrs={'width':510, 'height':510}))
 
+
+
+
+
 def index(request):
 	# If there have never been any statistics generated then return the
 	# none page for statistics
@@ -67,13 +71,16 @@ def index(request):
 	values['category_amount_values'] = category_amount_values
 
 	gmap = maps.Map(opts = {
-        'center': maps.LatLng(38, -97),
+        'center': maps.LatLng(49.2400238, -123.15193),
         'mapTypeId': maps.MapTypeId.ROADMAP,
-        'zoom': 3,
+        'zoom': 13,
         'mapTypeControlOptions': {
              'style': maps.MapTypeControlStyle.DROPDOWN_MENU
+             
         },
     })
+    
+    
     
 	values['form'] =  MapForm(initial={'map': gmap})
     
