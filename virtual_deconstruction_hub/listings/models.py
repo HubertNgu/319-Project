@@ -53,12 +53,7 @@ class Listing(models.Model):
     expires = models.DateTimeField("expiry date", 
         default=(timezone.now() + datetime.timedelta(days=30)), editable=True)
     expired = models.BooleanField(default=False)
-<<<<<<< HEAD
-    for_sale = models.CharField(max_length=3, choices=SALE_CHOICES, default='yes')
-=======
     for_sale = models.CharField(max_length=4, choices=SALE_CHOICES, default="sell")
-    # TODO: For survey change this to uuid
->>>>>>> Commiting work done by Sean
     survey_id = models.CharField(max_length=36, default=uuid.uuid4)
     survey_time_sent = models.DateTimeField("survey time sent", blank=True, 
         null=True)
