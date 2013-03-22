@@ -1,0 +1,8 @@
+{{ object.title }}
+{{ object.text_content }}
+{{ object.created }}
+{{ object.url }}
+{{ object.category }}
+{{ object.price }}
+{{ object.city }}
+{{ object.for_sale }}

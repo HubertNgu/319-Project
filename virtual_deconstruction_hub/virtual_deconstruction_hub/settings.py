@@ -49,7 +49,7 @@ USE_TZ = False
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = 'photo_uploads/'
+MEDIA_ROOT = os.path.join(PROJECT_PATH, 'photo_uploads')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -138,9 +138,18 @@ INSTALLED_APPS = (
 		'verificationapp',
 		'fileupload',
 		'postpictures',
-                'chart_tools',
-                'mailer',
+        'chart_tools',
+        'mailer',
+        'haystack',
+        'whoosh',
 )
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
+    },
+}
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # Host for sending e-mail

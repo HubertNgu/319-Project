@@ -4,28 +4,6 @@
 Create a New {{ post_type_title }} Post
 {% endblock window_title %}
 
-{% comment %}
-
-Can't seem to get this working, they all evaluate true all the time!!???
-
-{% ifequal post_type "blog" %}
-{% block nav_blog %}class="active"{% endblock nav_blog %}
-{% block blog_option %}selected="selected"{% endblock blog_option %}
-{% endif %}
-
-{% ifequal post_type "stry" %}
-{% block nav_story %}class="active"{% endblock nav_story %}
-{% block stry_option %}selected="selected"{% endblock stry_option %}
-{% endifequal %}
-
-{% ifequal post_type "proj" %}
-{% block nav_projects %}class="active"{% endblock nav_projects %}
-{% block proj_option %}selected="selected"{% endblock proj_option %}
-{% endifequal %}
-{% endcomment %}
-
-
-
 {% block posts_content %}
 
 <h1>Create a new {{post_type_title|lower}} post:</h1>

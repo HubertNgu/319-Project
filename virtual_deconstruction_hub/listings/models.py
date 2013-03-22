@@ -28,8 +28,8 @@ CAT_CHOICES = ((WOOD, "Woods"), (BRICKS, "Bricks"), (SHINGL, "Shingles"),
     (TUBS, "Tubs"), (WINDOW, "Windows"), (DOORS, "Doors"),(FIXTUR, "Fixtures"),
     (CABWIR, "Cable and Wiring"), (PARTBD, "Particle board"), (CARDBD, "Cardboard"),
     (CABINT, "Cabinetry"), (SCRAPM, "Scrap metal"), (APPLIA, "Appliances"), (OTHER, "Other"),)
-
-
+SALE_CHOICES=(("sell", 'Items for sale'),
+              ("want", 'Items wanted'))
 
 class Listing(models.Model):
     
@@ -37,22 +37,29 @@ class Listing(models.Model):
     url = models.CharField(max_length=110)
     creator = models.EmailField("creators email")
     created = models.DateTimeField("date created", auto_now_add=True)
-    lastModified = models.DateTimeField("last modified", auto_now=True)
+    last_modified = models.DateTimeField("last modified", auto_now=True)
     title = models.CharField(max_length=100)
-    textContent = models.TextField()
+    text_content = models.TextField()
     verified = models.BooleanField(default=False)
     category = models.CharField(max_length=20, choices = CAT_CHOICES, default = WOOD)
     price = models.CharField(max_length=20, blank=True)
-    num = models.IntegerField()
-    street = models.CharField(max_length=100)
-    city = models.CharField(max_length=100)
+    num = models.IntegerField(blank=True,null=True)
+    street = models.CharField(max_length=100,blank=True)
+    city = models.CharField(max_length=100, blank=True)
     state = 'British Columbia'
-    zipcode = models.CharField(max_length=6)
+    zipcode = models.CharField(max_length=6,blank=True)
     location = models.CharField(max_length=100, blank=True)
-    flagCount = models.SmallIntegerField("flag count", default=0)
+    flag_count = models.SmallIntegerField("flag count", default=0)
     expires = models.DateTimeField("expiry date", 
         default=(timezone.now() + datetime.timedelta(days=30)), editable=True)
     expired = models.BooleanField(default=False)
+<<<<<<< HEAD
+    for_sale = models.CharField(max_length=3, choices=SALE_CHOICES, default='yes')
+=======
+    for_sale = models.CharField(max_length=4, choices=SALE_CHOICES, default="sell")
+    # TODO: For survey change this to uuid
+>>>>>>> Commiting work done by Sean
+    survey_id = models.CharField(max_length=36, default=uuid.uuid4)
     survey_time_sent = models.DateTimeField("survey time sent", blank=True, 
         null=True)
     uuid = models.CharField(max_length=36, default=uuid.uuid4)
@@ -65,16 +72,16 @@ class Listing(models.Model):
    
    
     def __unicode__(self):
-        return 'creator: %s, created: %s, title: %s, textContent: %s' \
-            % (self.creator, self.created, self.title, self.textContent)
+        return 'creator: %s, created: %s, title: %s, text_content: %s' \
+            % (self.creator, self.created, self.title, self.text_content)
 
-    def markModified(self):
-        self.lastModified = timezone.now()
+    def mark_modified(self):
+        self.last_modified = timezone.now()
 
     def flag(self):
-        self.flagCount + 1
+        self.flag_count + 1
 
-    def isExpired(self):
+    def is_expired(self):
         return self.expires <= timezone.now()
     
     def renew(self):
@@ -121,6 +128,12 @@ class Listing(models.Model):
     
     def get_uuid(self):
         return self.uuid
+    
+def get_listings_categories():
+    return CAT_CHOICES
+
+def get_sale_categories():
+    return SALE_CHOICES
 
 class ListingForm(ModelForm):
     
@@ -134,14 +147,15 @@ class ListingForm(ModelForm):
         self.fields['street'].label = "Street Name"
         self.fields['city'].label = "City"
         self.fields['zipcode'].label = "Postal code"
-        self.fields['textContent'].label = "Description"
+        self.fields['text_content'].label = "Description"
+        self.fields['for_sale'].label = "Type of listing"
         
     
     class Meta:
         model = Listing
-        exclude = ['url', 'verified', 'flagCount']
-        fields = ['creator', 'email_verification', 'title','category', 'price', 'num', 
-                  'street', 'city', 'zipcode', 'textContent']
+        #exclude = ['url', 'verified', 'flag_count']
+        fields = ['creator', 'email_verification', 'title','for_sale','category', 'price', 'num', 
+                  'street', 'city', 'zipcode', 'text_content']
         
         
     def clean(self):
@@ -150,6 +164,7 @@ class ListingForm(ModelForm):
         verified_email = cleaned_data.get('email_verification')
         category = cleaned_data.get('category')
         zipcode = cleaned_data.get('zipcode')
+        type = cleaned_data.get('type')
         
         if creator_email != verified_email:
             self._errors["email_verification"] = self.error_class(["The email and verification entered do not match"])
@@ -162,7 +177,7 @@ class EditListingForm(ModelForm):
     class Meta:
         model = Listing
         #exclude = ['flag_count', 'verified','type', 'url', 'uuid','creator']
-        fields = ['title', 'category', 'price', 'num', 'street', 'city', 'zipcode', 'textContent']
+        fields = ['title', 'for_sale', 'category', 'price', 'num', 'street', 'city', 'zipcode', 'text_content']
 
 # PhotoStroage model
 class Photo(models.Model):

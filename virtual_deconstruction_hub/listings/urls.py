@@ -13,9 +13,9 @@ urlpatterns = patterns('',
     #===========================================================================    
 
     url(r"^$", 'listings.views.index'),
-    url(r'^new', 'listings.views.createListing'),
+    url(r'^new', 'listings.views.create_listing'),
     url(r'^(?P<listing_id>\d+)/$', 'listings.views.detail', name='detail'),
-    url(r'^edit/(?P<listing_id>\d+)/$', 'listings.views.editListing'),
+    url(r'^edit/(?P<listing_id>\d+)/$', 'listings.views.edit_verify_listing'),
     url(r"edit-verify", 'listings.views.edit_verify_listing'),
-    url(r'^contactSeller/(?P<listing_id>\d+)/$', 'listings.views.contactSeller'),
+    url(r'^contactSeller/(?P<listing_id>\d+)/$', 'listings.views.contact_seller'),
     )

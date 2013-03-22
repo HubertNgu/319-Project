@@ -5,6 +5,20 @@
 
 </br> <a href="/listings/new/"> Create New Listing </a>
 
+<div id="page_links_top" class="pagination">
+    <span class="step-links">
+        {% if listings.has_previous %}
+            <a href="?page={{ listings.previous_page_number }}">Previous</a>
+        {% endif %}
+        <span class="current">
+            Page {{ listings.number }} of {{ listings.paginator.num_pages }}
+        </span>
+        {% if listings.has_next %}
+            <a href="?page={{ listings.next_page_number }}">Next</a>
+        {% endif %}
+    </span>
+</div>
+<br>
 
 {% if listings %}
 
@@ -20,20 +34,19 @@
     
 {% endif %}
 	
-<div class="pagination">
+<div id="page_links_bottom" class="pagination">
     <span class="step-links">
         {% if listings.has_previous %}
-            <a href="?page={{ listings.previous_page_number }}">previous</a>
+            <a href="?page={{ listings.previous_page_number }}">Previous</a>
         {% endif %}
         <span class="current">
-            Page {{ listings.number }} of {{ listings.paginator.num_pages }}.
+            Page {{ listings.number }} of {{ listings.paginator.num_pages }}
         </span>
         {% if listings.has_next %}
-            <a href="?page={{ listings.next_page_number }}">next</a>
+            <a href="?page={{ listings.next_page_number }}">Next</a>
         {% endif %}
     </span>
 </div>
-
 
 {% endblock listings_content %}
 

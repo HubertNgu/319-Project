@@ -12,10 +12,11 @@ urlpatterns = patterns('posts.views',
     #===========================================================================    
 
     # looks for url patter domain.com/posts/4CHARTYPESTRING/new, calls posts.views.create_post(request, post_type='4CHARTYPESTRING')
-    url(r"(?P<post_type>[a-zA-Z]{4})/new", 'new_post'),
-    url(r"edit-verify", 'edit_verify_post'),
+    url(r"^(?P<post_type>[a-zA-Z]{4})/new/$", 'new_post'),
+    url(r"^(?P<post_type>[a-zA-Z]{4})/new$", 'new_post'),
+    url(r"^edit-verify$", 'edit_verify_post'),
     #url(r"(?P<post_type>[a-zA-Z]{4})/search", 'search_posts'),
     # displys the appropriate index page for any of our three types of posts
-    url(r"(?P<post_type>[a-zA-Z]{4})/(?P<tag>\w+)", 'posts_specific'),
-    url(r"(?P<post_type>[a-zA-Z]{4})",'posts_index'),
+    url(r"^(?P<post_type>[a-zA-Z]{4})/(?P<tag>\w+)", 'posts_specific'),
+    url(r"^(?P<post_type>[a-zA-Z]{4})/$",'posts_index'),
     )

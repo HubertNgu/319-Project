@@ -120,8 +120,14 @@ class Photo(models.Model):
    photo =  models.ImageField(upload_to='photos/posts/%Y/%B/%d/')
    caption = models.CharField(max_length=200)
    
-   def imagename(self):
-       return os.path.basename(self.photo.name)
+    def get_caption(self):
+        return self.caption
+   
+    def get_url(self):
+        return self.photo
+   
+    def imagename(self):
+        return os.path.basename(self.photo.name)
    
 class UploadForm(ModelForm):
     class Meta:
