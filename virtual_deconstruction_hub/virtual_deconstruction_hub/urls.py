@@ -44,8 +44,6 @@ urlpatterns = patterns('',
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    url(r"^contact_seller", 'mailer.views.contact_seller'),
     
     # search application
     url(r'^search/', 'search.views.search'),    

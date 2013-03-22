@@ -2,7 +2,7 @@ from django.http import Http404
 #from posts.views import search_posts
 from listings.models import Listing
 from posts.models import Post
-from haystack.forms import SearchForm
+from haystack.forms import SearchForm, FacetedSearchForm
 from haystack.query import SearchQuerySet 
 from haystack.views import SearchView, search_view_factory
 #from posts.search_indexes import SearchForm, PostSearchView
@@ -84,38 +84,39 @@ def search_posts_custom_form(request):
 
 """Searches the query string for in listings objects"""
 def search_listings_custom_form(request):
-    q_string = request.GET['q']
-    #category = request.GET.get('category', None)
-    sqs = SearchQuerySet().filter(content=AutoQuery(q_string)).models(Listing).facet('category').facet('for_sale')
+#    q_string = request.GET['q']
+#    #category = request.GET.get('category', None)
+#    #sqs = SearchQuerySet().filter(content=AutoQuery(q_string)).models(Listing)#.facet('category').facet('for_sale')
 #    if category:
 #        category = str(category).lower() 
 #        sqs = SearchQuerySet().filter(content=AutoQuery(q_string), category=Exact(category)).models(Listing)
     view = search_view_factory(
         view_class=ListingSearchView,
         template=TEMPLATE_PATHS['listings_results'],
-        searchqueryset=sqs,
+        searchqueryset=SearchQuerySet().models(Listing),
         form_class=ListingSearchForm
         )
     return view(request)
 
 
-class ListingSearchForm(SearchForm):
+class ListingSearchForm(FacetedSearchForm):
     cat = forms.CharField(required=False, widget=forms.Select(choices=get_listings_categories()))
     type = forms.CharField(required=False, widget=forms.HiddenInput)
-    TYPE_CHOICES=((True, 'Items for sale'),
-                  (False, 'Items wanted'))
-    for_sale = forms.BooleanField(required=False, widget=forms.Select(choices=get_sale_categories()))
+#    TYPE_CHOICES=((True, 'Items for sale'),
+#                  (False, 'Items wanted'))
+    for_sale = forms.CharField(required=False, widget=forms.Select(choices=get_sale_categories()))
     
     def search(self):
         # First, store the SearchQuerySet received from other processing.
         sqs = super(ListingSearchForm, self).search()
-           
-        # Check to see if a category_date was chosen.
-        if self.cleaned_data.get('cat', None):
+            
+        # Check to see if a category was chosen.
+        if self.cleaned_data['cat']:
             sqs = sqs.filter(category=self.cleaned_data['cat'])
             
-        if self.cleaned_data.get('for_sale', None):
-            sqs = sqs.filter(for_sale__contains=self.cleaned_data.get('for_sale'))
+        # Check to see if a type was chosen.
+        if self.cleaned_data['for_sale']:
+            sqs = sqs.filter(for_sale=self.cleaned_data['for_sale'])
 
         return sqs
     

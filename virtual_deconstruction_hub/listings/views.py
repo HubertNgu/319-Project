@@ -68,7 +68,8 @@ def detail(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
     return render(request, TEMPLATE_PATHS.get('listings_single'), {"listing": listing, 'logonparams':logparams})  
         
-def createListing(request):
+def create_listing(request):
+    
     if request.user.is_authenticated():
         logtext = "Logout"
         accounttext = "My Account"
@@ -78,6 +79,7 @@ def createListing(request):
         logtext = "Login"
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
+
     submit_action = '/listings/new'
     pictureform = UploadForm()
     if request.method == 'GET':
@@ -202,6 +204,7 @@ def random_string_generator(size, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
 
+<<<<<<< HEAD
 def contactSeller(request, listing_id):
     if request.user.is_authenticated():
         logtext = "Logout"
@@ -212,6 +215,9 @@ def contactSeller(request, listing_id):
         logtext = "Login"
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
+=======
+def contact_seller(request, listing_id):
+>>>>>>> Commiting work done by Sean
     submit_action = '/listings/contactSeller/' + listing_id + '/'
     
     if request.method == 'GET':
@@ -234,8 +240,17 @@ def multiple_entries_for_testing(number):
     title = ' Furniture for sale '
     content = ' - Bah blah blah blahahab labalaba hbaalavhgvsha balobuebfuewbfuebfue jefbuefuewbfuewbfuwefbuwebfuweb fiunbefiuwef uefbuwefbwuefbeufb;efuebf'
     for i in xrange(0,number):
-        l = Listing(creator=email, title = title, text_content=content, category = 'wood', for_sale=True,
-                    num = 22, street = 'blah', city = 'Vancouver', zipcode = 'V6T1Z4', verified = True)
+        sale="sell"
+        ver=True
+        exp=False
+        if i%2 == 0:
+            sale="want"
+        if i%5 == 0:
+            ver=False
+        if i%7 == 0:
+            exp=True
+        l = Listing(creator=email, title = str(i) + " - " + title, text_content=content, category = 'wood', for_sale=sale,
+                    num = 22, street = 'blah', city = 'Vancouver', zipcode = 'V6T1Z4', verified = ver, expired=exp)
         l.save()
     return
 

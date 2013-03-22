@@ -28,9 +28,8 @@ CAT_CHOICES = ((WOOD, "Woods"), (BRICKS, "Bricks"), (SHINGL, "Shingles"),
     (TUBS, "Tubs"), (WINDOW, "Windows"), (DOORS, "Doors"),(FIXTUR, "Fixtures"),
     (CABWIR, "Cable and Wiring"), (PARTBD, "Particle board"), (CARDBD, "Cardboard"),
     (CABINT, "Cabinetry"), (SCRAPM, "Scrap metal"), (APPLIA, "Appliances"), (OTHER, "Other"),)
-
-SALE_CHOICES=(('yes', 'Items for sale'),
-              ('no', 'Items wanted'))
+SALE_CHOICES=(("sell", 'Items for sale'),
+              ("want", 'Items wanted'))
 
 class Listing(models.Model):
     
@@ -54,7 +53,12 @@ class Listing(models.Model):
     expires = models.DateTimeField("expiry date", 
         default=(timezone.now() + datetime.timedelta(days=30)), editable=True)
     expired = models.BooleanField(default=False)
+<<<<<<< HEAD
     for_sale = models.CharField(max_length=3, choices=SALE_CHOICES, default='yes')
+=======
+    for_sale = models.CharField(max_length=4, choices=SALE_CHOICES, default="sell")
+    # TODO: For survey change this to uuid
+>>>>>>> Commiting work done by Sean
     survey_id = models.CharField(max_length=36, default=uuid.uuid4)
     survey_time_sent = models.DateTimeField("survey time sent", blank=True, 
         null=True)
