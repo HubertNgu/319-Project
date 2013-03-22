@@ -33,6 +33,7 @@ CAT_CHOICES = ((WOOD, "Woods"), (BRICKS, "Bricks"), (SHINGL, "Shingles"),
 
 class Listing(models.Model):
     
+    for_sale = models.BooleanField()
     url = models.CharField(max_length=110)
     creator = models.EmailField("creators email")
     created = models.DateTimeField("date created", auto_now_add=True)
@@ -40,7 +41,7 @@ class Listing(models.Model):
     title = models.CharField(max_length=100)
     textContent = models.TextField()
     verified = models.BooleanField(default=False)
-    category = models.CharField(max_length=6, choices = CAT_CHOICES, default = WOOD)
+    category = models.CharField(max_length=20, choices = CAT_CHOICES, default = WOOD)
     price = models.CharField(max_length=20, blank=True)
     num = models.IntegerField()
     street = models.CharField(max_length=100)
@@ -52,8 +53,6 @@ class Listing(models.Model):
     expires = models.DateTimeField("expiry date", 
         default=(timezone.now() + datetime.timedelta(days=30)), editable=True)
     expired = models.BooleanField(default=False)
-    # TODO: For survey change this to uuid
-    survey_id = models.CharField(max_length=36, default=uuid.uuid4)
     survey_time_sent = models.DateTimeField("survey time sent", blank=True, 
         null=True)
     uuid = models.CharField(max_length=36, default=uuid.uuid4)

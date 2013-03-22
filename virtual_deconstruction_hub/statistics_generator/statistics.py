@@ -21,50 +21,79 @@ def survey_category_transaction_amount(surveys):
 		amounts.update(survey.category, survey.price)
 	return amounts
 
+def survey_average_transaction_amount(surveys):
+	return float(sum([survey.price for survey in surveys])) / float(len(surveys))
+
+def buyer_transaction_total_amount(buyer_surveys):
+	return float(sum([survey.price for survey in buyer_surveys]))
+
+def seller_transaction_total_amount(seller_surveys):
+	return float(sum([survey.price for survey in seller_surveys]))
+
 def survey_transaction_total_amount(surveys):
 	return sum([survey.price for survey in surveys])
 
 def average_time_successful_transaction(survey_listings):
 	transaction_times = list()
-	for survey, listing in survey_listings.items():
+	for survey, listing in survey_listings:
 		transaction_times.append((listing.created - survey.time_submitted).seconds)
 	return sum(transaction_times) / len(transaction_times) \
 			if len(transaction_times) > 0 else 0
 			
-		
-		
-def listing_transaction_success_rate(survey_listings, buyer_listings, seller_listings):
-	buyers, sellers = list(), list()
-	for survey, listing in survey_listings:
-		if listing.type == 'buyer':
-			buyers.append(survey)
-		else:
-			sellers.append(survey)
+def listing_transaction_success_rate(buyer_surveys, seller_surveys, 
+		buyer_listings, seller_listings):
+	buyer_success_rate = 100*float(len(buyer_surveys)) / float(len(buyer_listings)) \
+		if len(buyer_listings) > 0 else 0
+	seller_success_rate = 100*float(len(seller_surveys)) / float(len(seller_listings)) \
+		if len(seller_listings) > 0 else 0
+	total_success_rate = 100*float(len(buyer_surveys) + len(seller_surveys)) / \
+			float((len(buyer_listings) + len(seller_listings))) \
+			if len(buyer_listings) + len(seller_listings) > 0 else 0
 
-	return len(buyers) / len(buyer_listings), len(sellers) / len(seller_listings)
+	return buyer_success_rate, seller_success_rate, total_success_rate
 
 def generate_statistics():
 	surveys = Survey.objects.all()
-	#buyer_listings = Listing.objects.get(type=='buyer')
-	#seller_listings = Listing.objects.get(type=='seller')
-	survey_listings = {survey : Listing.objects.get(id=survey.listing_id) for survey in surveys}
+	listings = Listing.objects.all()
+	buyer_listings = Listing.objects.filter(for_sale=1)
+	seller_listings = Listing.objects.filter(for_sale=0)
+	survey_listings = [(survey, Listing.objects.get(id=survey.listing_id))
+						for survey in surveys]
+	buyer_surveys = [survey for survey, listing in survey_listings if not listing.for_sale]
+	seller_surveys = [survey for survey, listing in survey_listings if listing.for_sale]
 
 	# Maps of category data
 	survey_category_rank_stats = survey_category_rank(surveys)
-	#buyer_category_rank_stats = buyer_category_rank(buyer_listings)
-	#seller_category_rank_stats = seller_category_rank(seller_listings)
+	buyer_category_rank_stats = buyer_category_rank(buyer_listings)
+	seller_category_rank_stats = seller_category_rank(seller_listings)
 	survey_category_transaction_amount_stats = \
 		survey_category_transaction_amount(surveys)
 
 	# Integer data values
+	average_transaction_amount = survey_average_transaction_amount(surveys)
+	buyer_transaction_amount = buyer_transaction_total_amount(buyer_surveys)
+	seller_transaction_amount = seller_transaction_total_amount(seller_surveys)
 	successful_transaction_amount = survey_transaction_total_amount(surveys)
 	average_transaction_time = average_time_successful_transaction(survey_listings)
-	#transaction_success_rate = listing_transaction_success_rate(survey_listings, 
-	#		buyer_listings, seller_listings)
+	buyer_transaction_success_rate, seller_transaction_success_rate, \
+		total_transaction_success_rate  = listing_transaction_success_rate(
+			buyer_surveys, seller_surveys,
+			buyer_listings, seller_listings)
 
-	statistics = Statistics(successful_transaction_amount=successful_transaction_amount,
+	statistics = Statistics(number_surveys=len(surveys),
+					number_listings=len(listings),
+					number_buyer_surveys=len(buyer_surveys),
+					number_seller_surveys=len(seller_surveys),
+					number_buyer_listings=len(buyer_listings),
+					number_seller_listings=len(seller_listings),
+					average_transaction_amount=average_transaction_amount,
+					buyer_transaction_amount=buyer_transaction_amount,
+					seller_transaction_amount=seller_transaction_amount,
+					successful_transaction_amount=successful_transaction_amount,
 					average_transaction_time=average_transaction_time,
-					transaction_success_rate=100)
+					buyer_transaction_success_rate=buyer_transaction_success_rate,
+					seller_transaction_success_rate=seller_transaction_success_rate,
+					total_transaction_success_rate=total_transaction_success_rate)
 	statistics.save()
 
 	for name, category in CAT_CHOICES:
@@ -72,8 +101,8 @@ def generate_statistics():
 			StatisticsCategory(statistics_id=statistics.id, 
 				category=category, 
 				survey_count=survey_category_rank_stats[category], 
-				buyer_count=0,
-				seller_count=0, 
+				buyer_count=buyer_category_rank_stats[category],
+				seller_count=seller_category_rank_stats[category], 
 				amount=survey_category_transaction_amount_stats.get(category))
 		statistics_category.save()
 
