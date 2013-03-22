@@ -12,7 +12,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
                     
     # user and authentication URLs
-    (r'^users/', include('users.urls')),
+    (r'^myaccount/', include('users.urls')),
     
     # listings URLs
     (r'listings/', include('listings.urls')),

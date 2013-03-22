@@ -1,7 +1,6 @@
-{% extends "base.html" %}
+{% extends "users/myaccount.html" %}
 
-{% block base_content %}
- <div  class="body">
+{% block account_content %}
 <span id = "error" style="color:red;display:none"></span>
 <form action="" method="post" onSubmit = "return onEditClick();">
   {% csrf_token %}
@@ -39,5 +38,5 @@
 <input type="submit" value = "Save">  
 </form>
 <button OnClick = "return cancelButton();">Cancel</button>
-</div>
-{% endblock base_content %}
+
+{% endblock account_content %}

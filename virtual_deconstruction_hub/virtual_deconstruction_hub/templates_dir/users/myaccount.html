@@ -2,19 +2,22 @@
 
 {% block base_content %}
  <div  class="body">
-<h1> Welcome {{username}}  to your account settings</h1>
-<label> Username: </label> {{username}} <br/>
-<label> First Name: </label> {{firstname}}<br/>
-<label> Last Name: </label> {{lastname}}<br/>
-<label> Email: </label>  {{email}}<br/>
-<label> Phone Number: </label> {{phone}}<br/>
-<label> Address: </label> {{address}}<br/>
-<label> City: </label> {{city}}<br/>
-<label> Province: </label> {{province}}<br/>
+    <h1> Welcome {{username}} to your account settings</h1>
+    <br />
+    <div style="height:100%;width:20%;float:left">
+        <ul>
+            <li value="listings" style="margin: 0 0 10px 0;cursor:pointer" ><a style="text-decoration:none" href="/myaccount/profile">Profile</a></li>
+            <li value="listings" style="margin: 0 0 10px 0;cursor:pointer" ><a style="text-decoration:none" href="/myaccount/listings">Listings</a></li>
+            <li value="listings" style="margin: 0 0 10px 0;cursor:pointer" ><a style="text-decoration:none" href="/myaccount/blog">Blog Posts</a></li>
+            <li value="listings" style="margin: 0 0 10px 0;cursor:pointer" ><a style="text-decoration:none" href="/myaccount/stry">Success Stories</a></li>
+            <li value="listings" style="margin: 0 0 10px 0;cursor:pointer" ><a style="text-decoration:none" href="/myaccount/proj">Project Ideas</a></li>
+        </ul>
+    </div>
+    
+    <div style="height:100%;width:80%;margin-left:20%" >
+        {% block account_content %}
 
-<form action="" method="post">
-  {% csrf_token %}
-  <input type="submit" value="Edit Your Account"> 
- </form>
+        {% endblock account_content %}
+    </div>
 </div>
 {% endblock base_content %}
