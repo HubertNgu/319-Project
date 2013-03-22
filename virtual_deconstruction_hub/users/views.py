@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.template import Context, loader
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.template.defaulttags import csrf_token
@@ -13,8 +13,15 @@ from django.shortcuts import redirect
 from userprofile.models import UserProfile 
 from verificationapp.models import VerificationApp
 from mailer.views import send_signup_verification_email
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from listings.models import Listing
+from posts.models import Post
+from django.conf import settings
 import string
 import random
+
+#PAGE_SIZE = int(constants.RESULTS_PAGE_SIZE)
+PAGE_SIZE = settings.RESULTS_PAGE_SIZE
 
 def index(request):
     if request.user.is_authenticated():
@@ -77,7 +84,7 @@ def signup(request):
             verificationcode = id_generator()
             verificationapp = VerificationApp(username = checkusername, verificationcode = verificationcode)
             verificationapp.save()
-            send_signup_verification_email("http://localhost:8080/users/verifyemail/?username=n&verificationcode=KU47FL3HR6", email)
+            send_signup_verification_email("http://localhost:8080/users/verifyemail/?username="+ checkusername + "&verificationcode="+ verificationcode, email)
             return render_to_response("users/verification.html",context_instance=RequestContext(request))
     else:
         
@@ -160,7 +167,7 @@ def myaccount(request):
     description = profile.description
     firstname = profile.firstname
     lastname = profile.lastname
-    return render_to_response("users\myaccount.html",{'username':username,
+    return render_to_response("users\profile.html",{'username':username,
                                                       'firstname':firstname,
                                                       'lastname':lastname,
                                                       'email':email,
@@ -169,3 +176,33 @@ def myaccount(request):
                                                       'phone':phone,
                                                       'province':province,
                                                       'description':description,},context_instance=RequestContext(request))
+                                                      
+def listings(request):
+    #    if request.
+    listings_list = Listing.objects.filter(creator = request.user.email).order_by('-created')
+    paginator = Paginator(listings_list, 25)
+    page = request.GET.get('page')
+    try:
+        listings = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        listings = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        listings = paginator.page(paginator.num_pages)
+#    return render_to_response('listings/listings_list.html', {"listings": listings})
+    return render(request, "users/listings.html", { "listings" : listings, "username" : request.user.username })
+def posts(request, post_type):
+    post_type = str(post_type.lower())
+    query = Post.objects.filter(type=post_type, creator=request.user.email).order_by('-last_modified')
+    paginator = Paginator(query , PAGE_SIZE)
+    page = request.GET.get('page')
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        posts = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        posts= paginator.page(paginator.num_pages)
+    return render(request, "users/" + post_type + ".html", { "posts" : posts, "username" : request.user.username })
