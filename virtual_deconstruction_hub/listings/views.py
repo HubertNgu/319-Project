@@ -32,6 +32,15 @@ MESSAGES = {'verified_listing': "Your listing has been verified and will be disp
 
 def index(request):
 #    if request.
+    if request.user.is_authenticated():
+        logtext = "Logout"
+        accounttext = "My Account"
+        welcometext = request.user.username
+        logparams=[logtext,accounttext, welcometext]
+    else: 
+        logtext = "Login"
+        accounttext = "Sign Up"
+        logparams=[logtext,accounttext]
     listings_list = Listing.objects.filter(verified = True).order_by('-created')
     paginator = Paginator(listings_list, 25)
     page = request.GET.get('page')
@@ -44,11 +53,20 @@ def index(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         listings = paginator.page(paginator.num_pages)
 #    return render_to_response('listings/listings_list.html', {"listings": listings})
-    return render(request, TEMPLATE_PATHS.get('listings_list'), { "listings" : listings })
+    return render(request, TEMPLATE_PATHS.get('listings_list'), { "listings" : listings, 'logonparams':logparams })
 
 def detail(request, listing_id):
+    if request.user.is_authenticated():
+        logtext = "Logout"
+        accounttext = "My Account"
+        welcometext = request.user.username
+        logparams=[logtext,accounttext, welcometext]
+    else: 
+        logtext = "Login"
+        accounttext = "Sign Up"
+        logparams=[logtext,accounttext]
     listing = get_object_or_404(Listing, pk=listing_id)
-    return render(request, TEMPLATE_PATHS.get('listings_single'), {"listing": listing})  
+    return render(request, TEMPLATE_PATHS.get('listings_single'), {"listing": listing, 'logonparams':logparams})  
 
 #def searchListing(request):
 #    if request.method == 'SEARCH':
@@ -75,11 +93,20 @@ def detail(request, listing_id):
         
         
 def createListing(request):
+    if request.user.is_authenticated():
+        logtext = "Logout"
+        accounttext = "My Account"
+        welcometext = request.user.username
+        logparams=[logtext,accounttext, welcometext]
+    else: 
+        logtext = "Login"
+        accounttext = "Sign Up"
+        logparams=[logtext,accounttext]
     submit_action = '/listings/new'
     pictureform = UploadForm()
     if request.method == 'GET':
         form = ListingForm(instance=Listing())
-        form_args = {'form':form, 'submit_action':submit_action, 'pictureform': pictureform}
+        form_args = {'form':form, 'submit_action':submit_action, 'pictureform': pictureform, 'logparams':logparams}
         return render_to_response(TEMPLATE_PATHS.get('listings_new'), form_args, context_instance=RequestContext(request))
     if request.method == 'POST':
         listing_form = ListingForm(request.POST)
@@ -106,10 +133,10 @@ def createListing(request):
                 listingid = request.POST.get("listingid")
                 listing = Listing.objects.get(id = listingid )
                 listing_url = listing.get_url()
-        form_args = {'form':listing_form, 'submit_action':submit_action, 'listing_url' : listing_url, 'listing':listing}
+        form_args = {'form':listing_form, 'submit_action':submit_action, 'listing_url' : listing_url, 'listing':listing, 'logparams' : logparams}
        
         if form.is_valid():
-            form_args = {'listing':listing, 'listing_url': listing_url}
+            form_args = {'listing':listing, 'listing_url': listing_url, 'logparams':logparams}
             photo = Photo(photo = request.FILES['picture'], listing = listing )
             photo.save()            
             if request.POST.get('pictureform') == "1" and request.POST.get("issubmit") != 1:
@@ -120,7 +147,8 @@ def createListing(request):
             
                 form_args = {'form':listing_form, 'submit_action':submit_action, 
                               'pictureform': pictureform,
-                             'listingid' :listingid, 'addanotherprevious' : addanotherprevious}
+                             'listingid' :listingid, 'addanotherprevious' : addanotherprevious,
+                             'logparams': logparams}
                 return render_to_response("listings/listings_new.html", form_args, context_instance=RequestContext(request))
                       
         if listing.verified:
@@ -137,6 +165,15 @@ def createListing(request):
         
 
 def edit_verify_listing(request):  
+    if request.user.is_authenticated():
+        logtext = "Logout"
+        accounttext = "My Account"
+        welcometext = request.user.username
+        logparams=[logtext,accounttext, welcometext]
+    else: 
+        logtext = "Login"
+        accounttext = "Sign Up"
+        logparams=[logtext,accounttext]
     listing_id = request.GET.get('listing_id')
     uuid = request.GET.get('uuid')
     #action for submit button
@@ -163,7 +200,7 @@ def edit_verify_listing(request):
                 raise Http404
         #post verified by this point, render edit page with message
         edit_form = EditListingForm(instance=listing)
-        form_args = {'form':edit_form, 'message': message, 'submit_action': submit_action}
+        form_args = {'form':edit_form, 'message': message, 'submit_action': submit_action, 'logparams':logparams}
         return render_to_response(TEMPLATE_PATHS.get("listings_new"), form_args, context_instance=RequestContext(request))
         
     if request.method == 'POST':
@@ -175,11 +212,11 @@ def edit_verify_listing(request):
             # This redirects back to edit form, should change to a render_to_response with a message that edit successful
             #return redirect(post_url,context_instance=RequestContext(request))
             #return render_to_response(post_url,context_instance=RequestContext(request))
-            form_args = {'form':edit_form, 'submit_action':submit_action, 'message':MESSAGES.get('edit_success'), 'listing_url': listing_url}
+            form_args = {'form':edit_form, 'submit_action':submit_action, 'message':MESSAGES.get('edit_success'), 'listing_url': listing_url, 'logparams':logparams}
             return render_to_response(TEMPLATE_PATHS.get("listings_new"), form_args, context_instance=RequestContext(request))
         else:
             # if form submission not valid, redirect back to form with error messages
-            form_args = {'form':edit_form, 'submit_action':submit_action, 'message':None}
+            form_args = {'form':edit_form, 'submit_action':submit_action, 'message':None, 'logparams':logparams}
             return render_to_response(TEMPLATE_PATHS.get("listings_new"), form_args, context_instance=RequestContext(request)) 
 
 def tag_maker(space_replacement_char, tag_string):
@@ -190,13 +227,22 @@ def random_string_generator(size, chars=string.ascii_uppercase + string.digits):
 
 
 def contactSeller(request, listing_id):
+    if request.user.is_authenticated():
+        logtext = "Logout"
+        accounttext = "My Account"
+        welcometext = request.user.username
+        logparams=[logtext,accounttext, welcometext]
+    else: 
+        logtext = "Login"
+        accounttext = "Sign Up"
+        logparams=[logtext,accounttext]
     submit_action = '/listings/contactSeller/' + listing_id + '/'
     
     if request.method == 'GET':
-        form_args = {'submit_action':submit_action}
+        form_args = {'submit_action':submit_action, 'logparams':logparams}
         return render_to_response("listings/contact_seller.html", form_args, context_instance=RequestContext(request))
     if request.method == "POST":
-        form_args = {'submit_action':submit_action}
+        form_args = {'submit_action':submit_action, 'logparams':logparams}
         listing = Listing.objects.get(pk = listing_id) 
         toemail = [listing.creator]
         fromemail = request.POST.get('emailTxt')
