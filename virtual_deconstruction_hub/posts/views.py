@@ -44,13 +44,24 @@ MESSAGES = {'verified_post': "Your post has been verified and will be displayed 
             'edit_success': "Your changes have been saved. You can make further changes to your post if you wish."}
 
 def new_post(request, post_type):
+    if request.user.is_authenticated():
+        logtext = "Logout"
+        accounttext = "My Account"
+        welcometext = request.user.username
+        logparams=[logtext,accounttext, welcometext]
+    else: 
+        logtext = "Login"
+        accounttext = "Sign Up"
+        logparams=[logtext,accounttext]
     post_type = str(post_type.lower())
     #action for submit button
     pictureform = UploadForm()
     submit_action = URL_PATHS.get(post_type+'_new')
     if request.method == 'GET':
         form = PostForm(instance=Post())
-        form_args = {'form':form, 'submit_action':submit_action, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post_type), 'pictureform':pictureform}
+        form_args = {'form':form, 'submit_action':submit_action, 'message':None, 
+                     'post_type_title':POST_TYPE_TITLES.get(post_type), 
+                     'pictureform':pictureform, 'logparams': logparams}
         return render_to_response(TEMPLATE_PATHS.get("posts_new"), form_args, context_instance=RequestContext(request))
     if request.method == 'POST':
         post_form = PostForm(request.POST)
@@ -78,10 +89,10 @@ def new_post(request, post_type):
                 post.set_type(post_type.lower())
                 post.set_url( tag_maker("_", post) )
                 post_url = post.get_url()
-        form_args = {'form':post_form, 'submit_action':submit_action, 'post_url' : post_url, 'post':post}
+        form_args = {'form':post_form, 'submit_action':submit_action, 'post_url' : post_url, 'post':post, 'logparams':logparams}
         
         if form.is_valid():
-            form_args = {'post':post, 'post_url': post_url}
+            form_args = {'post':post, 'post_url': post_url, 'logparams':logparams}
             photo = Photo(photo = request.FILES['picture'], post = post )
             photo.save()            
             if request.POST.get('pictureform') == "1" and request.POST.get("issubmit") != 1:
@@ -92,7 +103,7 @@ def new_post(request, post_type):
             
                 form_args = {'form':post_form, 'submit_action':submit_action, 
                               'pictureform': pictureform,
-                             'postid' :postid, 'addanotherprevious' : addanotherprevious}
+                             'postid' :postid, 'addanotherprevious' : addanotherprevious, 'logparams':logparams}
                 return render_to_response("posts/posts_new.html", form_args, context_instance=RequestContext(request))
                 
             # if phot_upload tag triggered, save the current post as object in db
@@ -124,7 +135,16 @@ def new_post(request, post_type):
            # return render_to_response("posts/verification.html", form_args, context_instance=RequestContext(request))
 
 
-def edit_verify_post(request):  
+def edit_verify_post(request): 
+    if request.user.is_authenticated():
+        logtext = "Logout"
+        accounttext = "My Account"
+        welcometext = request.user.username
+        logparams=[logtext,accounttext, welcometext]
+    else: 
+        logtext = "Login"
+        accounttext = "Sign Up"
+        logparams=[logtext,accounttext] 
     post_id = request.GET.get('post_id')
     uuid = request.GET.get('uuid')
     #action for submit button
@@ -151,7 +171,7 @@ def edit_verify_post(request):
                 raise Http404
         #post verified by this point, render edit page with message
         edit_form = EditPostForm(instance=post)
-        form_args = {'form':edit_form, 'message': message, 'submit_action': submit_action, 'post_type_title':POST_TYPE_TITLES.get(post.get_type())}
+        form_args = {'form':edit_form, 'message': message, 'submit_action': submit_action, 'post_type_title':POST_TYPE_TITLES.get(post.get_type()), 'logparams': logparams}
         return render_to_response(TEMPLATE_PATHS.get("posts_new"), form_args, context_instance=RequestContext(request))
         
     if request.method == 'POST':
@@ -163,14 +183,23 @@ def edit_verify_post(request):
             # This redirects back to edit form, should change to a render_to_response with a message that edit successful
             #return redirect(post_url,context_instance=RequestContext(request))
             #return render_to_response(post_url,context_instance=RequestContext(request))
-            form_args = {'form':edit_form, 'submit_action':submit_action, 'message':MESSAGES.get('edit_success'), 'post_type_title':POST_TYPE_TITLES.get(post.get_type()), 'post_url': post_url}
+            form_args = {'form':edit_form, 'submit_action':submit_action, 'message':MESSAGES.get('edit_success'), 'post_type_title':POST_TYPE_TITLES.get(post.get_type()), 'post_url': post_url, 'logparams' : logparams}
             return render_to_response(TEMPLATE_PATHS.get("posts_new"), form_args, context_instance=RequestContext(request))
         else:
             # if form submission not valid, redirect back to form with error messages
-            form_args = {'form':edit_form, 'submit_action':submit_action, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post.get_type())}
+            form_args = {'form':edit_form, 'submit_action':submit_action, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post.get_type()), 'logparams':logparams}
             return render_to_response(TEMPLATE_PATHS.get("posts_new"), form_args, context_instance=RequestContext(request))   
     
 def posts_index(request, post_type):
+    if request.user.is_authenticated():
+        logtext = "Logout"
+        accounttext = "My Account"
+        welcometext = request.user.username
+        logparams=[logtext,accounttext, welcometext]
+    else: 
+        logtext = "Login"
+        accounttext = "Sign Up"
+        logparams=[logtext,accounttext]
     post_type = str(post_type.lower())
     query = Post.objects.filter(type=post_type).filter(verified=True).order_by('-last_modified')
     paginator = Paginator(query , PAGE_SIZE)
@@ -183,10 +212,19 @@ def posts_index(request, post_type):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         posts= paginator.page(paginator.num_pages)
-    form_args = {'posts':posts, 'message': None, 'post_type_title':POST_TYPE_TITLES.get(post_type)}
+    form_args = {'posts':posts, 'message': None, 'post_type_title':POST_TYPE_TITLES.get(post_type), 'logparams': logparams}
     return render_to_response(TEMPLATE_PATHS.get(post_type+'_list'),form_args, context_instance=RequestContext(request))
         
 def posts_specific(request, post_type, tag):
+    if request.user.is_authenticated():
+        logtext = "Logout"
+        accounttext = "My Account"
+        welcometext = request.user.username
+        logparams=[logtext,accounttext, welcometext]
+    else: 
+        logtext = "Login"
+        accounttext = "Sign Up"
+        logparams=[logtext,accounttext]
     post_type = str(post_type.lower())
     tag.lower()
     if request.method == 'GET':
