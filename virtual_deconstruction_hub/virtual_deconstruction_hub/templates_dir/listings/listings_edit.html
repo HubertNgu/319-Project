@@ -11,7 +11,7 @@ Create a new listing - Virtual Deconstruction Hub
 
 {# context for directing to a app method call ->  <form action="{% url 'listings:submit_new' listing.id %}" method="post"> #}
 
-<form id="new_post_form" action="{{ submit_action }}" method="post" enctype="multipart/form-data">
+<form id="edit_form" action="{{ submit_action }}" method="post" enctype="multipart/form-data">
 {% csrf_token %}
 <input type = "hidden" name = "pictureform" id = "pictureform" value = "0"></input>
 <input type = "hidden" name = "issubmit" id = "issubmit" value = "0"></input>
@@ -32,7 +32,7 @@ Create a new listing - Virtual Deconstruction Hub
 
 {% endif %}
 
-<button form="new_post_form" formaction="/listings/delete-verify?listing_id={{listing.id}}&uuid={{listing.uuid}}">Delete</button>
+<button form="edit_form" formaction="/listings/delete-verify?listing_id={{listing.id}}&uuid={{listing.uuid}}">Delete</button>
 <input type="submit" value="Submit" />
 <button onclick= "return addAnotherPicture()">Add Another Picture</button>
 </form>

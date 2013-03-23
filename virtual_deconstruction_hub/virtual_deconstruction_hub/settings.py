@@ -138,7 +138,7 @@ INSTALLED_APPS = (
 		'verificationapp',
 		'fileupload',
 		'postpictures',
-        'chart_tools',
+#        'chart_tools',
         'mailer',
         'haystack',
         'whoosh',
