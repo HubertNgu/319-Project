@@ -15,7 +15,7 @@ urlpatterns = patterns('',
     (r'^myaccount/', include('users.urls')),
     
     # listings URLs
-    (r'listings/', include('listings.urls')),
+    (r'^listings/', include('listings.urls')),
     
     # survey system URLs
     (r'^survey/', include('survey_system.urls')),
@@ -24,10 +24,10 @@ urlpatterns = patterns('',
     (r'^posts/', include('posts.urls')),
     
     # profile URLs
-    (r'profiles/', include('userprofile.urls')),
+    (r'^profiles/', include('userprofile.urls')),
     
     #statistics urls
-    (r'statistics/', include('statistics_generator.urls')),
+    (r'^statistics/', include('statistics_generator.urls')),
 
     # admin site url
     url(r'^admin/', include(admin.site.urls)),

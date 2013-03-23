@@ -74,7 +74,12 @@ def detail(request, listing_id):
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
     listing = get_object_or_404(Listing, pk=listing_id)
-    return render(request, TEMPLATE_PATHS.get('listings_single'), {"listing": listing, 'logonparams':logparams})  
+    try:
+        listing = Listing.objects.get(id=???)
+        address = '%s%%2C+%s' % (str(last_survey.address).replace(' ', '+'), last_survey.city)
+    except:
+        address = str()
+    return render(request, TEMPLATE_PATHS.get('listings_single'), { 'address': address, "listing": listing, 'logonparams':logparams})  
         
 def create_listing(request):
     
@@ -89,8 +94,13 @@ def create_listing(request):
         logparams=[logtext,accounttext]
 
     submit_action = '/listings/new'
+    
     pictureform = UploadForm()
     
+<<<<<<< HEAD
+=======
+    
+>>>>>>> Commiting work done by Sean
     if request.method == 'GET':
         form = ListingForm(instance=Listing())
         form_args = {'form':form, 'submit_action':submit_action, 'pictureform': pictureform, 'logparams':logparams}
@@ -98,6 +108,7 @@ def create_listing(request):
     
     if request.method == 'POST':
         listing_form = ListingForm(request.POST)
+        form_args = {}
         if listing_form.is_valid() and request.POST.get("notnewlisting") == None:
             listing = listing_form.save(commit=False)
             listing.url = re.sub(r'\W+', '', listing.title.lower().replace (" ", "_"))
@@ -115,32 +126,37 @@ def create_listing(request):
 
             listing.save()
             listingid = listing.id
+<<<<<<< HEAD
         
             logger.debug('format', "createListing: debug")
             
+=======
+           
+            form = UploadForm(request.POST, request.FILES)
+>>>>>>> Commiting work done by Sean
             
-        form = UploadForm(request.POST, request.FILES)
-        if request.POST.get("notnewlisting") != None:
-                listingid = request.POST.get("listingid")
-                listing = Listing.objects.get(id = listingid )
-                listing_url = listing.get_url()
-        form_args = {'form':listing_form, 'submit_action':submit_action, 'listing_url' : listing_url, 'listing':listing, 'logparams' : logparams}
-       
-        if form.is_valid():
-            form_args = {'listing':listing, 'listing_url': listing_url, 'logparams':logparams}
-            photo = Photo(photo = request.FILES['picture'], listing = listing )
-            photo.save()            
-            if request.POST.get('pictureform') == "1" and request.POST.get("issubmit") != 1:
-                photolist = Photo.objects.filter(listing_id = listing.id)
-                addanotherprevious = list()
-                for o in Photo.objects.filter(listing_id = listing.id): 
-                    addanotherprevious.append(o.photo.name)
-            
-                form_args = {'form':listing_form, 'submit_action':submit_action, 
-                              'pictureform': pictureform,
-                             'listingid' :listingid, 'addanotherprevious' : addanotherprevious,
-                             'logparams': logparams}
-                return render_to_response("listings/listings_new.html", form_args, context_instance=RequestContext(request))
+            if request.POST.get("notnewlisting") != None:
+                    listingid = request.POST.get("listingid")
+                    listing = Listing.objects.get(id = listingid )
+                    listing_url = listing.get_url()
+            form_args = {'form':listing_form, 'submit_action':submit_action, 'listing_url' : listing_url, 'listing':listing, 'logparams' : logparams}
+           
+            if form.is_valid():
+                form_args = {'listing':listing, 'listing_url': listing_url, 'logparams':logparams}
+                photo = Photo(photo = request.FILES['picture'], listing = listing )
+                photo.save()            
+                if request.POST.get('pictureform') == "1" and request.POST.get("issubmit") != 1:
+                    photolist = Photo.objects.filter(listing_id = listing.id)
+                    addanotherprevious = list()
+                    for o in Photo.objects.filter(listing_id = listing.id): 
+                        addanotherprevious.append(o.photo.name)
+                
+                    form_args = {'form':listing_form, 'submit_action':submit_action, 
+                                  'pictureform': pictureform,
+                                 'listingid' :listingid, 'addanotherprevious' : addanotherprevious,
+                                 'logparams': logparams}
+                    
+                    return render_to_response("listings/listings_new.html", form_args, context_instance=RequestContext(request))
                       
         if listing.verified:
              # if post is already verified, redirect user to their newly created post
@@ -151,9 +167,8 @@ def create_listing(request):
         verify_url = '/edit-verify?listing_id=%s&uuid=%s' % (listing.id, listing.get_uuid())
         send_post_verification_email(verify_url, user_email, 'list')
 #        multiple_entries_for_testing(50)
-            
-        return render_to_response(TEMPLATE_PATHS.get('listings_success'), form_args, context_instance=RequestContext(request))
-        
+                
+    return render_to_response(TEMPLATE_PATHS.get('listings_success'), form_args, context_instance=RequestContext(request))    
         
 
 def edit_verify_listing(request):  
@@ -251,8 +266,13 @@ def random_string_generator(size, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
 
+<<<<<<< HEAD
 
 def contact_seller(request, listing_id):
+=======
+
+def contact_seller(request, listing_id):
+>>>>>>> Commiting work done by Sean
     if request.user.is_authenticated():
         logtext = "Logout"
         accounttext = "My Account"
@@ -262,6 +282,10 @@ def contact_seller(request, listing_id):
         logtext = "Login"
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
+<<<<<<< HEAD
+=======
+
+>>>>>>> Commiting work done by Sean
     submit_action = '/listings/contactSeller/' + listing_id + '/'
     if request.method == 'GET':
         form_args = {'submit_action':submit_action, 'logparams':logparams}

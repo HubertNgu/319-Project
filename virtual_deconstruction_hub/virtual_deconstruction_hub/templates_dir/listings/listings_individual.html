@@ -22,10 +22,11 @@
       	{{ listing.text_content }}
       
 </ul>
-
 </br> 
-</a> <a href="/listings/contactSeller/{{listing.id}}" > Contact </a>  <a href="/listings/new/"> Create </a> <a href="/listings/"> Go Back </a>
- 
+<iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" 
+src="https://maps.google.com/maps?f=q&source=s_q&hl=en&geocode&q{{ address }}&aq&sll=49.251784%2C-123.11039
+&sspn=0.065325%2C0.169086&doflg=ptk&ie=UTF8&hq&hnear={{ address }}%2C+Canada&t=m&z=12&iwloc=A&output=embed">
+</iframe><br />
 
 
 {% endblock listings_content %}
