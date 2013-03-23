@@ -1,4 +1,12 @@
-# Statistics Class
+'''
+ Statistics module responsible for generating statistics based on the
+ listings and surveys in the database.
+
+ @author Hubert Ngu
+ @author Jason Hou
+'''
+
+import logging
 from survey_system.models import Survey
 from listings.models import Listing, CAT_CHOICES
 from statistics_generator.models import Statistics, StatisticsCategory
@@ -6,43 +14,52 @@ from statistics_generator.models import Statistics, StatisticsCategory
 from util import ValueCounter
 from collections import Counter
 
-def survey_category_rank(surveys):
-	return Counter([survey.category for survey in surveys])
+logger = logging.getLogger(__name__)
 
-def buyer_category_rank(buyer_listings):
-	return Counter([listing.category for listing in buyer_listings])
+def __category_rank(category_list):
+	'''
+	Returns of map of category to count pairs for all surveys submitted.
+	'''
+	return Counter([element.category for element in category_list])
 
-def seller_category_rank(seller_listing):
-	return Counter([listing.category for listing in seller_listing])
-
-def survey_category_transaction_amount(surveys):
+def __survey_category_transaction_amount(surveys):
+	'''
+	Returns a map of category to amount pairs for all surveys submitted.
+	'''
 	amounts = ValueCounter.ValueCounter()
 	for survey in surveys:
 		amounts.update(survey.category, survey.price)
 	return amounts
 
-def survey_average_transaction_amount(surveys):
+def __survey_average_transaction_amount(surveys):
+	'''
+	Returns the average amount of money paid in all transactions.
+	'''
 	return float(sum([survey.price for survey in surveys])) / \
 		float(len(surveys)) if len(surveys) > 0 else 0
 
-def buyer_transaction_total_amount(buyer_surveys):
-	return float(sum([survey.price for survey in buyer_surveys]))
+def __transaction_amount(surveys):
+	'''
+	Returns the total amount of money paid in all transactions.
+	'''
+	return float(sum([survey.price for survey in surveys]))
 
-def seller_transaction_total_amount(seller_surveys):
-	return float(sum([survey.price for survey in seller_surveys]))
-
-def survey_transaction_total_amount(surveys):
-	return sum([survey.price for survey in surveys])
-
-def average_time_successful_transaction(survey_listings):
+def __average_time_successful_transaction(survey_listings):
+	'''
+	Returns the average time for a transaction to complete.
+	'''
 	transaction_times = list()
 	for survey, listing in survey_listings:
 		transaction_times.append((listing.created - survey.time_submitted).seconds)
 	return sum(transaction_times) / len(transaction_times) \
 			if len(transaction_times) > 0 else 0
 			
-def listing_transaction_success_rate(buyer_surveys, seller_surveys, 
+def __listing_transaction_success_rate(buyer_surveys, seller_surveys, 
 		buyer_listings, seller_listings):
+	'''
+	Returns the success rate for buyer transactions, seller_transactions,
+	and all transactions.
+	'''
 	buyer_success_rate = 100*float(len(buyer_surveys)) / float(len(buyer_listings)) \
 		if len(buyer_listings) > 0 else 0
 	seller_success_rate = 100*float(len(seller_surveys)) / float(len(seller_listings)) \
@@ -50,37 +67,53 @@ def listing_transaction_success_rate(buyer_surveys, seller_surveys,
 	total_success_rate = 100*float(len(buyer_surveys) + len(seller_surveys)) / \
 			float((len(buyer_listings) + len(seller_listings))) \
 			if len(buyer_listings) + len(seller_listings) > 0 else 0
-
 	return buyer_success_rate, seller_success_rate, total_success_rate
 
 def generate_statistics():
+	'''
+	Generates statistics and adds a new tuple in the 
+	statistics_generator_statistics table.
+	'''
 	surveys = Survey.objects.all()
 	listings = Listing.objects.all()
 	buyer_listings = Listing.objects.filter(for_sale='want')
 	seller_listings = Listing.objects.filter(for_sale='sell')
-	survey_listings = [(survey, Listing.objects.get(id=survey.listing_id))
-						for survey in surveys]
-	buyer_surveys = [survey for survey, listing in survey_listings if not listing.for_sale]
-	seller_surveys = [survey for survey, listing in survey_listings if listing.for_sale]
+	survey_listings = [(survey, Listing.objects.get(id=survey.listing_id)) for survey in surveys]
+	buyer_surveys = [survey for survey, listing in survey_listings if listing.for_sale == 'want']
+	seller_surveys = [survey for survey, listing in survey_listings if listing.for_sale == 'sell']
+	logger.info('Successfully gathered all data from database used for generating statistics')
 
 	# Maps of category data
-	survey_category_rank_stats = survey_category_rank(surveys)
-	buyer_category_rank_stats = buyer_category_rank(buyer_listings)
-	seller_category_rank_stats = seller_category_rank(seller_listings)
+	survey_category_rank_stats = __category_rank(surveys)
+	buyer_category_rank_stats = __category_rank(buyer_listings)
+	seller_category_rank_stats = __category_rank(seller_listings)
 	survey_category_transaction_amount_stats = \
-		survey_category_transaction_amount(surveys)
+		__survey_category_transaction_amount(surveys)
+	logger.info('Successfully generated category statistics')
 
 	# Integer data values
-	average_transaction_amount = survey_average_transaction_amount(surveys)
-	buyer_transaction_amount = buyer_transaction_total_amount(buyer_surveys)
-	seller_transaction_amount = seller_transaction_total_amount(seller_surveys)
-	successful_transaction_amount = survey_transaction_total_amount(surveys)
-	average_transaction_time = average_time_successful_transaction(survey_listings)
+	average_transaction_amount = __survey_average_transaction_amount(surveys)
+	logger.info('Successfully generated average transaction amount statistics')
+
+	buyer_transaction_amount = __transaction_amount(buyer_surveys)
+	logger.info('Successfully generated buyer transaction amount statistics')
+
+	seller_transaction_amount = __transaction_amount(seller_surveys)
+	logger.info('Successfully generated seller transaction amount statistics')
+
+	successful_transaction_amount = __transaction_amount(surveys)
+	logger.info('Successfully generated survey transaction amount statistics')
+
+	average_transaction_time = __average_time_successful_transaction(survey_listings)
+	logger.info('Successfully generated average transaction time statistics')
+
 	buyer_transaction_success_rate, seller_transaction_success_rate, \
-		total_transaction_success_rate  = listing_transaction_success_rate(
+		total_transaction_success_rate  = __listing_transaction_success_rate(
 			buyer_surveys, seller_surveys,
 			buyer_listings, seller_listings)
+	logger.info('Successfully generated transaction success rate statistics')
 
+	# Create the Statistics tuple and save it.
 	statistics = Statistics(number_surveys=len(surveys),
 					number_listings=len(listings),
 					number_buyer_surveys=len(buyer_surveys),
@@ -97,6 +130,7 @@ def generate_statistics():
 					total_transaction_success_rate=total_transaction_success_rate)
 	statistics.save()
 
+	# Create the StatisticsCategory tuples and save them.
 	for name, category in CAT_CHOICES:
 		statistics_category = \
 			StatisticsCategory(statistics_id=statistics.id, 
@@ -106,6 +140,8 @@ def generate_statistics():
 				seller_count=seller_category_rank_stats[category], 
 				amount=survey_category_transaction_amount_stats.get(category))
 		statistics_category.save()
+
+	logger.info('Successfully save generated statistics to the database')	
 
 
 

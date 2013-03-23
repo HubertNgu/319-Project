@@ -5,10 +5,9 @@
  @author Hubert Ngu
 '''
 
-from listings.models import Listing, CAT_CHOICES
-
 from django.db import models
 from django.forms import ModelForm, Textarea
+from listings.models import Listing, CAT_CHOICES, CITY_CHOICES
 
 # Fields included here will be visisble on the HTML page
 FIELDS = ['listing_id', 'item', 'category', 'price', 'address', 
@@ -24,7 +23,7 @@ class Survey(models.Model):
     category = models.CharField(max_length=20, choices=CAT_CHOICES, default=CAT_CHOICES[0][0])
     price = models.FloatField()
     address = models.CharField(max_length=100, blank=True)
-    city = models.CharField(max_length=100, blank=True)
+    city = models.CharField(max_length=30, choices=CITY_CHOICES, default=CITY_CHOICES[0][0])
     comments = models.CharField(max_length=500, blank=True)
     time_submitted = models.DateTimeField("time submitted", auto_now_add=True)
 

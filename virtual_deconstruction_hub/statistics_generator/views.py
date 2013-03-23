@@ -1,25 +1,24 @@
-import re
+'''
+ Views module for the statistics generator.
+
+ @author Hubert Ngu
+ @author Jason Hou
+'''
+
 import logging
-from listings.models import Listing
+from django.shortcuts import render
 from survey_system.models import Survey
-from listings.models import Listing, ListingForm
 from statistics_generator.models import Statistics, StatisticsCategory
-from gmapi import maps
-from gmapi.forms.widgets import GoogleMap
-from django import forms
-from django.utils import timezone
-from django.http import HttpResponse, HttpRequest
-from django.template.defaulttags import csrf_token
-from django.template import Context, loader, RequestContext
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.shortcuts import redirect,get_object_or_404, render_to_response, render
 
 logger = logging.getLogger(__name__)
 
-class MapForm(forms.Form):
-    map = forms.Field(widget=GoogleMap(attrs={'width':511, 'height':510}))
-
 def index(request):
+    '''
+    Loads the index page showing all of the statistics from the last generated
+    run of the statistics_generator.
+    '''
+
+    # Handle user account options.
     if request.user.is_authenticated():
         logtext = "Logout"
         accounttext = "My Account"
@@ -29,10 +28,13 @@ def index(request):
         logtext = "Login"
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
+
+
     # If there have never been any statistics generated then return the
     # none page for statistics
     try:
         statistics = Statistics.objects.latest('id')
+        logger.debug('Successfully found the lastest Statistics instance')
     except:
         return render(request, 'statistics_generator/statistics_none.html')
     
@@ -40,33 +42,22 @@ def index(request):
     categories, survey_count, buyer_count, seller_count, category_amount = \
         list(), list(), list(), list(), list()
 
-    # Create parallel lists
+    # Create parallel lists for the graphs
     for statistic_category in statistics_categories:
         categories.append(str(statistic_category.category))
         survey_count.append(int(statistic_category.survey_count))
         buyer_count.append(int(statistic_category.buyer_count))
         seller_count.append(int(statistic_category.seller_count))
-        category_amount.append(int(statistic_category.amount))
-
-    logger.debug("debug me baby")
-
-                            
+        category_amount.append(int(statistic_category.amount))                        
+    # Transform the lists to formatted strings using the values
     labels = str(categories)[1:-1].replace(', ', '|').replace('\'', '').replace(' ', '+')
     category_survey_values = 't:%s' % str(survey_count)[1:-1]
-    logger.debug('%s', category_survey_values)
-
-
     category_buyer_values = 't:%s' % str(buyer_count)[1:-1]
     category_seller_values = 't:%s' % str(seller_count)[1:-1]
     category_amount_values = 't:%s' % str(category_amount)[1:-1]
-    logger.debug('%s', category_amount_values)
+    logger.debug('Successfully formatted statistics labels and values for graphs')
 
-    try:
-        last_survey = Survey.objects.latest('id')
-        address = '%s%%2C+%s' % (str(last_survey.address).replace(' ', '+'), last_survey.city)
-    except:
-        address = str()
-
+    # Build values dictionary that will be used by the html page to load values.
     values = dict()
     values['category_amount_max'] = max(category_amount)
     values['number_surveys'] = int(statistics.number_surveys)
@@ -88,6 +79,5 @@ def index(request):
     values['category_buyer_values'] = category_buyer_values
     values['category_seller_values'] = category_seller_values
     values['category_amount_values'] = category_amount_values
-    values['address'] = address
     
     return render(request, 'statistics_generator/statistics_main.html', values)
