@@ -7,6 +7,7 @@ from django.forms import ModelForm
 from django import forms
 
 
+
 CATEGORIES = ['Woods', 'Bricks', 'Shingles', 'Drywall', 'Toilets', 'Sinks',
                 'Tubs', 'Windows', 'Doors', 'Fixtures', 'Cable and Wiring', 
                 'Particle board', 'Cardboard', 'Cabinetry', 'Scrap metal',
@@ -20,6 +21,7 @@ CITIES = ['Abbotsford', 'Anmore', 'Belcarra', 'Burnaby', 'Chilliwack',
 SALE_CHOICES=(("sell", 'Items for sale'), ("want", 'Items wanted'))
 CAT_CHOICES = [(category, category) for category in CATEGORIES]
 CITY_CHOICES = [(city, city) for city in CITIES]
+
 
 class Listing(models.Model):
     

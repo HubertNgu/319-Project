@@ -76,10 +76,14 @@ def detail(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
     try:
         listing = Listing.objects.get(id=listing_id)
+        reply_action = '/listings/contactSeller/' + listing_id + '/'
+        go_back_action = '/listings'
         address = '%s%%2C+%s' % (str(last_survey.address).replace(' ', '+'), last_survey.city)
     except:
         address = str()
-    return render(request, TEMPLATE_PATHS.get('listings_single'), { 'address': address, "listing": listing, 'logonparams':logparams})  
+    return render(request, TEMPLATE_PATHS.get('listings_single'), 
+                  { 'address': address, "listing": listing, 'logonparams':logparams, 
+                   'reply_action':reply_action, 'go_back_action':go_back_action})  
         
 def create_listing(request):
     
@@ -114,6 +118,7 @@ def create_listing(request):
             listing = listing_form.save(commit=False)
             listing.url = re.sub(r'\W+', '', listing.title.lower().replace (" ", "_"))
             listing_url = listing.get_url()
+            
             #if user is logged in, then verify post
             if request.user.is_authenticated:
                 listing.verified = True
@@ -125,9 +130,7 @@ def create_listing(request):
             
             listing_url = listing.url
             listing_url = HttpRequest.build_absolute_uri(request, listing_url)
-            
-#            if request.user.is_authenticated():
-#                listing.verified = True
+
 
             listing.save()
             listingid = listing.id
@@ -158,7 +161,7 @@ def create_listing(request):
                       
         if listing.verified:
              # if post is already verified, redirect user to their newly created post
-            return redirect(listing.url, context_instance=RequestContext(request))
+            return redirect("/listings/" + listing.url, context_instance=RequestContext(request))
             
         # create a verification/edit link and send with mailer then direct to success message page
         user_email = listing.get_creator()
