@@ -1,0 +1,22 @@
+{% extends "users/myaccount.html" %}
+
+{% block account_content %}
+
+    {% if posts %}
+        
+        {% for stry in posts %}
+
+            <li><b>{{ stry.title }}</b></li>
+            <p><i>{{ stry.created }}</i></p>
+            <p>{{ stry.text_content|truncatechars:100 }}</p>
+
+        {% endfor %}
+        
+    {% else %}
+
+        <p>No Success Stories.</p>
+        
+    {% endif %}
+
+    
+{% endblock account_content %}

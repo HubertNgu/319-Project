@@ -15,14 +15,22 @@ import string
 import random
 from listings.models import Photo
 from postpictures.models import UploadForm, PostPictures
+import logging
+
+logger = logging.getLogger(__name__)
+
+
 
 TEMPLATE_PATHS = {'listings_list': 'listings/listings_list.html',
                   'listings_single': 'listings/listings_individual.html',
                   'listings_new': 'listings/listings_new.html',
-                  'listings_success':'listings/new_listing_success.html'
+                  'listings_success':'listings/new_listing_success.html',
+                  'listings_delete': 'listings/listings_delete.html',
+                  'listings_edit': 'listings/listings_edit.html'
                   #'listings_upload': 'uploadfile/upload.html',
                   }
 URL_PATHS = {'listings_edit-verify': '/listings/edit-verify',
+             'listings_delete-verify': '/listings/delete-verify',
              'listings_root': '/listings/',
              'listing_new': '/listing/new'}
 
@@ -82,16 +90,18 @@ def create_listing(request):
 
     submit_action = '/listings/new'
     pictureform = UploadForm()
+    
     if request.method == 'GET':
         form = ListingForm(instance=Listing())
         form_args = {'form':form, 'submit_action':submit_action, 'pictureform': pictureform, 'logparams':logparams}
         return render_to_response(TEMPLATE_PATHS.get('listings_new'), form_args, context_instance=RequestContext(request))
+    
     if request.method == 'POST':
         listing_form = ListingForm(request.POST)
         if listing_form.is_valid() and request.POST.get("notnewlisting") == None:
             listing = listing_form.save(commit=False)
             listing.url = re.sub(r'\W+', '', listing.title.lower().replace (" ", "_"))
-            listing_url = listing.url
+            listing_url = listing.get_url()
             #check that url is unique in db, if url already exists
             # append a random 10 char string to the end
             if Listing.objects.filter(url=listing.url).count() > 0:
@@ -102,9 +112,12 @@ def create_listing(request):
             
 #            if request.user.is_authenticated():
 #                listing.verified = True
+
             listing.save()
             listingid = listing.id
         
+            logger.debug('format', "createListing: debug")
+            
             
         form = UploadForm(request.POST, request.FILES)
         if request.POST.get("notnewlisting") != None:
@@ -130,13 +143,14 @@ def create_listing(request):
                 return render_to_response("listings/listings_new.html", form_args, context_instance=RequestContext(request))
                       
         if listing.verified:
-                # if post is already verified, redirect user to their newly created post
+             # if post is already verified, redirect user to their newly created post
             return redirect(listing.url, context_instance=RequestContext(request))
             
-             # create a verification/edit link and send with mailer then direct to success message page
+        # create a verification/edit link and send with mailer then direct to success message page
         user_email = listing.get_creator()
-        verify_url = '%s/edit-verify?listing_id=%s&uuid=%s' % (Site.objects.get_current(), listing.id, listing.get_uuid())
+        verify_url = '/edit-verify?listing_id=%s&uuid=%s' % (listing.id, listing.get_uuid())
         send_post_verification_email(verify_url, user_email, 'list')
+#        multiple_entries_for_testing(50)
             
         return render_to_response(TEMPLATE_PATHS.get('listings_success'), form_args, context_instance=RequestContext(request))
         
@@ -155,7 +169,7 @@ def edit_verify_listing(request):
     listing_id = request.GET.get('listing_id')
     uuid = request.GET.get('uuid')
     #action for submit button
-    submit_action = URL_PATHS.get('listings_edit-verify') + '?listing_id=' + listing_id + '&uuid=' + uuid
+    submit_action = URL_PATHS.get('listings_edit-verify') + '?listing_id=' + listing_id + '&uuid=' + uuid 
     listing_url = None
     listing = None
     message = None
@@ -178,8 +192,10 @@ def edit_verify_listing(request):
                 raise Http404
         #post verified by this point, render edit page with message
         edit_form = EditListingForm(instance=listing)
-        form_args = {'form':edit_form, 'message': message, 'submit_action': submit_action, 'logparams':logparams}
-        return render_to_response(TEMPLATE_PATHS.get("listings_new"), form_args, context_instance=RequestContext(request))
+
+        form_args = {'form':edit_form, 'message': message, 'submit_action': submit_action, 'logparams':logparams, 'listing': listing}
+        return render_to_response(TEMPLATE_PATHS.get("listings_edit"), form_args, context_instance=RequestContext(request))
+
         
     if request.method == 'POST':
         edit_form = EditListingForm(request.POST, instance=listing)
@@ -191,11 +207,42 @@ def edit_verify_listing(request):
             #return redirect(post_url,context_instance=RequestContext(request))
             #return render_to_response(post_url,context_instance=RequestContext(request))
             form_args = {'form':edit_form, 'submit_action':submit_action, 'message':MESSAGES.get('edit_success'), 'listing_url': listing_url, 'logparams':logparams}
-            return render_to_response(TEMPLATE_PATHS.get("listings_new"), form_args, context_instance=RequestContext(request))
+            return render_to_response(TEMPLATE_PATHS.get("listings_edit"), form_args, context_instance=RequestContext(request))
         else:
             # if form submission not valid, redirect back to form with error messages
             form_args = {'form':edit_form, 'submit_action':submit_action, 'message':None, 'logparams':logparams}
-            return render_to_response(TEMPLATE_PATHS.get("listings_new"), form_args, context_instance=RequestContext(request)) 
+            return render_to_response(TEMPLATE_PATHS.get("listings_edit"), form_args, context_instance=RequestContext(request)) 
+
+
+
+def delete_verify_listing(request): 
+     
+    listing_id = request.GET.get('listing_id')
+    uuid = request.GET.get('uuid')
+    #action for submit button
+    delete_submit_action = URL_PATHS.get('listings_delete-verify') + '?listing_id=' + listing_id + '&uuid=' + uuid
+    listing = get_object_or_404(Listing, id=str(listing_id))
+    if not listing:
+        message = "Listing does not exist or it has already been deleted"
+        form_args = { "message" : message }
+        return render_to_response(TEMPLATE_PATHS.get("listings_delete"), form_args, context_instance=RequestContext(request))
+    else:
+        listing.delete()
+        message = "Listing is successfully deleted"
+        form_args = { "message" : message }
+        return render_to_response(TEMPLATE_PATHS.get("listings_delete"), form_args, context_instance=RequestContext(request))
+    
+#    if request.method == 'POST':      
+#        if listing.is_verified():   
+#            if listing and (listing.get_uuid() == str(uuid)):
+#                listing.delete()
+#            else:
+#                raise Http404
+#        
+#        form_args = {'listing': listing, 'delete_submit_action': submit_action}
+#        return render_to_response(TEMPLATE_PATHS.get("listings_delete"), form_args, context_instance=RequestContext(request))
+#         
+    
 
 def tag_maker(space_replacement_char, tag_string):
     return re.sub(r'\W+', '', tag_string.lower().replace (" ", space_replacement_char ))
@@ -204,7 +251,7 @@ def random_string_generator(size, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
 
-<<<<<<< HEAD
+
 def contactSeller(request, listing_id):
     if request.user.is_authenticated():
         logtext = "Logout"
@@ -215,9 +262,7 @@ def contactSeller(request, listing_id):
         logtext = "Login"
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
-=======
-def contact_seller(request, listing_id):
->>>>>>> Commiting work done by Sean
+
     submit_action = '/listings/contactSeller/' + listing_id + '/'
     
     if request.method == 'GET':

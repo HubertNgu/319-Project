@@ -7,6 +7,7 @@
 
 {% block listings_content %}
 
+
 <h1>{{ listing.title }}</h1>
 <ul>
 
@@ -15,13 +16,15 @@
      <li>Category: {{ listing.category }}</li>
      <li>Type of listing: {{ listing.for_sale }}</li>
      <li>Location: {{ listing.location }}</li>
+
       <li>Description: </li> </br>
       
       	{{ listing.text_content }}
       
 </ul>
 
-</br> </a> <a href="/listings/contactSeller/{{listing.id}}" > Contact </a>  <a href="/listings/new/"> Create </a> <a href="/listings/"> Go Back 
+</br> 
+</a> <a href="/listings/contactSeller/{{listing.id}}" > Contact </a>  <a href="/listings/new/"> Create </a> <a href="/listings/"> Go Back </a>
  
 
 
