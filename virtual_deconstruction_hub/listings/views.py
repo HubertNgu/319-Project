@@ -252,7 +252,7 @@ def random_string_generator(size, chars=string.ascii_uppercase + string.digits):
 
 
 
-def contactSeller(request, listing_id):
+def contact_seller(request, listing_id):
     if request.user.is_authenticated():
         logtext = "Logout"
         accounttext = "My Account"
@@ -262,9 +262,7 @@ def contactSeller(request, listing_id):
         logtext = "Login"
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
-
     submit_action = '/listings/contactSeller/' + listing_id + '/'
-    
     if request.method == 'GET':
         form_args = {'submit_action':submit_action, 'logparams':logparams}
         return render_to_response("listings/contact_seller.html", form_args, context_instance=RequestContext(request))

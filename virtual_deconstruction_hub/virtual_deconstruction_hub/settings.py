@@ -138,15 +138,11 @@ INSTALLED_APPS = (
 		'verificationapp',
 		'fileupload',
 		'postpictures',
-<<<<<<< HEAD
         'chart_tools',
         'mailer',
         'haystack',
         'whoosh',
-=======
-#        'chart_tools',
-         'mailer',
->>>>>>> 7100dc4... Commiting work done by evelyn
+
 )
 
 HAYSTACK_CONNECTIONS = {
