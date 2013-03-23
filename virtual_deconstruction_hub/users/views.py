@@ -45,7 +45,7 @@ def index(request):
 
 def logout_user(request):
     logout(request)
-    response = redirect('virtual_deconstruction_hub.views.index')
+    response = redirect('/')
     response.delete_cookie('user_location')
     return response
 

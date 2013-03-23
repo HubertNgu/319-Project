@@ -75,7 +75,7 @@ def detail(request, listing_id):
         logparams=[logtext,accounttext]
     listing = get_object_or_404(Listing, pk=listing_id)
     try:
-        listing = Listing.objects.get(id=???)
+        listing = Listing.objects.get(id=listing_id)
         address = '%s%%2C+%s' % (str(last_survey.address).replace(' ', '+'), last_survey.city)
     except:
         address = str()
@@ -92,27 +92,32 @@ def create_listing(request):
         logtext = "Login"
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
-
     submit_action = '/listings/new'
-    
     pictureform = UploadForm()
-    
-<<<<<<< HEAD
-=======
-    
->>>>>>> Commiting work done by Sean
     if request.method == 'GET':
-        form = ListingForm(instance=Listing())
+        if request.user.is_authenticated():
+            form = ListingForm(instance=Listing(), initial={'creator':request.user.email, 'email_verification':request.user.email})
+            form.fields['creator'].widget = forms.HiddenInput()
+            form.fields['email_verification'].widget = forms.HiddenInput()
+        else:
+            form = ListingForm(instance=Listing())
         form_args = {'form':form, 'submit_action':submit_action, 'pictureform': pictureform, 'logparams':logparams}
         return render_to_response(TEMPLATE_PATHS.get('listings_new'), form_args, context_instance=RequestContext(request))
     
     if request.method == 'POST':
         listing_form = ListingForm(request.POST)
         form_args = {}
+        if request.user.is_authenticated():
+            post_form.fields['creator'].widget = forms.HiddenInput()
+            post_form.fields['email_verification'].widget = forms.HiddenInput()
         if listing_form.is_valid() and request.POST.get("notnewlisting") == None:
             listing = listing_form.save(commit=False)
             listing.url = re.sub(r'\W+', '', listing.title.lower().replace (" ", "_"))
             listing_url = listing.get_url()
+            #if user is logged in, then verify post
+            if request.user.is_authenticated:
+                listing.verified = True
+            
             #check that url is unique in db, if url already exists
             # append a random 10 char string to the end
             if Listing.objects.filter(url=listing.url).count() > 0:
@@ -126,15 +131,8 @@ def create_listing(request):
 
             listing.save()
             listingid = listing.id
-<<<<<<< HEAD
-        
             logger.debug('format', "createListing: debug")
-            
-=======
-           
             form = UploadForm(request.POST, request.FILES)
->>>>>>> Commiting work done by Sean
-            
             if request.POST.get("notnewlisting") != None:
                     listingid = request.POST.get("listingid")
                     listing = Listing.objects.get(id = listingid )
@@ -265,14 +263,7 @@ def tag_maker(space_replacement_char, tag_string):
 def random_string_generator(size, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
-
-<<<<<<< HEAD
-
 def contact_seller(request, listing_id):
-=======
-
-def contact_seller(request, listing_id):
->>>>>>> Commiting work done by Sean
     if request.user.is_authenticated():
         logtext = "Logout"
         accounttext = "My Account"
@@ -282,10 +273,6 @@ def contact_seller(request, listing_id):
         logtext = "Login"
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
-<<<<<<< HEAD
-=======
-
->>>>>>> Commiting work done by Sean
     submit_action = '/listings/contactSeller/' + listing_id + '/'
     if request.method == 'GET':
         form_args = {'submit_action':submit_action, 'logparams':logparams}
