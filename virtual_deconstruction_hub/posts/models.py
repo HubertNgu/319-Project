@@ -2,6 +2,7 @@ from django.db import models
 from django import forms
 from django.forms import ModelForm
 import uuid
+import os
 from django.conf import settings
 
 TIME_ZONE = settings.TIME_ZONE
@@ -86,7 +87,7 @@ class PostForm(ModelForm):
     email_verification = forms.EmailField(required=True)
     
     def __init__(self, *args, **kwargs):
-        super(PostForm, self).__init__(*args, **kwargs)
+        super(PostForm, self).__init__(*args, **kwargs) 
         self.fields['creator'].label = "Email address"
         self.fields['email_verification'].label = "Verify email"
 
