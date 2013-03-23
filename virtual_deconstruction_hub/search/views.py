@@ -8,7 +8,7 @@ from haystack.views import SearchView, search_view_factory
 #from posts.search_indexes import SearchForm, PostSearchView
 from haystack.forms import HighlightedSearchForm
 from haystack.inputs import AutoQuery, Exact
-from listings.models import get_listings_categories, get_sale_categories
+from listings.models import get_listings_categories, get_sale_categories, get_city_categories
 from django import forms
 import logging
 
@@ -33,22 +33,6 @@ def search(request):
         else: raise Http404
     else: raise Http404
 
-            
-#
-#"""Searches the query string and post type selected from dropdown menu in global search bar"""
-#def search_posts(request):
-#    post_type = request.GET.get('type', None)
-#    if post_type:
-#        post_type = str(post_type).lower() 
-#    q_string = request.GET['q']
-#    sqs = SearchQuerySet().filter(content=AutoQuery(q_string), type=Exact(post_type))
-#    view = search_view_factory(
-#        view_class=SearchView,
-#        template=TEMPLATE_PATHS['posts_results'],
-#        searchqueryset=sqs,
-#        form_class=HighlightedSearchForm, 
-#        )
-#    return view(request)
 
 """Searches the query string and post type selected from dropdown menu in global search bar"""
 def search_posts_custom_form(request):
@@ -66,21 +50,6 @@ def search_posts_custom_form(request):
         )
     return view(request)
 
-#"""Searches the query string for in listings objects"""
-#def search_listings(request):
-#    q_string = request.GET['q']
-#    #category = request.GET.get('category', None)
-#    sqs = SearchQuerySet().filter(content=AutoQuery(q_string)).models(Listing)
-##    if category:
-##        category = str(category).lower() 
-##        sqs = SearchQuerySet().filter(content=AutoQuery(q_string), category=Exact(category)).models(Listing)
-#    view = search_view_factory(
-#        view_class=SearchView,
-#        template=TEMPLATE_PATHS['listings_results'],
-#        searchqueryset=sqs,
-#        form_class=HighlightedSearchForm
-#        )
-#    return view(request)
 
 """Searches the query string for in listings objects"""
 def search_listings_custom_form(request):
@@ -102,9 +71,8 @@ def search_listings_custom_form(request):
 class ListingSearchForm(FacetedSearchForm):
     cat = forms.CharField(required=False, widget=forms.Select(choices=get_listings_categories()))
     type = forms.CharField(required=False, widget=forms.HiddenInput)
-#    TYPE_CHOICES=((True, 'Items for sale'),
-#                  (False, 'Items wanted'))
     for_sale = forms.CharField(required=False, widget=forms.Select(choices=get_sale_categories()))
+    city = forms.CharField(required=False, widget=forms.Select(choices=get_city_categories()))
     
     def search(self):
         # First, store the SearchQuerySet received from other processing.
@@ -117,6 +85,10 @@ class ListingSearchForm(FacetedSearchForm):
         # Check to see if a type was chosen.
         if self.cleaned_data['for_sale']:
             sqs = sqs.filter(for_sale=self.cleaned_data['for_sale'])
+            
+        # Check to see if a city was chosen.
+        if self.cleaned_data['city']:
+            sqs = sqs.filter(city=self.cleaned_data['city'])
 
         return sqs
     
@@ -129,6 +101,7 @@ class ListingSearchView(SearchView):
             extra['post_type'] = self.request.GET.get('type', None)
             extra['cat'] = self.request.GET.get('cat', None)
             extra['for_sale'] = self.request.GET.get('for_sale', None)
+            extra['city'] = self.request.GET.get('city', None)
 
             return extra
     

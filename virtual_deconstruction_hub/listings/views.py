@@ -158,7 +158,7 @@ def create_listing(request):
                       
         if listing.verified:
              # if post is already verified, redirect user to their newly created post
-            return redirect(listing.url, context_instance=RequestContext(request))
+            return redirect("/listings/" + listing.url, context_instance=RequestContext(request))
             
         # create a verification/edit link and send with mailer then direct to success message page
         user_email = listing.get_creator()

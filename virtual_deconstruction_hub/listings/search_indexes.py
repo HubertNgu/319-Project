@@ -1,6 +1,5 @@
 from haystack import indexes
 from listings.models import Listing
-from django.utils import timezone
 
 """IMPORTANT NOTE - Must specify any fields of the model that you want to be indexed below the 'text' line
 and also, any model field that you want to use to filter search results by needs to be specified here as well """
