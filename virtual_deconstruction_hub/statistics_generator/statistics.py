@@ -56,8 +56,8 @@ def listing_transaction_success_rate(buyer_surveys, seller_surveys,
 def generate_statistics():
 	surveys = Survey.objects.all()
 	listings = Listing.objects.all()
-	buyer_listings = Listing.objects.filter(for_sale=1)
-	seller_listings = Listing.objects.filter(for_sale=0)
+	buyer_listings = Listing.objects.filter(for_sale='want')
+	seller_listings = Listing.objects.filter(for_sale='sell')
 	survey_listings = [(survey, Listing.objects.get(id=survey.listing_id))
 						for survey in surveys]
 	buyer_surveys = [survey for survey, listing in survey_listings if not listing.for_sale]
