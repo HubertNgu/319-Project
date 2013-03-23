@@ -175,6 +175,7 @@ class EditListingForm(ModelForm):
         #exclude = ['flag_count', 'verified','type', 'url', 'uuid','creator']
         fields = ['title', 'for_sale', 'category', 'price', 'num', 'street', 'city', 'zipcode', 'text_content']
 
+        
 # PhotoStroage model
 class Photo(models.Model):
    listing = models.ForeignKey(Listing)
