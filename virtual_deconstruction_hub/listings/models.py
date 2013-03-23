@@ -6,22 +6,24 @@ from django.utils import timezone
 from django.forms import ModelForm
 from django import forms
 
-SALE_CHOICES=(("sell", 'Items for sale'),
-              ("want", 'Items wanted'))
+
 CATEGORIES = ['Woods', 'Bricks', 'Shingles', 'Drywall', 'Toilets', 'Sinks',
                 'Tubs', 'Windows', 'Doors', 'Fixtures', 'Cable and Wiring', 
                 'Particle board', 'Cardboard', 'Cabinetry', 'Scrap metal',
                 'Appliances', 'Other']
+CITIES = ['Abbotsford', 'Anmore', 'Belcarra', 'Burnaby', 'Chilliwack',
+             'Coquitlam', 'Delta', 'Hope', 'Kent', 'Langley', 'Maple Ridge',
+             'Mission', 'New Westminster', 'North Vancouver', 'Pitt Meadows',
+             'Port Coquitlam', 'Port Moody', 'Richmond', 'Squamish', 'Surrey',
+             'Vancouver', 'West Vancouver', 'White Rock', 'Whistler']
 
+SALE_CHOICES=(("sell", 'Items for sale'), ("want", 'Items wanted'))
 CAT_CHOICES = [(category, category) for category in CATEGORIES]
-
-CITY_CHOICES=(("cariboo", "Cariboo"), ("comoxV", "Comox Valley"), ("fraserV", "Fraser Valley"), ("kamloops", "Kamloops"), 
-              ("kelo/oka", "Kelowna/Okanagan"), ("kootenays", "Kootenays"), ("nanaimo", "Nanaimo"), ("princeG", "Prince George"),
-              ("skeenaB", "Skeena-Bulkley"), ("sunC", "Sunshine Coast"), ("vancouver", "Vancouver"), ("victoria", "Victoria"), ("whistler", "Whistler"))
+CITY_CHOICES = [(city, city) for city in CITIES]
 
 class Listing(models.Model):
     
-    for_sale = models.BooleanField()
+    for_sale = models.CharField(max_length=4, choices=SALE_CHOICES, default=SALE_CHOICES[0][0])
     url = models.CharField(max_length=110)
     creator = models.EmailField("creators email")
     created = models.DateTimeField("date created", auto_now_add=True)
@@ -32,15 +34,11 @@ class Listing(models.Model):
     category = models.CharField(max_length=20, choices=CAT_CHOICES, default=CAT_CHOICES[0][0])
     price = models.CharField(max_length=20, blank=True)
     address = models.CharField(max_length=100, blank=True)
-    city = models.CharField(max_length=9, choices=CITY_CHOICES, default="sell")
-    prov = 'British Columbia'
+    city = models.CharField(max_length=30, choices=CITY_CHOICES, default=CITY_CHOICES[0][0])
     flag_count = models.SmallIntegerField("flag count", default=0)
     expires = models.DateTimeField("expiry date", 
         default=(timezone.now() + datetime.timedelta(days=30)), editable=True)
     expired = models.BooleanField(default=False)
-    for_sale = models.CharField(max_length=4, choices=SALE_CHOICES, default="sell")
-    # TODO: For survey change this to uuid
-    survey_id = models.CharField(max_length=36, default=uuid.uuid4)
     survey_time_sent = models.DateTimeField("survey time sent", blank=True, 
         null=True)
     uuid = models.CharField(max_length=36, default=uuid.uuid4)
