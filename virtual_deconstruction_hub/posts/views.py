@@ -82,6 +82,7 @@ def new_post(request, post_type):
             post.set_url( tag_maker("_", post) )
             post_url = post.get_url()
             post_url = HttpRequest.build_absolute_uri(request, post_url)
+            post.verified = True
             
             #===================================================================
             # if request.user.is_authenticated():
@@ -209,6 +210,9 @@ def posts_index(request, post_type):
         logtext = "Login"
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
+    username = None
+    if request.user.username == "admin":
+        username = "admin"
     post_type = str(post_type.lower())
     query = Post.objects.filter(type=post_type).filter(verified=True).order_by('-last_modified')
     paginator = Paginator(query , PAGE_SIZE)
@@ -221,7 +225,8 @@ def posts_index(request, post_type):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         posts= paginator.page(paginator.num_pages)
-    form_args = {'posts':posts, 'message': None, 'post_type_title':POST_TYPE_TITLES.get(post_type), 'post_type': post_type, 'logparams': logparams}
+    form_args = {'posts':posts, 'message': None, 'post_type_title':POST_TYPE_TITLES.get(post_type), 
+                 'post_type': post_type, 'logparams': logparams, 'username': username}
     return render_to_response(TEMPLATE_PATHS.get(post_type+'_list'),form_args, context_instance=RequestContext(request))
         
 def posts_specific(request, post_type, tag):

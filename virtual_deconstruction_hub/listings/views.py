@@ -108,8 +108,8 @@ def create_listing(request):
         listing_form = ListingForm(request.POST)
         form_args = {}
         if request.user.is_authenticated():
-            post_form.fields['creator'].widget = forms.HiddenInput()
-            post_form.fields['email_verification'].widget = forms.HiddenInput()
+            listing_form.fields['creator'].widget = forms.HiddenInput()
+            listing_form.fields['email_verification'].widget = forms.HiddenInput()
         if listing_form.is_valid() and request.POST.get("notnewlisting") == None:
             listing = listing_form.save(commit=False)
             listing.url = re.sub(r'\W+', '', listing.title.lower().replace (" ", "_"))
