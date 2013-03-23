@@ -84,10 +84,11 @@ Here you will find some statistical information
   		&chtt=Transaction+Amounts+(Average:${{average_transaction_amount}}CAD)
       {% endchart %}
    </span>
+ </div>
 
-   <h1>Average Transaction Time: {{ average_transaction_time }}</h1>
+<h1>Average Transaction Time: {{ average_transaction_time }}</h1>
 
-   <div class="succesrate">
+<div class="succesrate">
   <span class="successrate">
     {% load chart_tags %}
       {% chart %}
@@ -102,15 +103,15 @@ Here you will find some statistical information
       &chdl=Buyer+Surveys|Buyer+Listing|Seller+Surveys|Seller+Listings|Surveys|Listings
       &chtt=Transaction+Success+Rate
       {% endchart %}
-   </span>
+  </span>
+
+
+
+  <iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" 
+      src="https://maps.google.com/maps?f=q&source=s_q&hl=en&geocode&q={{ address }}&aq&sll=49.251784%2C-123.11039
+      &sspn=0.065325%2C0.169086&doflg=ptk&ie=UTF8&hq&hnear={{ address }}%2C+Canada&t=m&z=12&iwloc=A&output=embed">
+  </iframe><br />
 </div>
-</div>
-
-
-
-{{ form.map }}
-{{ form.media.js }}
-
 
 {% endblock stats_content %}
 

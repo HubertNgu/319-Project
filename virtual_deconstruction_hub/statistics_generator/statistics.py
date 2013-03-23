@@ -22,7 +22,8 @@ def survey_category_transaction_amount(surveys):
 	return amounts
 
 def survey_average_transaction_amount(surveys):
-	return float(sum([survey.price for survey in surveys])) / float(len(surveys))
+	return float(sum([survey.price for survey in surveys])) / \
+		float(len(surveys)) if len(surveys) > 0 else 0
 
 def buyer_transaction_total_amount(buyer_surveys):
 	return float(sum([survey.price for survey in buyer_surveys]))

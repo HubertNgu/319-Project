@@ -24,18 +24,26 @@ def survey(request, survey_id):
 			return render_to_response('survey_system/expired.html',
 				context_instance=RequestContext(request))
 		else:
-			form = SurveyForm(instance=Survey())
+			form = SurveyForm(instance=Survey(), 
+				initial={'category' : listing.category, 'listing_id' : listing.id})
 			form_args = { 'form' : form, 
-							'submit_action' : '/survey_system/survey/%s' % survey_id}
+							'submit_action' : '/survey/%s' % survey_id}
 			return render_to_response('survey_system/survey.html', form_args,
 				context_instance=RequestContext(request))
 	elif request.method == 'POST':
-		survey_form = SurveyForm(request.POST)
-		if survey_form.is_valid():
-			survey = survey_form.save(commit=False)
+		form = SurveyForm(request.POST,
+			initial={'category' : listing.category, 'listing_id' : listing.id})
+		if form.is_valid():
+			form.listing_id = listing.id
+			form.save()
 			listing.expired = 1
 			listing.save()
 			return render_to_response('survey_system/successful.html',
+				context_instance=RequestContext(request))
+		else:
+			form_args = {'form' : form,
+							'submit_action' : '/survey/%s' % survey_id}
+			return render_to_response('survey_system/survey.html', form_args,
 				context_instance=RequestContext(request))
 	else:
 		raise Http404

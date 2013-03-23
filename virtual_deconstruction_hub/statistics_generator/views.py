@@ -60,6 +60,12 @@ def index(request):
     category_amount_values = 't:%s' % str(category_amount)[1:-1]
     logger.debug('%s', category_amount_values)
 
+    try:
+        last_survey = Survey.objects.latest('id')
+        address = '%s%%2C+%s' % (str(last_survey.address).replace(' ', '+'), last_survey.city)
+    except:
+        address = str()
+
     values = dict()
     values['category_amount_max'] = max(category_amount)
     values['number_surveys'] = int(statistics.number_surveys)
@@ -81,22 +87,6 @@ def index(request):
     values['category_buyer_values'] = category_buyer_values
     values['category_seller_values'] = category_seller_values
     values['category_amount_values'] = category_amount_values
-
-    from pprint import pprint
-    pprint(values)
-
-    gmap = maps.Map(opts = {
-        'center': maps.LatLng(49.2400238, -123.15193),
-        'mapTypeId': maps.MapTypeId.ROADMAP,
-        'zoom': 13,
-        'mapTypeControlOptions': {
-             'style': maps.MapTypeControlStyle.DROPDOWN_MENU
-             
-        },
-    })
-    
-    
-    values['logparams'] = logparam
-    values['form'] =  MapForm(initial={'map': gmap})
+    values['address'] = address
     
     return render(request, 'statistics_generator/statistics_main.html', values)
