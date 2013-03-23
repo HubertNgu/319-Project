@@ -6,30 +6,14 @@ from django.utils import timezone
 from django.forms import ModelForm
 from django import forms
 
-WOOD = 'wood'
-BRICKS = 'bricks'
-SHINGL = 'shingl'
-DRYWAL = 'drywal'
-TOILET = 'toilet'
-SINKS = 'sinks'
-TUBS = 'tubs'
-WINDOW = 'window'
-DOORS = 'doors'
-FIXTUR = 'fixtur'
-CABWIR = 'cabWir'
-PARTBD = 'partBd' 
-CARDBD = 'cardBd'
-SCRAPM = 'scrapM'
-CABINT = 'cabint'
-APPLIA = 'applian'
-OTHER = 'other'
-CAT_CHOICES = ((WOOD, "Woods"), (BRICKS, "Bricks"), (SHINGL, "Shingles"),
-    (DRYWAL, "Drywall"), (TOILET, "Toilets"), (SINKS, "Sinks"),
-    (TUBS, "Tubs"), (WINDOW, "Windows"), (DOORS, "Doors"),(FIXTUR, "Fixtures"),
-    (CABWIR, "Cable and Wiring"), (PARTBD, "Particle board"), (CARDBD, "Cardboard"),
-    (CABINT, "Cabinetry"), (SCRAPM, "Scrap metal"), (APPLIA, "Appliances"), (OTHER, "Other"),)
 SALE_CHOICES=(("sell", 'Items for sale'),
               ("want", 'Items wanted'))
+CATEGORIES = ['Woods', 'Bricks', 'Shingles', 'Drywall', 'Toilets', 'Sinks',
+                'Tubs', 'Windows', 'Doors', 'Fixtures', 'Cable and Wiring', 
+                'Particle board', 'Cardboard', 'Cabinetry', 'Scrap metal',
+                'Appliances', 'Other']
+
+CAT_CHOICES = [(category, category) for category in CATEGORIES]
 
 class Listing(models.Model):
     
@@ -41,7 +25,7 @@ class Listing(models.Model):
     title = models.CharField(max_length=100)
     text_content = models.TextField()
     verified = models.BooleanField(default=False)
-    category = models.CharField(max_length=20, choices = CAT_CHOICES, default = WOOD)
+    category = models.CharField(max_length=20, choices=CAT_CHOICES, default=CAT_CHOICES[0][0])
     price = models.CharField(max_length=20, blank=True)
     num = models.IntegerField(blank=True,null=True)
     street = models.CharField(max_length=100,blank=True)

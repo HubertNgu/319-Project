@@ -1,3 +1,4 @@
+from ast import literal_eval
 from ConfigParser import RawConfigParser
 
 def load(path):
@@ -14,7 +15,10 @@ def load(path):
 		print section
 		for key, value in config.items(section):
 			print key.upper(), value
-			globals()[key.upper()] = value
+			try:
+				globals()[key.upper()] = literal_eval(value)
+			except:
+				globals()[key.upper()] = value
 
 # Used to test this
 if __name__ == '__main__':

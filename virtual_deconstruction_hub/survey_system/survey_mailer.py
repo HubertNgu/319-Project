@@ -7,10 +7,10 @@ from datetime import datetime, timedelta
 from django.contrib.sites.models import Site
 
 def get_initial_send_delay():
-	return timedelta(days=int(constants.INITIAL_SEND_DELAY))
+	return timedelta(days=constants.INITIAL_SEND_DELAY)
 
 def get_repeat_send_delay():
-	return timedelta(days=int(constants.REPEAT_SEND_DELAY))
+	return timedelta(days=constants.REPEAT_SEND_DELAY)
 
 def is_survey_ready(listing):
 	return (listing.survey_time_sent is None and 
