@@ -15,6 +15,10 @@ CATEGORIES = ['Woods', 'Bricks', 'Shingles', 'Drywall', 'Toilets', 'Sinks',
 
 CAT_CHOICES = [(category, category) for category in CATEGORIES]
 
+CITY_CHOICES=(("cariboo", "Cariboo"), ("comoxV", "Comox Valley"), ("fraserV", "Fraser Valley"), ("kamloops", "Kamloops"), 
+              ("kelo/oka", "Kelowna/Okanagan"), ("kootenays", "Kootenays"), ("nanaimo", "Nanaimo"), ("princeG", "Prince George"),
+              ("skeenaB", "Skeena-Bulkley"), ("sunC", "Sunshine Coast"), ("vancouver", "Vancouver"), ("victoria", "Victoria"), ("whistler", "Whistler"))
+
 class Listing(models.Model):
     
     for_sale = models.BooleanField()
@@ -27,12 +31,9 @@ class Listing(models.Model):
     verified = models.BooleanField(default=False)
     category = models.CharField(max_length=20, choices=CAT_CHOICES, default=CAT_CHOICES[0][0])
     price = models.CharField(max_length=20, blank=True)
-    num = models.IntegerField(blank=True,null=True)
-    street = models.CharField(max_length=100,blank=True)
-    city = models.CharField(max_length=100, blank=True)
-    state = 'British Columbia'
-    zipcode = models.CharField(max_length=6,blank=True)
-    location = models.CharField(max_length=100, blank=True)
+    address = models.CharField(max_length=100, blank=True)
+    city = models.CharField(max_length=9, choices=CITY_CHOICES, default="sell")
+    prov = 'British Columbia'
     flag_count = models.SmallIntegerField("flag count", default=0)
     expires = models.DateTimeField("expiry date", 
         default=(timezone.now() + datetime.timedelta(days=30)), editable=True)
@@ -109,11 +110,18 @@ class Listing(models.Model):
     def get_uuid(self):
         return self.uuid
     
+    def get_city(self):
+        return self.city
+    
 def get_listings_categories():
     return CAT_CHOICES
 
 def get_sale_categories():
     return SALE_CHOICES
+
+def get_city_categories():
+    return CITY_CHOICES
+
 
 class ListingForm(ModelForm):
     creator = forms.EmailField(required = True)
@@ -123,19 +131,15 @@ class ListingForm(ModelForm):
         super(ListingForm, self).__init__(*args, **kwargs)
         self.fields['creator'].label = "Email address"
         self.fields['email_verification'].label = "Verify email"
-        self.fields['num'].label = "Street Number"
-        self.fields['street'].label = "Street Name"
+        self.fields['address'].label = "Address"
         self.fields['city'].label = "City"
-        self.fields['zipcode'].label = "Postal code"
         self.fields['text_content'].label = "Description"
         self.fields['for_sale'].label = "Type of listing"
-        
     
     class Meta:
         model = Listing
         #exclude = ['url', 'verified', 'flag_count']
-        fields = ['creator', 'email_verification', 'title','for_sale','category', 'price', 'num', 
-                  'street', 'city', 'zipcode', 'text_content']
+        fields = ['creator', 'email_verification', 'title','for_sale','category', 'price', 'address', 'city', 'text_content']
         
         
     def clean(self):
@@ -157,7 +161,7 @@ class EditListingForm(ModelForm):
     class Meta:
         model = Listing
         #exclude = ['flag_count', 'verified','type', 'url', 'uuid','creator']
-        fields = ['title', 'for_sale', 'category', 'price', 'num', 'street', 'city', 'zipcode', 'text_content']
+        fields = ['title', 'for_sale', 'category', 'price', 'address', 'city', 'text_content']
 
         
 # PhotoStroage model

@@ -49,7 +49,7 @@ def index(request):
         logtext = "Login"
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
-    listings_list = Listing.objects.filter(verified = True).order_by('-created')
+    listings_list = Listing.objects.filter(verified = True, expired = False).order_by('-created')
     paginator = Paginator(listings_list, 25)
     page = request.GET.get('page')
     try:
@@ -240,7 +240,8 @@ def delete_verify_listing(request):
         form_args = { "message" : message }
         return render_to_response(TEMPLATE_PATHS.get("listings_delete"), form_args, context_instance=RequestContext(request))
     else:
-        listing.delete()
+        listing.expired = True
+        listing.save()
         message = "Listing is successfully deleted"
         form_args = { "message" : message }
         return render_to_response(TEMPLATE_PATHS.get("listings_delete"), form_args, context_instance=RequestContext(request))

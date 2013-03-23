@@ -19,11 +19,11 @@ Create a new listing - Virtual Deconstruction Hub
 <table>
 {{ form.as_table }}
 </table>
+
 {{pictureform.as_p}}
 {% if addanotherprevious != None %}
 {% for item in addanotherprevious %}
 <li> Added {{item}} </li>
-
 {% endfor %}
 
 <input type="hidden" name= "notnewlisting" id = "notnewlistingg" value = "0"></input>
@@ -32,9 +32,7 @@ Create a new listing - Virtual Deconstruction Hub
 
 {% endif %}
 
-</br> </a>
-<a href="/listings/delete-verify?listing_id={{listing.id}}&uuid={{listing.uuid}}" > Delete </a>
-
+<button form="new_post_form" formaction="/listings/delete-verify?listing_id={{listing.id}}&uuid={{listing.uuid}}">Delete</button>
 <input type="submit" value="Submit" />
 <button onclick= "return addAnotherPicture()">Add Another Picture</button>
 </form>
