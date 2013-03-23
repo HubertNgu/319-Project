@@ -132,7 +132,7 @@ def new_post(request, post_type):
 
         if post.is_verified():
                     # if post is already verified, redirect user to their newly created post
-            return redirect(post.get_url(), context_instance=RequestContext(request))
+            return redirect("/posts/" + post_type +"/" + post.url, context_instance=RequestContext(request))
 
             # create a verification/edit link and send with mailer then direct to success message page
         user_email = post.get_creator()
