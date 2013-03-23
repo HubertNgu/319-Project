@@ -52,17 +52,27 @@ def new_post(request, post_type):
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
     post_type = str(post_type.lower())
+    if post_type == "blog" and request.user.username != "admin":
+        return render_to_response("users/not_admin.html", {'logparams': logparams}, context_instance=RequestContext(request))
     #action for submit button
     pictureform = UploadForm()
     submit_action = URL_PATHS.get(post_type+'_new')
     if request.method == 'GET':
-        form = PostForm(instance=Post())
+        form = PostForm(instance=Post(), initial={'creator':request.user.email, 'email_verification':request.user.email})
+        if request.user.is_authenticated():
+            form.fields['creator'].widget = forms.HiddenInput()
+            form.fields['email_verification'].widget = forms.HiddenInput()
+           
+        
         form_args = {'form':form, 'submit_action':submit_action, 'message':None, 
                      'post_type_title':POST_TYPE_TITLES.get(post_type), 
                      'pictureform':pictureform, 'logparams': logparams}
         return render_to_response(TEMPLATE_PATHS.get("posts_new"), form_args, context_instance=RequestContext(request))
     if request.method == 'POST':
         post_form = PostForm(request.POST)
+        if request.user.is_authenticated():
+            post_form.fields['creator'].widget = forms.HiddenInput()
+            post_form.fields['email_verification'].widget = forms.HiddenInput()
         #if post_form valid, process new post
         
         if post_form.is_valid() and request.POST.get("notnewpost") == None:
@@ -82,18 +92,18 @@ def new_post(request, post_type):
         
         form = UploadForm(request.POST, request.FILES)
         if request.POST.get("notnewpost") != None:
-                postid = request.POST.get("postid")
-                post = Post.objects.get(id = postid )
-                post.set_type(post_type.lower())
-                post.set_url( tag_maker("_", post) )
-                post_url = post.get_url()
+            postid = request.POST.get("postid")
+            post = Post.objects.get(id = postid )
+            post.set_type(post_type.lower())
+            post.set_url( tag_maker("_", post) )
+            post_url = post.get_url()
         form_args = {'form':post_form, 'submit_action':submit_action, 'post_url' : post_url, 'post':post, 'logparams':logparams}
         
         if form.is_valid():
             form_args = {'post':post, 'post_url': post_url, 'logparams':logparams}
             photo = Photo(photo = request.FILES['picture'], post = post )
             photo.save()            
-            if request.POST.get('pictureform') == "1" and request.POST.get("issubmit") != 1:
+            if request.POST.get('pictureform') == "1" and request.POST.get("issubmit") != "1":
                 photolist = Photo.objects.filter(post_id = post.id)
                 addanotherprevious = list()
                 for o in Photo.objects.filter(post_id = post.id): 
@@ -118,19 +128,20 @@ def new_post(request, post_type):
            #====================================================================
            #multiple_entries_for_testing(100, post_type)
 
-            if post.is_verified():
+        if post.is_verified():
                     # if post is already verified, redirect user to their newly created post
-                return redirect(post.get_url(), context_instance=RequestContext(request))
+            return redirect(post.get_url(), context_instance=RequestContext(request))
 
             # create a verification/edit link and send with mailer then direct to success message page
-            user_email = post.get_creator()
-            verify_url = '%s/posts/%s?post_id=%s&uuid=%s' % (Site.objects.get_current(), URL_PATHS.get('posts_edit-verify'), post.id, post.get_uuid())
-            send_post_verification_email(verify_url, user_email, post_type)
-            return render_to_response(TEMPLATE_PATHS.get("posts_success"), form_args, context_instance=RequestContext(request))
-        else:
+        user_email = post.get_creator()
+        verify_url = '%s/posts/%s?post_id=%s&uuid=%s' % (Site.objects.get_current(), URL_PATHS.get('posts_edit-verify'), post.id, post.get_uuid())
+        send_post_verification_email(verify_url, user_email, post_type)
+        return render_to_response(TEMPLATE_PATHS.get("posts_success"), form_args, context_instance=RequestContext(request))
+    else:
+      
             # if form submission not valid, redirect back to form with error messages
-            form_args = {'form':post_form, 'submit_action':submit_action, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post_type), 'pictureform': pictureform, 'post_type': post_type}
-            return render_to_response(TEMPLATE_PATHS.get("posts_new"), form_args, context_instance=RequestContext(request))
+        form_args = {'form':post_form, 'submit_action':submit_action, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post_type), 'pictureform': pictureform, 'post_type': post_type}
+        return render_to_response(TEMPLATE_PATHS.get("posts_new"), form_args, context_instance=RequestContext(request))
 
 
 def edit_verify_post(request): 

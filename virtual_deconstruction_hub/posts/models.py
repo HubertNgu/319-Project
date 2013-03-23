@@ -82,6 +82,7 @@ class Post(models.Model):
     
 # Create the form class.
 class PostForm(ModelForm):
+    creator = forms.EmailField(required=True)
     email_verification = forms.EmailField(required=True)
     
     def __init__(self, *args, **kwargs):
@@ -116,17 +117,17 @@ class EditPostForm(ModelForm):
     
 # PhotoStroage model
 class Photo(models.Model):
-   listing = models.ForeignKey(Post)
+   post = models.ForeignKey(Post)
    photo =  models.ImageField(upload_to='photos/posts/%Y/%B/%d/')
    caption = models.CharField(max_length=200)
    
-    def get_caption(self):
+   def get_caption(self):
         return self.caption
    
-    def get_url(self):
+   def get_url(self):
         return self.photo
    
-    def imagename(self):
+   def imagename(self):
         return os.path.basename(self.photo.name)
    
 class UploadForm(ModelForm):

@@ -25,7 +25,7 @@ PAGE_SIZE = settings.RESULTS_PAGE_SIZE
 
 def index(request):
     if request.user.is_authenticated():
-       return redirect('virtual_deconstruction_hub.views.index')
+       return redirect('/')
     elif request.method == 'POST':
         usernamepost = request.POST.get('username')
         passwordpost = request.POST.get('password')
@@ -38,7 +38,7 @@ def index(request):
             errormessage =  "Your username and/or password were incorrect."
             return render_to_response("users\login.html",{'errormessage':errormessage},context_instance=RequestContext(request))   
         login(request, user)
-        return redirect('virtual_deconstruction_hub.views.index')
+        return redirect('/')
    
     else:
         return render_to_response("users\login.html",context_instance=RequestContext(request))
@@ -114,6 +114,15 @@ def id_generator(size=10, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
 def editaccount(request):
+    if request.user.is_authenticated():
+        logtext = "Logout"
+        accounttext = "My Account"
+        welcometext = request.user.username
+        logparams=[logtext,accounttext, welcometext]
+    else: 
+        logtext = "Login"
+        accounttext = "Sign Up"
+        logparams=[logtext,accounttext]
     user =request.user
     username = request.user.username
     profile = UserProfile.objects.get(username = username) 
@@ -132,7 +141,7 @@ def editaccount(request):
         profile.city = city
         profile.province = province
         profile.save()
-        return redirect("users.views.myaccount")
+        return render_to_response("users\myaccount", {'logparams': logparams})
     
     else:
         username = request.user.username
@@ -152,9 +161,19 @@ def editaccount(request):
                                                       'city':city,
                                                       'phone':phone,
                                                       'province':province,
-                                                      'description':description,},context_instance=RequestContext(request))
+                                                      'description':description,
+                                                      'logparams' : logparams},context_instance=RequestContext(request))
 
 def myaccount(request):
+    if request.user.is_authenticated():
+        logtext = "Logout"
+        accounttext = "My Account"
+        welcometext = request.user.username
+        logparams=[logtext,accounttext, welcometext]
+    else: 
+        logtext = "Login"
+        accounttext = "Sign Up"
+        logparams=[logtext,accounttext]
     if request.method == 'POST':
         return redirect("users.views.editaccount")
     username = request.user.username
@@ -175,7 +194,9 @@ def myaccount(request):
                                                       'city':city,
                                                       'phone':phone,
                                                       'province':province,
-                                                      'description':description,},context_instance=RequestContext(request))
+                                                      'description':description,
+                                                      'logparams': logparams},context_instance=RequestContext(request))
+
                                                       
 def listings(request):
     #    if request.
@@ -206,3 +227,4 @@ def posts(request, post_type):
         # If page is out of range (e.g. 9999), deliver last page of results.
         posts= paginator.page(paginator.num_pages)
     return render(request, "users/" + post_type + ".html", { "posts" : posts, "username" : request.user.username })
+

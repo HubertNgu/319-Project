@@ -1,6 +1,5 @@
 import re
 import logging
-from listings.views import Listing
 from survey_system.models import Survey
 from listings.models import Listing, ListingForm
 from statistics_generator.models import Statistics, StatisticsCategory
