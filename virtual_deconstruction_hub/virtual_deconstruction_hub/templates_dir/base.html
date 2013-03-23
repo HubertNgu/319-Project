@@ -43,12 +43,12 @@
 	
 {% if logparams != None %}
 {%  if logparams.0  == "Login"%}
- <a href = "/users/login">{{logparams.0}}</a> 
- <a href= "/users/signup">{{logparams.1}}</a> 
+ <a href = "/myaccount/login">{{logparams.0}}</a> 
+ <a href= "/myaccount/signup">{{logparams.1}}</a> 
 {% else %}
  <p> Welcome {{logparams.2}} </p>
- <a href = "/users/logout">{{logparams.0}}</a>
- <a href = "/users/myaccount"> {{logparams.1}} </a>
+ <a href = "/myaccount/logout">{{logparams.0}}</a>
+ <a href = "/myaccount/myaccount"> {{logparams.1}} </a>
 {% endif %}
 {% endif %}
 </div>

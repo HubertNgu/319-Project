@@ -116,7 +116,7 @@ def get_sale_categories():
     return SALE_CHOICES
 
 class ListingForm(ModelForm):
-    
+    creator = forms.EmailField(required = True)
     email_verification = forms.EmailField(required=True)
     
     def __init__(self, *args, **kwargs):
