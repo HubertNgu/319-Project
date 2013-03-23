@@ -22,10 +22,11 @@ Here you will find some statistical information
       {% load chart_tags %}
       {% chart %}
          ?chs=400x400
-                 &cht=p3
-                 &chd={{ category_survey_values }}
-                 &chdl={{ labels }}
-                 &chtt=Survey+Category+Rank
+         &cht=p3
+	&chco=FF0000|FF5F00|FF9C00|FFC900|FFF100|BAF300|4DDE00|00A383|086FA1|1533AD|4512AE|5E0DAC|8F04A8|BE008A|D8005F|A68600|FFAE73|36BBCE
+         &chd={{ category_survey_values }}
+         &chdl={{ labels }}
+         &chtt=Survey+Category+Rank
       {% endchart %}
    </span>
    
@@ -37,6 +38,7 @@ Here you will find some statistical information
                  &chd={{ category_buyer_values }}
                  &chdl={{ labels }}
                  &chtt=Buyer+Category+Rank
+		&chco=FF0000|FF5F00|FF9C00|FFC900|FFF100|BAF300|4DDE00|00A383|086FA1|1533AD|4512AE|5E0DAC|8F04A8|BE008A|D8005F|A68600|FFAE73|36BBCE
       {% endchart %}
    </span>
 
@@ -48,14 +50,17 @@ Here you will find some statistical information
                  &chd={{ category_seller_values }}
                  &chdl={{ labels }}
                  &chtt=Seller+Category+Rank
+		&chco=FF0000|FF5F00|FF9C00|FFC900|FFF100|BAF300|4DDE00|00A383|086FA1|1533AD|4512AE|5E0DAC|8F04A8|BE008A|D8005F|A68600|FFAE73|36BBCE
       {% endchart %}
    </span>
       
    <span class="amount">
    	{% load chart_tags %}
       {% chart %}
-      &chxt=y
-   		&chbh=a,3
+	?chxl=1:|dollar(%24)|
+   	&chxp=0,0
+     	 &chxt=y, t
+	&chbh=a,3
       &chds=0,{{ category_amount_max }}
   		&chs=300x225
    		&cht=bvs
@@ -88,12 +93,14 @@ Here you will find some statistical information
 
 <h1>Average Transaction Time: {{ average_transaction_time }}</h1>
 
-<div class="succesrate">
+<div class="successrate">
   <span class="successrate">
     {% load chart_tags %}
       {% chart %}
+	?chxl=1:|Count|
+   	&chxp=0,0
       ?chxr=0,0,{{number_listings}}
-      &chxt=y
+      &chxt=y, t
       &chbh=a
       &chds=0,{{ number_listings }}
       &chs=500x300
@@ -104,13 +111,6 @@ Here you will find some statistical information
       &chtt=Transaction+Success+Rate
       {% endchart %}
   </span>
-
-
-
-  <iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" 
-      src="https://maps.google.com/maps?f=q&source=s_q&hl=en&geocode&q={{ address }}&aq&sll=49.251784%2C-123.11039
-      &sspn=0.065325%2C0.169086&doflg=ptk&ie=UTF8&hq&hnear={{ address }}%2C+Canada&t=m&z=12&iwloc=A&output=embed">
-  </iframe><br />
 </div>
 
 {% endblock stats_content %}

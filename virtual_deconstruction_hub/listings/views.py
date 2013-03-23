@@ -10,6 +10,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import timezone
 from django.contrib.sites.models import Site
 from mailer.views import send_post_verification_email
+from users.models import user
 import re
 import string
 import random
@@ -100,7 +101,8 @@ def create_listing(request):
     pictureform = UploadForm()
     if request.method == 'GET':
         if request.user.is_authenticated():
-            form = ListingForm(instance=Listing(), initial={'creator':request.user.email, 'email_verification':request.user.email})
+            city = User.objects.get(username = request.user.email)
+            form = ListingForm(instance=Listing(), initial={'creator':request.user.email, 'email_verification':request.user.email,'city':city})
             form.fields['creator'].widget = forms.HiddenInput()
             form.fields['email_verification'].widget = forms.HiddenInput()
         else:
@@ -135,29 +137,29 @@ def create_listing(request):
             listing.save()
             listingid = listing.id
             logger.debug('format', "createListing: debug")
-            form = UploadForm(request.POST, request.FILES)
-            if request.POST.get("notnewlisting") != None:
-                    listingid = request.POST.get("listingid")
-                    listing = Listing.objects.get(id = listingid )
-                    listing_url = listing.get_url()
-            form_args = {'form':listing_form, 'submit_action':submit_action, 'listing_url' : listing_url, 'listing':listing, 'logparams' : logparams}
+        form = UploadForm(request.POST, request.FILES)
+        if request.POST.get("notnewlisting") != None:
+                listingid = request.POST.get("listingid")
+                listing = Listing.objects.get(id = listingid )
+                listing_url = listing.get_url()
+        form_args = {'form':listing_form, 'submit_action':submit_action, 'listing_url' : listing_url, 'listing':listing, 'logparams' : logparams}
            
-            if form.is_valid():
-                form_args = {'listing':listing, 'listing_url': listing_url, 'logparams':logparams}
-                photo = Photo(photo = request.FILES['picture'], listing = listing )
-                photo.save()            
-                if request.POST.get('pictureform') == "1" and request.POST.get("issubmit") != 1:
-                    photolist = Photo.objects.filter(listing_id = listing.id)
-                    addanotherprevious = list()
-                    for o in Photo.objects.filter(listing_id = listing.id): 
-                        addanotherprevious.append(o.photo.name)
+        if form.is_valid():
+            form_args = {'listing':listing, 'listing_url': listing_url, 'logparams':logparams}
+            photo = Photo(photo = request.FILES['picture'], listing = listing )
+            photo.save()            
+            if request.POST.get('pictureform') == "1" and request.POST.get("issubmit") != 1:
+                photolist = Photo.objects.filter(listing_id = listing.id)
+                addanotherprevious = list()
+                for o in Photo.objects.filter(listing_id = listing.id): 
+                    addanotherprevious.append(o.photo.name)
                 
-                    form_args = {'form':listing_form, 'submit_action':submit_action, 
+                form_args = {'form':listing_form, 'submit_action':submit_action, 
                                   'pictureform': pictureform,
                                  'listingid' :listingid, 'addanotherprevious' : addanotherprevious,
                                  'logparams': logparams}
                     
-                    return render_to_response("listings/listings_new.html", form_args, context_instance=RequestContext(request))
+                return render_to_response("listings/listings_new.html", form_args, context_instance=RequestContext(request))
                       
         if listing.verified:
              # if post is already verified, redirect user to their newly created post

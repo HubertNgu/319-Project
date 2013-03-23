@@ -82,7 +82,8 @@ def new_post(request, post_type):
             post.set_url( tag_maker("_", post) )
             post_url = post.get_url()
             post_url = HttpRequest.build_absolute_uri(request, post_url)
-            post.verified = True
+            if request.user.is_authenticated():
+                post.verified = True
             
             #===================================================================
             # if request.user.is_authenticated():

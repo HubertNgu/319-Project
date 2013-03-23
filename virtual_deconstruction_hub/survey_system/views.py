@@ -53,7 +53,9 @@ def survey(request, survey_id):
     if request.method == 'GET':
         # Generate the SurveyForm for the user to fill out.
         form = SurveyForm(instance=Survey(), 
-                initial={ 'category' : listing.category, 'listing_id' : listing.id})
+                initial={ 'category' : listing.category, 'listing_id' : listing.id, 
+                          'city' : listing.city, 'address' : listing.address, 
+                          'item' : listing.title})
         form_args = { 'form' : form, 'submit_action' : '/survey/%s' % survey_id}
         logger.debug('Generated a SurveyForm for the listing %s', survey_id)
         return render_to_response('survey_system/survey.html', form_args,
