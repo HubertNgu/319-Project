@@ -1,0 +1,48 @@
+{% extends "posts/posts_index.html" %}
+
+
+
+{% block posts_content %}
+
+<div id="create_new" class="body">
+{% if post_type == "blog" and username == None %}{%else%}<a href="/posts/{{ post_type }}/new"> Create a new post </a>{% endif %}
+</div>
+<br>
+<br>
+
+
+{% for post in posts %}
+
+	<div id="{{post.get_url}}", class="post_preview">
+	<li><a href="/posts/{{post_type}}/{{ post.get_url }}"><b>{{ post.title }}</b></a> </li>
+	<p><i>{{ post.last_modified }}</i></p>
+	<p>{{ post.text_content|truncatechars:400 }}</p>
+	</div>
+
+{% endfor %}
+
+<div id="page_links_bottom" class="pagination">
+    <span class="step-links">
+    	{% ifnotequal posts.number 1 %}
+            <a href="?page=1">First</a>
+        {% endifnotequal %}
+    	
+        {% if posts.has_previous %}
+            <a href="?page={{ posts.previous_page_number }}"> Previous </a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ posts.number }} of {{ posts.paginator.num_pages }}
+        </span>        
+
+        {% if posts.has_next %}
+            <a href="?page={{ posts.next_page_number }}"> Next </a>
+        {% endif %}
+        
+        {% ifnotequal posts.number posts.paginator.num_pages %}
+            <a href="?page={{ posts.paginator.num_pages }}">Last</a>
+        {% endifnotequal %}
+    </span>
+</div>
+
+{% endblock posts_content %}

@@ -7,9 +7,7 @@
 
 
 <title>
-{% block window_title %}
-Virtual Deconstruction Hub
-{% endblock window_title %}
+{% block window_title %}{% endblock window_title %} - Virtual Deconstruction Hub
 </title>
  
 </head>
@@ -17,47 +15,45 @@ Virtual Deconstruction Hub
 <body id="body" class="home">
 
 <header id="banner" class="body">
-	<h1>
+	<div id="header">
+	<div id="title_slogan" class="header"><h1>
 	<a href="/">Virtual Deconstruction Hub<strong>Insert Slogan here</strong></a></h1>
-	<div id="banner_logo" class="body">Logo</div> 
+	</div>
+	<div id="banner_logo" class="header"><img src="{{ STATIC_URL }}images\header-logo.png" height="100px" width="100px"/></div>
+	</div>
 	<nav><ul>
-		<li {% block nav_home %}{% endblock nav_home %}><a href="/">Home</a></li>
-		<li {% block nav_listings %}{% endblock nav_listings %}><a href="/listings">Listings</a></li>
-		<li {% block nav_blog %}{% endblock nav_blog %}><a href="/posts/blog">Blog</a></li>
-		<li {% block nav_projects %}{% endblock nav_projects %}><a href="/posts/proj">Project Ideas</a></li>
-		<li {% block nav_story %}{% endblock nav_story %}><a href="/posts/stry">Success Stories</a></li>
-		<li {% block nav_about %}{% endblock nav_about %}><a href="/about">About</a></li>
+		<li {% block nav_home %}{% endblock nav_home %}><a href="/">Home</a></li><li {% block nav_listings %}{% endblock nav_listings %}><a href="/listings">Listings</a></li><li {% block nav_blog %}{% endblock nav_blog %}><a href="/posts/blog">Blog</a></li><li {% block nav_projects %}{% endblock nav_projects %}><a href="/posts/proj">Project Ideas</a></li><li {% block nav_story %}{% endblock nav_story %}><a href="/posts/stry">Success Stories</a></li><li {% block nav_about %}{% endblock nav_about %}><a href="/about">About</a></li>
 	</ul></nav>
-	<input id="search_text" type="search" name="listingsearch">
-	<select id="select">
-  		<option value="listings">Listings</option>
-  		<option value="blog">Blog Posts</option>
-  		<option value="proj">Project Ideas</option>
-  		<option value="stry">Success Stories</option>
-  	</select><input id="search_button" type="submit" value="Search">
+	{% block nav_search %}
+	<form id="header_search_form" action={% block search_action %}"/search"{% endblock search_action %} method="get" >
+		<input id="search_text" type="search" name="q">
+		<select id="select" name="type">
+	  		<option value="list" {% block listings_option %}{% endblock listings_option %}>Listings</option>
+	  		<option value="blog" {% block blog_option %}{% endblock blog_option %}>Blog Posts</option>
+	  		<option value="proj" {% block proj_option %}{% endblock proj_option %}>Project Ideas</option>
+	  		<option value="stry" {% block stry_option %}{% endblock stry_option %}>Success Stories</option>
+	  	</select><input id="search_button" type="submit" value="Search" a>
+  	</form>
+  	{% endblock nav_search %}
 </header>
 
 <div id="content" class="body">
+
 <div id="login_div" class="body">
 	
-{% comment %}
-This section controls what the user see's in the for login/signup prompts.
-Must be passed as a param from every call to any template if we decide to use it.
-{% endcomment %}
-
+{% if logparams != None %}
 {%  if logparams.0  == "Login"%}
- <a href = "/users/login">{{logparams.0}}</a> 
- <a href= "/users/signup">{{logparams.1}}</a> 
+ <a href = "/myaccount/login">{{logparams.0}}</a> 
+ <a href= "/myaccount/signup">{{logparams.1}}</a> 
 {% else %}
  <p> Welcome {{logparams.2}} </p>
- <a href = "/users/logout">{{logparams.0}}</a>
- <a href = "/users/myaccount"> {{logparams.1}} </a>
+ <a href = "/myaccount/logout">{{logparams.0}}</a>
+ <a href = "/myaccount/myaccount"> {{logparams.1}} </a>
+{% endif %}
 {% endif %}
 </div>
-
 {% block base_content %}
 
-<b> Welcome to the Virtual Deconstruction Hub</b>
 
 {% endblock base_content %}
 </div>

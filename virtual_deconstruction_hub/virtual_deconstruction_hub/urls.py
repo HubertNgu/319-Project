@@ -1,5 +1,8 @@
 from django.conf.urls import patterns, include, url
 from django.conf import settings
+from django.conf.urls.defaults import *
+#from search.views import PostSearchView
+
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -7,9 +10,9 @@ admin.autodiscover()
 
 # ORDER MATTERS!! Django will direct to first match it encounters, so make sure the most generic url regex is the lowest in the list
 urlpatterns = patterns('',
-
+                    
     # user and authentication URLs
-    (r'^users/', include('users.urls')),
+    (r'^myaccount/', include('users.urls')),
     
     # listings URLs
     (r'^listings/', include('listings.urls')),
@@ -18,13 +21,13 @@ urlpatterns = patterns('',
     (r'^survey/', include('survey_system.urls')),
     
     # posts URLs
-    (r'posts/', include('posts.urls')),
+    (r'^posts/', include('posts.urls')),
     
     # profile URLs
-    (r'profiles/', include('userprofile.urls')),
+    (r'^profiles/', include('userprofile.urls')),
     
     #statistics urls
-    (r'statistics/', include('statistics_generator.urls')),
+    (r'^statistics/', include('statistics_generator.urls')),
 
     # admin site url
     url(r'^admin/', include(admin.site.urls)),
@@ -41,9 +44,14 @@ urlpatterns = patterns('',
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
+    
+    # search application
+    url(r'^search/', 'search.views.search'),    
+    
     #set root for static files (css, images, etc)
     url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
+    #set root for uploaded photo files
+    url(r'^photos/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     
     )
 

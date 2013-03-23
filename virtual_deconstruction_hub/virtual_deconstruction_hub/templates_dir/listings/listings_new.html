@@ -4,39 +4,37 @@
 Create a new listing - Virtual Deconstruction Hub
 {% endblock window_title %}
 
+
 {% block listings_content %}
 
-<h1 style = "text-align:center" >Create a new listing</h1>
+<h1>Create a new post</h1>
 
-{% if errormessage != None %}
-<span id= "sameusername" style="color:red;display:inline">{{errormessage}}</span><br/>
-{%endif%}
-<span id = "error" style="color:red;display:none"></span>
-  <form action="" method="post" onSubmit = "return onSignUpClick();">
-  {% csrf_token %}
-  
-  <div style="width:120px;text-align:right; float:left">
-   <label style = "line-height:26px">Email Address:</label><br/>
-    <label style = "line-height:26px">Title:</label><br/>
-    <label style = "line-height:26px">Content:</label><br/>
-    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+{# context for directing to a app method call ->  <form action="{% url 'listings:submit_new' listing.id %}" method="post"> #}
 
-   </div>
-   <div style = "margin-left:4px"  >
-   <input type = "text" name = "creator" id = "creator" size = "35"/><br/>
-   <input type = "text" name = "title" id = "title" size = "35"/><br/>
-   <textarea rows="20" cols="70" name = "textContent" id = "textContent"> </textarea><br/>
-   Photo 1: <input type = "file" name = "photo1" id = "photo1"/><br/>
-   Photo 2: <input type = "file" name = "photo2" id = "photo2"/><br/>
-   Photo 3: <input type = "file" name = "photo3" id = "photo3"/><br/>
-   Photo 4: <input type = "file" name = "photo4" id = "phot4"/><br/>
-   
-   
-<br/>
-    </div>  
-      <input type="submit" value="Submit">
-  </form>
+<form id="new_post_form" action="{{ submit_action }}" method="post" enctype="multipart/form-data">
+{% csrf_token %}
+<input type = "hidden" name = "pictureform" id = "pictureform" value = "0"></input>
+<input type = "hidden" name = "issubmit" id = "issubmit" value = "0"></input>
 
-</div>
+<table>
+{{ form.as_table }}
+</table>
+{{pictureform.as_p}}
+{% if addanotherprevious != None %}
+{% for item in addanotherprevious %}
+<li> Added {{item}} </li>
+
+{% endfor %}
+
+<input type="hidden" name= "notnewlisting" id = "notnewlistingg" value = "0"></input>
+<input type="hidden" name= "listingid" id = "listingid" value = {{listingid}}></input>
+<input type = "hidden" name="paragraphtag" id = "paragraphtag" value = "1"></input>
+{% endif %}
+<input type="submit" value="Submit" />
+<button onclick= "return addAnotherPicture()">Add Another Picture</button>
+</form>
 
 {% endblock listings_content %}
+
+
+

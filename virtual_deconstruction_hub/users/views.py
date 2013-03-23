@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.template import Context, loader
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.template.defaulttags import csrf_token
@@ -12,12 +12,20 @@ from django.contrib.auth import logout
 from django.shortcuts import redirect
 from userprofile.models import UserProfile 
 from verificationapp.models import VerificationApp
+from mailer.views import send_signup_verification_email
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from listings.models import Listing
+from posts.models import Post
+from django.conf import settings
 import string
 import random
 
+#PAGE_SIZE = int(constants.RESULTS_PAGE_SIZE)
+PAGE_SIZE = settings.RESULTS_PAGE_SIZE
+
 def index(request):
     if request.user.is_authenticated():
-       return redirect('virtual_deconstruction_hub.views.index')
+       return redirect('/')
     elif request.method == 'POST':
         usernamepost = request.POST.get('username')
         passwordpost = request.POST.get('password')
@@ -30,14 +38,14 @@ def index(request):
             errormessage =  "Your username and/or password were incorrect."
             return render_to_response("users\login.html",{'errormessage':errormessage},context_instance=RequestContext(request))   
         login(request, user)
-        return redirect('virtual_deconstruction_hub.views.index')
+        return redirect('/')
    
     else:
         return render_to_response("users\login.html",context_instance=RequestContext(request))
 
 def logout_user(request):
     logout(request)
-    response = redirect('virtual_deconstruction_hub.views.index')
+    response = redirect('/')
     response.delete_cookie('user_location')
     return response
 
@@ -76,9 +84,8 @@ def signup(request):
             verificationcode = id_generator()
             verificationapp = VerificationApp(username = checkusername, verificationcode = verificationcode)
             verificationapp.save()
-            #add email to include in querystring username and verification. i.e(http://localhost:2000/users/verifyemail/?username=n&verificationcode=KU47FL3HR6)
-            #verification code is under variable verification code
-            return   render_to_response("users/verification.html",context_instance=RequestContext(request))
+            send_signup_verification_email("http://localhost:8080/users/verifyemail/?username="+ checkusername + "&verificationcode="+ verificationcode, email)
+            return render_to_response("users/verification.html",context_instance=RequestContext(request))
     else:
         
         return render_to_response("users/signup.html",context_instance=RequestContext(request))
@@ -107,6 +114,15 @@ def id_generator(size=10, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
 def editaccount(request):
+    if request.user.is_authenticated():
+        logtext = "Logout"
+        accounttext = "My Account"
+        welcometext = request.user.username
+        logparams=[logtext,accounttext, welcometext]
+    else: 
+        logtext = "Login"
+        accounttext = "Sign Up"
+        logparams=[logtext,accounttext]
     user =request.user
     username = request.user.username
     profile = UserProfile.objects.get(username = username) 
@@ -125,7 +141,7 @@ def editaccount(request):
         profile.city = city
         profile.province = province
         profile.save()
-        return redirect("users.views.myaccount")
+        return render_to_response("users\myaccount", {'logparams': logparams})
     
     else:
         username = request.user.username
@@ -145,9 +161,19 @@ def editaccount(request):
                                                       'city':city,
                                                       'phone':phone,
                                                       'province':province,
-                                                      'description':description,},context_instance=RequestContext(request))
+                                                      'description':description,
+                                                      'logparams' : logparams},context_instance=RequestContext(request))
 
 def myaccount(request):
+    if request.user.is_authenticated():
+        logtext = "Logout"
+        accounttext = "My Account"
+        welcometext = request.user.username
+        logparams=[logtext,accounttext, welcometext]
+    else: 
+        logtext = "Login"
+        accounttext = "Sign Up"
+        logparams=[logtext,accounttext]
     if request.method == 'POST':
         return redirect("users.views.editaccount")
     username = request.user.username
@@ -160,7 +186,7 @@ def myaccount(request):
     description = profile.description
     firstname = profile.firstname
     lastname = profile.lastname
-    return render_to_response("users\myaccount.html",{'username':username,
+    return render_to_response("users\profile.html",{'username':username,
                                                       'firstname':firstname,
                                                       'lastname':lastname,
                                                       'email':email,
@@ -168,4 +194,37 @@ def myaccount(request):
                                                       'city':city,
                                                       'phone':phone,
                                                       'province':province,
-                                                      'description':description,},context_instance=RequestContext(request))
+                                                      'description':description,
+                                                      'logparams': logparams},context_instance=RequestContext(request))
+
+                                                      
+def listings(request):
+    #    if request.
+    listings_list = Listing.objects.filter(creator = request.user.email).order_by('-created')
+    paginator = Paginator(listings_list, 25)
+    page = request.GET.get('page')
+    try:
+        listings = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        listings = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        listings = paginator.page(paginator.num_pages)
+#    return render_to_response('listings/listings_list.html', {"listings": listings})
+    return render(request, "users/listings.html", { "listings" : listings, "username" : request.user.username })
+def posts(request, post_type):
+    post_type = str(post_type.lower())
+    query = Post.objects.filter(type=post_type, creator=request.user.email).order_by('-last_modified')
+    paginator = Paginator(query , PAGE_SIZE)
+    page = request.GET.get('page')
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        posts = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        posts= paginator.page(paginator.num_pages)
+    return render(request, "users/" + post_type + ".html", { "posts" : posts, "username" : request.user.username })
+

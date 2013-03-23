@@ -90,7 +90,7 @@ if(document.getElementById('password').value != document.getElementById('confirm
  }
  
  function cancelButton(){
- window.location.href="myaccount.html";
+ window.location.href="myaccount/profile.html";
  }
  
   function checkLogin(){
@@ -123,3 +123,20 @@ if(document.getElementById('password').value != document.getElementById('confirm
 
          return true;
       }
+      
+ function addAnotherPicture()
+ {
+ 
+ document.getElementById('pictureform').value = "1";
+ if (document.getElementById('id_picture').value == ""){
+ alert("You must choose a file to add");
+ return false;
+ }
+ }
+ 
+  function setSubmitTrue()
+ {
+ 
+ document.getElementById('issubmit').value = "1";
+ }
+ 

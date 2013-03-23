@@ -1,22 +1,28 @@
 {% extends "base.html" %}
 
 {% block window_title %}
-Listings - Virtual Deconstruction Hub
+Listings
 {% endblock window_title %}
  
-
 {% block nav_listings %}
 class="active"
 {% endblock nav_listings %}
+{% block listings_option %}
+selected="selected"
+{% endblock listings_option %}
+
 
 {% block base_content %}
-<b> Listings page - thes section is static across ALL listings pages</b>
+
+{% if message %}
+
+<p id="system_message" class="body"> {{ message }} </p>
+
+{% endif %}
 
 {% block listings_content %}
 
 
 {% endblock listings_content %}
-
-
 
 {% endblock base_content %}

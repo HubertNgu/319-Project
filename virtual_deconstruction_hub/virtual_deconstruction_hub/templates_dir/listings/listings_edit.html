@@ -1,0 +1,43 @@
+{% extends "listings/listings_index.html" %}
+
+{% block window_title %}
+Create a new listing - Virtual Deconstruction Hub
+{% endblock window_title %}
+
+
+{% block listings_content %}
+
+<h1>Edit/Delete a new post</h1>
+
+{# context for directing to a app method call ->  <form action="{% url 'listings:submit_new' listing.id %}" method="post"> #}
+
+<form id="edit_form" action="{{ submit_action }}" method="post" enctype="multipart/form-data">
+{% csrf_token %}
+<input type = "hidden" name = "pictureform" id = "pictureform" value = "0"></input>
+<input type = "hidden" name = "issubmit" id = "issubmit" value = "0"></input>
+
+<table>
+{{ form.as_table }}
+</table>
+
+{{pictureform.as_p}}
+{% if addanotherprevious != None %}
+{% for item in addanotherprevious %}
+<li> Added {{item}} </li>
+{% endfor %}
+
+<input type="hidden" name= "notnewlisting" id = "notnewlistingg" value = "0"></input>
+<input type="hidden" name= "listingid" id = "listingid" value = {{listingid}}></input>
+<input type = "hidden" name="paragraphtag" id = "paragraphtag" value = "1"></input>
+
+{% endif %}
+
+<button form="edit_form" formaction="/listings/delete-verify?listing_id={{listing.id}}&uuid={{listing.uuid}}">Delete</button>
+<input type="submit" value="Submit" />
+<button onclick= "return addAnotherPicture()">Add Another Picture</button>
+</form>
+
+{% endblock listings_content %}
+
+
+
