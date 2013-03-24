@@ -205,18 +205,30 @@ def edit_verify_post(request):
             return render_to_response(TEMPLATE_PATHS.get("posts_new"), form_args, context_instance=RequestContext(request))   
     
 def posts_index(request, post_type):
+    loggedin = None
     if request.user.is_authenticated():
         logtext = "Logout"
         accounttext = "My Account"
         welcometext = request.user.username
         logparams=[logtext,accounttext, welcometext]
+        loggedin = "yes"
     else: 
         logtext = "Login"
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
     username = None
+    postname = None
     if request.user.username == "admin":
         username = "admin"
+    if(post_type == "blog" and username == None) or loggedin == None:
+        loggedin = None
+    if post_type == "blog":
+        postname = "blog"
+    if post_type == "proj":
+        postname = 'project idea'
+    if post_type == "stry":
+        postname = "success story"
+    
     post_type = str(post_type.lower())
     query = Post.objects.filter(type=post_type).filter(verified=True).order_by('-last_modified')
     paginator = Paginator(query , PAGE_SIZE)
@@ -229,8 +241,8 @@ def posts_index(request, post_type):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         posts= paginator.page(paginator.num_pages)
-    form_args = {'posts':posts, 'message': None, 'post_type_title':POST_TYPE_TITLES.get(post_type), 
-                 'post_type': post_type, 'logparams': logparams, 'username': username}
+    form_args = {'posts':posts, 'message': None, 'post_type_title':postname, 
+                 'post_type': post_type, 'logparams': logparams, 'username': username, 'loggedin':loggedin}
     return render_to_response(TEMPLATE_PATHS.get(post_type+'_list'),form_args, context_instance=RequestContext(request))
         
 def posts_specific(request, post_type, tag):

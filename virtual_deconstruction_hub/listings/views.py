@@ -10,7 +10,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import timezone
 from django.contrib.sites.models import Site
 from mailer.views import send_post_verification_email
-from users.models import User
+from users.models import Use
 import re
 import string
 import random
