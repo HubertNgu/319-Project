@@ -2,6 +2,16 @@
 
 {% extends "base.html" %}
 
+{% block head_extra %}
+<script type="text/javascript">
+    $(document).ready(function() {
+         window.onload = function() {
+         $("#email").focus();
+        };  
+    }); 
+    </script> 
+{% endblock head_extra %}
+
 {% block base_content %}
 <h1 style = "text-align:center" >Create an Account</h1>
 <div  id = "signupform" class="body">
@@ -12,34 +22,31 @@
   <form action="" method="post" onSubmit = "return onSignUpClick();">
   {% csrf_token %}
   <div style="width:120px;text-align:right; float:left">
-   <label style = "line-height:26px">Username:</label><br/>
+   <label style = "line-height:26px">Email:</label><br/>
+   <label style = "line-height:26px">First Name:</label><br/>
+   <label style = "line-height:26px">Last Name:</label><br/>
     <label style = "line-height:26px">Password:</label><br/>
-    <label style = "line-height:26px">Confirm Password:</label><br/>
-    <label style = "line-height:26px">Email:</label><br/>
+    <label style = "line-height:26px">Confirm Password:</label><br/> 
     <label style = "line-height:26px">Phone Number:</label><br/>
      <label style = "line-height:26px">Address:</label><br/>
      <label style = "line-height:26px"> City: </label><br/>
      <label style = "line-height:26px">Province:</label><br/>
    </div>
    <div style = "margin-left:4px"  >
-   <input type = "text" name = "username" id = "username"/><br/>
-   
+   <input type = "text" name = "email" id = "email"/><br/>
   
+   <input type = "text" name = "firstname" id = "firstname"/><br/>
+   <input type = "text" name = "lastname" id = "lastname"/><br/>
+
    <input type = "password" name = "password" id = "password"/><br/>
                  
    
    <input type = "password" name = "confirmpassword" id = "confirmpassword"/><br/>
-                 
-    
-   <input type = "text" name = "email" id = "email"/><br/>
-   
-   
+                
    <input type = "text" onkeypress="return isNumberKey(event)" name = "phone" id = "phone"/><br/>
    
   
    <input type = "text" name = "address" id = "address"/><br/>
-   
-   
      <select name = "city" id = "city"/><br/>
     <option value="Abbotsford">Abbotsford</option>
 	<option value="Anmore">Anmore</option>
@@ -65,7 +72,6 @@
 	<option value="White Rock">White Rock</option>
 	<option value="Whistler">Whistler</option>	
 </select><br/>
-
   <select name = "province" id = "province">
 	<option value="AB">Alberta</option>
 	<option value="BC">British Columbia</option>

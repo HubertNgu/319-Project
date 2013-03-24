@@ -1,0 +1,43 @@
+{% extends "users/myaccount.html" %}
+
+{% block account_content %}
+
+    {% if posts %}
+        
+        {% for post in posts %}
+
+            <div id="{{post.get_url}}", class="post_preview">
+            <li><b>{{ post.title }}</b><a  style="margin-left:20px"  href="/posts/{{post_type}}/{{ post.get_url }}">View</a><a style="margin-left:20px" href="/posts/edit-verify?post_id={{ post.id }}&uuid={{post.get_uuid}}">Edit</a></li>
+            <p><i>{{ post.last_modified }}</i></p>
+            <p>{{ post.text_content|truncatechars:400 }}</p>
+            </div>
+
+        {% endfor %}
+
+    {% endif %}
+
+    <div id="page_links_bottom" class="pagination">
+        <span class="step-links">
+            {% ifnotequal posts.number 1 %}
+                <a href="?page=1">First</a>
+            {% endifnotequal %}
+            
+            {% if posts.has_previous %}
+                <a href="?page={{ posts.previous_page_number }}"> Previous </a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ posts.number }} of {{ posts.paginator.num_pages }}
+            </span>        
+
+            {% if posts.has_next %}
+                <a href="?page={{ posts.next_page_number }}"> Next </a>
+            {% endif %}
+            
+            {% ifnotequal posts.number posts.paginator.num_pages %}
+                <a href="?page={{ posts.paginator.num_pages }}">Last</a>
+            {% endifnotequal %}
+        </span>
+    </div>
+    
+{% endblock account_content %}

@@ -14,10 +14,8 @@ urlpatterns = patterns('',
 
     url(r"^$", 'listings.views.index'),
     url(r'^new', 'listings.views.create_listing'),
-    url(r'^(?P<listing_id>\d+)/$', 'listings.views.detail', name='detail'),
-    url(r'^edit/(?P<listing_id>\d+)/$', 'listings.views.edit_verify_listing'),
+    url(r'^(?P<listing_url>[a-zA-Z]+)/$', 'listings.views.detail', name='detail'),
     url(r"edit-verify", 'listings.views.edit_verify_listing'),
+    url(r'^contactSeller/(?P<listing_url>[a-zA-Z]+)/$', 'listings.views.contact_seller'),
     url(r"^delete-verify", 'listings.views.delete_verify_listing'),
-    url(r'^contactSeller/(?P<listing_id>\d+)/$', 'listings.views.contact_seller'),
-
     )

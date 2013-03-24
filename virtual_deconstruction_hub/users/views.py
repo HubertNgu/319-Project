@@ -10,51 +10,60 @@ from django.contrib.auth import authenticate,login,get_user
 from django.http import  HttpResponseRedirect
 from django.contrib.auth import logout
 from django.shortcuts import redirect
-from userprofile.models import UserProfile 
+from users.models import UserProfile 
 from verificationapp.models import VerificationApp
 from mailer.views import send_signup_verification_email
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from listings.models import Listing
 from posts.models import Post
 from django.conf import settings
+from django.contrib.sites.models import Site
 import string
 import random
+import logging
+
+logger = logging.getLogger(__name__)
 
 #PAGE_SIZE = int(constants.RESULTS_PAGE_SIZE)
 PAGE_SIZE = settings.RESULTS_PAGE_SIZE
 
 def index(request):
+    prevPage = request.GET.get('prevPage')
+    if prevPage is None:
+        prevPage = '/'
     if request.user.is_authenticated():
-       return redirect('/')
+       return redirect('users.views.myaccount')
     elif request.method == 'POST':
         usernamepost = request.POST.get('username')
         passwordpost = request.POST.get('password')
         if UserProfile.objects.filter(username = usernamepost).exists():
             checkverified = UserProfile.objects.get(username= usernamepost)
             if checkverified.isverified == False:
-                return render_to_response("users\mustverify.html",context_instance=RequestContext(request))
+                return render_to_response("users/mustverify.html",context_instance=RequestContext(request))
         user = authenticate(username=usernamepost, password=passwordpost)
         if user is None:
-            errormessage =  "Your username and/or password were incorrect."
-            return render_to_response("users\login.html",{'errormessage':errormessage},context_instance=RequestContext(request))   
+            errormessage =  "Your email and/or password were incorrect."
+            return render_to_response("users/login.html",{'errormessage':errormessage},context_instance=RequestContext(request))   
         login(request, user)
-        return redirect('/')
-   
+        return redirect(prevPage) 
     else:
-        return render_to_response("users\login.html",context_instance=RequestContext(request))
+        return render_to_response("users/login.html", {'prevPage':prevPage}, context_instance=RequestContext(request))
 
 def logout_user(request):
+    prevPage = request.GET.get('prevPage')
+    if prevPage.startswith('/myaccount'):
+        prevPage = '/'
     logout(request)
-    response = redirect('/')
+    response = redirect(prevPage)
     response.delete_cookie('user_location')
     return response
 
 def signup(request):
     errormessage = None
     if request.method == 'POST':
-        checkusername = request.POST.get("username")
+        checkusername = request.POST.get("email")
         if checkusername == None:
-             errormessage = "You must select a username"
+             errormessage = "You must select an email"
              return render_to_response("users\signup.html",{'errormessage':errormessage},context_instance=RequestContext(request))
         if request.POST.get('password') == None:
              errormessage = "You must choose a password"
@@ -62,13 +71,10 @@ def signup(request):
         if request.POST.get('password') != request.POST.get('confirmpassword'):
           errormessage = "Your passwords do not match"
           return render_to_response("users\signup.html",{'errormessage':errormessage},context_instance=RequestContext(request))
-        if request.POST.get('email') == None:
-             errormessage = "You must enter an email address"
-             return render_to_response("users\signup.html",{'errormessage':errormessage},context_instance=RequestContext(request))
-       
+
         try: 
              User.objects.get(username = checkusername) 
-             errormessage = "That account name has been taken"
+             errormessage = "That email has been taken"
              return render_to_response("users\signup.html",{'errormessage':errormessage},context_instance=RequestContext(request))
         except: 
             email = request.POST.get('email')
@@ -84,32 +90,47 @@ def signup(request):
             verificationcode = id_generator()
             verificationapp = VerificationApp(username = checkusername, verificationcode = verificationcode)
             verificationapp.save()
-            send_signup_verification_email("http://localhost:8080/users/verifyemail/?username="+ checkusername + "&verificationcode="+ verificationcode, email)
-            return render_to_response("users/verification.html",context_instance=RequestContext(request))
+            verify_url = 'http://%s/myaccount/verifyemail/?username=%s&verificationcode=%s' % (Site.objects.get_current(), checkusername, verificationcode)
+            send_signup_verification_email(verify_url, email)
+            logtext = "Login"
+            accounttext = "Sign Up"
+            logparams=[logtext,accounttext]
+            return render_to_response("users/verification.html", {'logparams' : logparams }, context_instance=RequestContext(request))
     else:
         
         return render_to_response("users/signup.html",context_instance=RequestContext(request))
 
 def verification(request):
-     return render_to_response("users/verification.html",context_instance=RequestContext(request))
+    if request.user.is_authenticated():
+        logtext = "Logout"
+        accounttext = "My Account"
+        welcometext = request.user.username
+        logparams=[logtext,accounttext, welcometext]
+    else: 
+        logtext = "Login"
+        accounttext = "Sign Up"
+        logparams=[logtext,accounttext]
+        return render_to_response("users/verification.html", {'logparams' : logparams}, context_instance=RequestContext(request))
  
 def verifyemail(request):
     username = request.GET.get('username')
     verification = request.GET.get('verificationcode')
-    verify = VerificationApp.objects.get(username = username)
-    if verify.verificationcode == verification:
+    try:
+        verify = VerificationApp.objects.get(username = username, verificationcode = verification)
+    except:
+        verify = None
+        
+    if verify != None:
         verifyuser = UserProfile.objects.get(username = username)
         verifyuser.isverified = True
         verifyuser.save()
         verify.delete()
-        return redirect('virtual_deconstruction_hub.views.index')
+        return redirect("/myaccount/login")
     else: return redirect('users.views.verifyfail')
 
 def verifyfail(request):
       return render_to_response("users/verifyfail.html",context_instance=RequestContext(request))
      
-    
-
 def id_generator(size=10, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
@@ -123,11 +144,14 @@ def editaccount(request):
         logtext = "Login"
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
+        return render_to_response("users\login.html",{'logparams':logparams},context_instance=RequestContext(request))
+        
     user =request.user
     username = request.user.username
     profile = UserProfile.objects.get(username = username) 
     if request.method == "POST":
-        email = request.POST.get('email')
+        print "1"
+        email = username
         firstname = request.POST.get('firstname')
         lastname = request.POST.get('lastname')
         phoneno = request.POST.get('phone')
@@ -141,7 +165,7 @@ def editaccount(request):
         profile.city = city
         profile.province = province
         profile.save()
-        return render_to_response("users\myaccount", {'logparams': logparams})
+        return redirect('/myaccount/profile')
     
     else:
         username = request.user.username
@@ -164,6 +188,7 @@ def editaccount(request):
                                                       'description':description,
                                                       'logparams' : logparams},context_instance=RequestContext(request))
 
+
 def myaccount(request):
     if request.user.is_authenticated():
         logtext = "Logout"
@@ -174,6 +199,8 @@ def myaccount(request):
         logtext = "Login"
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
+        return render_to_response("users\login.html",{'logparams':logparams},context_instance=RequestContext(request))
+         
     if request.method == 'POST':
         return redirect("users.views.editaccount")
     username = request.user.username
@@ -195,36 +222,47 @@ def myaccount(request):
                                                       'phone':phone,
                                                       'province':province,
                                                       'description':description,
-                                                      'logparams': logparams},context_instance=RequestContext(request))
-
+                                                      'logparams' : logparams},context_instance=RequestContext(request))
                                                       
 def listings(request):
-    #    if request.
-    listings_list = Listing.objects.filter(creator = request.user.email).order_by('-created')
-    paginator = Paginator(listings_list, 25)
-    page = request.GET.get('page')
-    try:
-        listings = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        listings = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        listings = paginator.page(paginator.num_pages)
-#    return render_to_response('listings/listings_list.html', {"listings": listings})
-    return render(request, "users/listings.html", { "listings" : listings, "username" : request.user.username })
+    if request.user.is_authenticated():
+        logtext = "Logout"
+        accounttext = "My Account"
+        welcometext = request.user.username
+        logparams=[logtext,accounttext, welcometext]
+        listings_list = Listing.objects.filter(creator = request.user.email).order_by('-created')
+        paginator = Paginator(listings_list, 25)
+        page = request.GET.get('page')
+        try:
+            listings = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            listings = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            listings = paginator.page(paginator.num_pages)
+    #    return render_to_response('listings/listings_list.html', {"listings": listings})
+        return render(request, "users/listings.html", { "listings" : listings, 'logparams' : logparams})
+    else:
+        return redirect("/myaccount/login")
 def posts(request, post_type):
-    post_type = str(post_type.lower())
-    query = Post.objects.filter(type=post_type, creator=request.user.email).order_by('-last_modified')
-    paginator = Paginator(query , PAGE_SIZE)
-    page = request.GET.get('page')
-    try:
-        posts = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        posts = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        posts= paginator.page(paginator.num_pages)
-    return render(request, "users/" + post_type + ".html", { "posts" : posts, "username" : request.user.username })
-
+    if request.user.is_authenticated():
+        logtext = "Logout"
+        accounttext = "My Account"
+        welcometext = request.user.username
+        logparams=[logtext,accounttext, welcometext]
+        post_type = str(post_type.lower())
+        query = Post.objects.filter(type=post_type, creator=request.user.email).order_by('-last_modified')
+        paginator = Paginator(query , PAGE_SIZE)
+        page = request.GET.get('page')
+        try:
+            posts = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            posts = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            posts= paginator.page(paginator.num_pages)
+        return render(request, "users/posts.html", { "posts" : posts, "post_type" : post_type, 'logparams' : logparams})
+    else:
+        return redirect("/myaccount/login")

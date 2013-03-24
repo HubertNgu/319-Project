@@ -1,3 +1,10 @@
+'''
+ URL module for the statistics generator.
+
+ @author Hubert Ngu
+ @author Jason Hou
+'''
+
 from django.conf.urls import patterns, include, url
 from django.conf import settings
 
@@ -15,4 +22,3 @@ urlpatterns = patterns('',
     #set root for static files (css, images, etc)
     url(r'^$', 'statistics_generator.views.index'),
     )
-

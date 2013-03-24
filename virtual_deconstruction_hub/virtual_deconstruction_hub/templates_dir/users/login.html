@@ -1,16 +1,28 @@
 {% extends "base.html" %}
 
+{% block head_extra %}
+<script type="text/javascript">
+    $(document).ready(function() {
+         window.onload = function() {
+         $("#username").focus();
+        };  
+    }); 
+    </script> 
+{% endblock head_extra %}
+
 {% block base_content %}
   <h1 style = "text-align:center" >Login</h1>
   <div  class="body">
-  {% if errormessage != None %}
+{% if errormessage != None %}
 <span id= "sameusername" style="color:red;display:inline">{{errormessage}}</span><br/>
+{% elif message != None %}
+<span id= "sameusername" style="display:inline">{{message}}</span><br/>
 {%endif%}
 <span id = "error" style="color:red;display:none"></span>
   <form action="" method="post" onSubmit = "return checkLogin();">
   {% csrf_token %}
   <div style="width:120px;text-align:right; float:left">
-      <label style = "line-height:26px">Username:</label><br/>
+      <label style = "line-height:26px">Email:</label><br/>
       <label style = "line-height:26px">Password:</label><br/>
       <input type="submit" value="Login">
       </div>

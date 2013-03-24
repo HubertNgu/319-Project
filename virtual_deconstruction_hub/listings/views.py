@@ -10,7 +10,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import timezone
 from django.contrib.sites.models import Site
 from mailer.views import send_post_verification_email
-from users.models import user
+from users.models import User
 import re
 import string
 import random
@@ -19,8 +19,6 @@ from postpictures.models import UploadForm, PostPictures
 import logging
 
 logger = logging.getLogger(__name__)
-
-
 
 TEMPLATE_PATHS = {'listings_list': 'listings/listings_list.html',
                   'listings_single': 'listings/listings_individual.html',
@@ -62,9 +60,9 @@ def index(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         listings = paginator.page(paginator.num_pages)
 #    return render_to_response('listings/listings_list.html', {"listings": listings})
-    return render(request, TEMPLATE_PATHS.get('listings_list'), { "listings" : listings, 'logonparams':logparams })
+    return render(request, TEMPLATE_PATHS.get('listings_list'), { "listings" : listings, 'logparams':logparams })
 
-def detail(request, listing_id):
+def detail(request, listing_url):
     if request.user.is_authenticated():
         logtext = "Logout"
         accounttext = "My Account"
@@ -74,20 +72,20 @@ def detail(request, listing_id):
         logtext = "Login"
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
-    listing = get_object_or_404(Listing, pk=listing_id)
+
+    listing = get_object_or_404(Listing, url=listing_url)
     try:
-        listing = Listing.objects.get(id=listing_id)
-        reply_action = '/listings/contactSeller/' + listing_id + '/'
+        listing = Listing.objects.get(url=listing_url)
+        reply_action = '/listings/contactSeller/' + listing_url + '/'
         go_back_action = '/listings'
         address = '%s%%2C+%s' % (str(last_survey.address).replace(' ', '+'), last_survey.city)
     except:
         address = str()
     return render(request, TEMPLATE_PATHS.get('listings_single'), 
-                  { 'address': address, "listing": listing, 'logonparams':logparams, 
+                  { 'address': address, "listing": listing, 'logparams':logparams, 
                    'reply_action':reply_action, 'go_back_action':go_back_action})  
-        
+
 def create_listing(request):
-    
     if request.user.is_authenticated():
         logtext = "Logout"
         accounttext = "My Account"
@@ -118,19 +116,13 @@ def create_listing(request):
             listing_form.fields['email_verification'].widget = forms.HiddenInput()
         if listing_form.is_valid() and request.POST.get("notnewlisting") == None:
             listing = listing_form.save(commit=False)
-            listing.url = re.sub(r'\W+', '', listing.title.lower().replace (" ", "_"))
-            listing_url = listing.get_url()
             
             #if user is logged in, then verify post
             if request.user.is_authenticated:
                 listing.verified = True
             
-            #check that url is unique in db, if url already exists
-            # append a random 10 char string to the end
-            if Listing.objects.filter(url=listing.url).count() > 0:
-                listing.url = tag_maker("_", listing.url + ' ' + random_string_generator(10))
-            
-            listing_url = listing.url
+            listing.set_url( tag_maker("_", listing) )
+            listing_url = listing.url           
             listing_url = HttpRequest.build_absolute_uri(request, listing_url)
 
 
@@ -167,11 +159,11 @@ def create_listing(request):
             
         # create a verification/edit link and send with mailer then direct to success message page
         user_email = listing.get_creator()
-        verify_url = '/edit-verify?listing_id=%s&uuid=%s' % (listing.id, listing.get_uuid())
+        verify_url = '%s/listings/edit-verify?listing_id=%s&uuid=%s' % (Site.objects.get_current(), listing.id, listing.get_uuid())
         send_post_verification_email(verify_url, user_email, 'list')
 #        multiple_entries_for_testing(50)
                 
-    return render_to_response(TEMPLATE_PATHS.get('listings_success'), form_args, context_instance=RequestContext(request))    
+        return render_to_response(TEMPLATE_PATHS.get('listings_success'), form_args, context_instance=RequestContext(request))    
         
 
 def edit_verify_listing(request):  
@@ -263,13 +255,23 @@ def delete_verify_listing(request):
 #         
     
 
-def tag_maker(space_replacement_char, tag_string):
-    return re.sub(r'\W+', '', tag_string.lower().replace (" ", space_replacement_char ))
-
+#===============================================================================
+# Takes in a post and removes any no a-z,A-Z,0-9 characters in the title,
+# replaces all spaces with the given Space_replacement_char then returns a
+# unique string in all lowercase to use as the relative url
+#===============================================================================
+def tag_maker(space_replacement_char, listing):
+    tag = re.sub(r'\W+', '', listing.get_title().lower().replace (" ", space_replacement_char ))
+    #check that url is unique in db, if url already exists
+    # append a random 10 char string to the end
+    if Listing.objects.filter(url=tag).count() > 0:
+        tag = tag + space_replacement_char + random_string_generator(10)
+    return tag
+    
 def random_string_generator(size, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
-def contact_seller(request, listing_id):
+def contact_seller(request, listing_url):
     if request.user.is_authenticated():
         logtext = "Logout"
         accounttext = "My Account"
@@ -279,13 +281,13 @@ def contact_seller(request, listing_id):
         logtext = "Login"
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
-    submit_action = '/listings/contactSeller/' + listing_id + '/'
+    submit_action = '/listings/contactSeller/' + listing_url + '/'
     if request.method == 'GET':
         form_args = {'submit_action':submit_action, 'logparams':logparams}
         return render_to_response("listings/contact_seller.html", form_args, context_instance=RequestContext(request))
     if request.method == "POST":
         form_args = {'submit_action':submit_action, 'logparams':logparams}
-        listing = Listing.objects.get(pk = listing_id) 
+        listing = Listing.objects.get(url = listing_url) 
         toemail = [listing.creator]
         fromemail = request.POST.get('emailTxt')
         subject = request.POST.get('emailSubject')
