@@ -9,7 +9,7 @@ from mailer.views import send_contact_email
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import timezone
 from django.contrib.sites.models import Site
-from mailer.views import send_post_verification_email
+from mailer.views import send_post_verification_emai
 from users.models import UserProfile, Use
 import re
 import string
