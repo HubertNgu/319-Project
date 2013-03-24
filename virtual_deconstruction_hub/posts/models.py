@@ -108,12 +108,16 @@ class PostForm(ModelForm):
 
         # Always return the full collection of cleaned data.
         return cleaned_data
-
+    def get_type(self):
+        return "PostForm"
+        
 class EditPostForm(ModelForm):
     class Meta:
         model = Post
         #exclude = ['flag_count', 'verified','type', 'url', 'uuid','creator']
         fields = ['title', 'text_content']
+    def get_type(self):
+        return "EditPostForm"
         
     
 # PhotoStroage model

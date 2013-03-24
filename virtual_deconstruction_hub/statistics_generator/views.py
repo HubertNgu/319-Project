@@ -36,7 +36,7 @@ def index(request):
         statistics = Statistics.objects.latest('id')
         logger.debug('Successfully found the lastest Statistics instance')
     except:
-        return render(request, 'statistics_generator/statistics_none.html')
+        return render(request, 'statistics_generator/statistics_none.html', {'logparams' : logparams})
     
     statistics_categories = StatisticsCategory.objects.filter(statistics_id=statistics.id)
     categories, survey_count, buyer_count, seller_count, category_amount = \

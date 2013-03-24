@@ -5,6 +5,9 @@ from django.template import RequestContext
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from mailer.models import Email
+import logging
+
+logger = logging.getLogger(__name__)
 
 CONTACT_EMAIL = 0
 SIGNUP_VERIFY = 1

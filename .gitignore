@@ -2,6 +2,7 @@
 *.project
 org.eclipse.ltk.core.refactoring.prefs
 
+*.out
 *.sh
 *.pyc
 *.exe

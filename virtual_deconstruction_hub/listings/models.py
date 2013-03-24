@@ -156,12 +156,19 @@ class ListingForm(ModelForm):
             self._errors["category"] = self.error_class(["You must choose category"])
     
         return cleaned_data
+    
+    def get_type(self):
+        return "ListingForm"
         
 class EditListingForm(ModelForm):
     class Meta:
         model = Listing
+
         #exclude = ['flag_count', 'verified','type', 'url', 'uuid','creator']
         fields = ['title', 'for_sale', 'category', 'price', 'address', 'city', 'text_content']
+           
+    def get_type(self):
+        return "EditListingForm"
 
         
 # PhotoStroage model
