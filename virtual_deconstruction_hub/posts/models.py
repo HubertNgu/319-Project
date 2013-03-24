@@ -127,10 +127,8 @@ class Photo(models.Model):
         return self.photo
    def imagename(self):
        return os.path.basename(self.photo.name)
+
    
-   
-class UploadForm(ModelForm):
-    class Meta:
-        model = Photo
-        exclude = ['post']
-        fields = ['photo', 'caption']
+class UploadForm(forms.Form):
+        picture  = forms.ImageField(label='Add a picture')
+        caption = forms.Textarea()

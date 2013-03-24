@@ -33,7 +33,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     #about url
-    url(r"about", 'direct_to_template', {"template": "about.html"}),
+    url(r"^about/", include('statistics_generator.urls')),
 
     # root url - home page
     url(r"^$", include('statistics_generator.urls')),

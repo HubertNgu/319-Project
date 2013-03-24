@@ -10,12 +10,12 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import timezone
 from django.contrib.sites.models import Site
 from mailer.views import send_post_verification_email
-from users.models import user
+from users.models import User
 import re
 import string
 import random
 from listings.models import Photo
-from postpictures.models import UploadForm, PostPictures
+from listings.models import UploadForm, PostPictures
 import logging
 
 logger = logging.getLogger(__name__)
@@ -64,7 +64,7 @@ def index(request):
 #    return render_to_response('listings/listings_list.html', {"listings": listings})
     return render(request, TEMPLATE_PATHS.get('listings_list'), { "listings" : listings, 'logonparams':logparams })
 
-def detail(request, listing_id):
+def detail(request, tag):
     if request.user.is_authenticated():
         logtext = "Logout"
         accounttext = "My Account"
@@ -74,14 +74,12 @@ def detail(request, listing_id):
         logtext = "Login"
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
-    listing = get_object_or_404(Listing, pk=listing_id)
-    try:
-        listing = Listing.objects.get(id=listing_id)
-        reply_action = '/listings/contactSeller/' + listing_id + '/'
-        go_back_action = '/listings'
-        address = '%s%%2C+%s' % (str(last_survey.address).replace(' ', '+'), last_survey.city)
-    except:
-        address = str()
+    
+    address = ''
+    listing = get_object_or_404(Listing, url=tag)
+    reply_action = '/listings/contactSeller/' + str(listing.id) + '/'
+    go_back_action = '/listings'
+    address = '%s%%2C+%s' % (str(listing.address).replace(' ', '+'), listing.city)
     return render(request, TEMPLATE_PATHS.get('listings_single'), 
                   { 'address': address, "listing": listing, 'logonparams':logparams, 
                    'reply_action':reply_action, 'go_back_action':go_back_action})  
@@ -122,7 +120,7 @@ def create_listing(request):
             listing_url = listing.get_url()
             
             #if user is logged in, then verify post
-            if request.user.is_authenticated:
+            if request.user.is_authenticated():
                 listing.verified = True
             
             #check that url is unique in db, if url already exists
@@ -163,13 +161,14 @@ def create_listing(request):
                       
         if listing.verified:
              # if post is already verified, redirect user to their newly created post
+            multiple_entries_for_testing(100)
             return redirect("/listings/" + listing.url, context_instance=RequestContext(request))
             
         # create a verification/edit link and send with mailer then direct to success message page
         user_email = listing.get_creator()
         verify_url = '/edit-verify?listing_id=%s&uuid=%s' % (listing.id, listing.get_uuid())
         send_post_verification_email(verify_url, user_email, 'list')
-#        multiple_entries_for_testing(50)
+        multiple_entries_for_testing(100)
                 
     return render_to_response(TEMPLATE_PATHS.get('listings_success'), form_args, context_instance=RequestContext(request))    
         
@@ -303,14 +302,19 @@ def multiple_entries_for_testing(number):
         sale="sell"
         ver=True
         exp=False
+        city="Vancouver"
         if i%2 == 0:
             sale="want"
         if i%5 == 0:
             ver=False
         if i%7 == 0:
             exp=True
+        if i%4 == 0:
+            city='Whistler'
+        if i%8 == 0:
+            city='Surrey'
         l = Listing(creator=email, title = str(i) + " - " + title, text_content=content, category = 'wood', for_sale=sale,
-                    num = 22, street = 'blah', city = 'Vancouver', zipcode = 'V6T1Z4', verified = ver, expired=exp)
+                     city = city, verified = ver, expired=exp)
         l.save()
     return
 
