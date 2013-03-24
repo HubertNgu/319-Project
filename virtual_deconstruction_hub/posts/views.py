@@ -8,7 +8,6 @@ from django.template import RequestContext
 from posts.models import *
 #from django.contrib.auth import authenticate,login,get_user
 from django.shortcuts import redirect
-from postpictures.models import *
 from django import forms
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -16,7 +15,7 @@ from django.shortcuts import get_object_or_404
 import re
 import string
 import random
-from postpictures.models import UploadForm, PostPictures
+from posts.models import UploadForm, Photo
 from mailer.views import send_post_verification_email
 from django.contrib.sites.models import Site
 from haystack.query import SearchQuerySet
@@ -256,18 +255,18 @@ def posts_specific(request, post_type, tag):
         else:
             raise Http404()        
                                                                                                         
-def upload_file(request):
-    if request.method == 'POST':
-        form = UploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            photo = PostPictures(photo = request.FILES['picture'], postid = 1 )
-            photo.save()
-            form_args = {'form':form, 'message': None, 'post_type_title':POST_TYPE_TITLES.get('upload'), 'post_type': form.post.get_type() }
-            return render_to_response(TEMPLATE_PATHS.get('posts_new'), form_args, context_instance=RequestContext(request))
-    else:
-        form = UploadForm()
-        form_args = {'form':form, 'message': None, 'post_type_title':POST_TYPE_TITLES.get('upload'), 'post_type': form.post.get_type() }
-        return render_to_response(TEMPLATE_PATHS.get('posts_upload'), form_args, context_instance=RequestContext(request))
+#def upload_file(request):
+#    if request.method == 'POST':
+#        form = UploadForm(request.POST, request.FILES)
+#        if form.is_valid():
+#            photo = PostPictures(photo = request.FILES['picture'], postid = 1 )
+#            photo.save()
+#            form_args = {'form':form, 'message': None, 'post_type_title':POST_TYPE_TITLES.get('upload'), 'post_type': form.post.get_type() }
+#            return render_to_response(TEMPLATE_PATHS.get('posts_new'), form_args, context_instance=RequestContext(request))
+#    else:
+#        form = UploadForm()
+#        form_args = {'form':form, 'message': None, 'post_type_title':POST_TYPE_TITLES.get('upload'), 'post_type': form.post.get_type() }
+#        return render_to_response(TEMPLATE_PATHS.get('posts_upload'), form_args, context_instance=RequestContext(request))
     
         
 #===============================================================================
@@ -297,3 +296,20 @@ def multiple_entries_for_testing(number, type):
         p.set_url( tag_maker('_', p) )
         p.save()
     return
+
+def delete_verify_listing(request): 
+     
+    post_id = request.GET.get('listing_id')
+    uuid = request.GET.get('uuid')
+    #action for submit button
+    delete_submit_action = URL_PATHS.get('posts_delete-verify') + '?listing_id=' + post_id + '&uuid=' + uuid
+    listing = get_object_or_404(Post, id=str(post_id))
+    if not listing:
+        message = "Listing does not exist or it has already been deleted"
+        form_args = { "message" : message }
+        return render_to_response(TEMPLATE_PATHS.get("listings_delete"), form_args, context_instance=RequestContext(request))
+    else:
+        listing.delete()
+        message = "Listing is successfully deleted"
+        form_args = { "message" : message }
+        return render_to_response(TEMPLATE_PATHS.get("listings_delete"), form_args, context_instance=RequestContext(request))

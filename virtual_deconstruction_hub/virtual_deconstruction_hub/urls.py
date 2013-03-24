@@ -23,6 +23,9 @@ urlpatterns = patterns('',
     # posts URLs
     (r'^posts/', include('posts.urls')),
     
+    # profile URLs
+    (r'^profiles/', include('userprofile.urls')),
+    
     #statistics urls
     (r'^statistics/', include('statistics_generator.urls')),
 
@@ -30,7 +33,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     #about url
-    url(r"about", 'direct_to_template', {"template": "about.html"}),
+    url(r"^about/", include('statistics_generator.urls')),
 
     # root url - home page
     url(r"^$", include('statistics_generator.urls')),
@@ -51,3 +54,4 @@ urlpatterns = patterns('',
     url(r'^photos/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     
     )
+
