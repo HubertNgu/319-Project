@@ -20,6 +20,9 @@ from postpictures.models import UploadForm, PostPictures
 from mailer.views import send_post_verification_email
 from django.contrib.sites.models import Site
 from haystack.query import SearchQuerySet
+import logging
+
+logger = logging.getLogger(__name__)
 
 #PAGE_SIZE = int(constants.results_page_size)
 PAGE_SIZE = settings.RESULTS_PAGE_SIZE
@@ -248,7 +251,7 @@ def posts_specific(request, post_type, tag):
         if query.is_verified():
             form = PostForm(instance=query)
             photos = query.photo_set.all()
-            form_args = {'post':form, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post_type), 'post_type': post_type, 'photos': photos}
+            form_args = {'post':form, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post_type), 'post_type': post_type, 'photos': photos, 'logparams' : logparams}
             return render_to_response( TEMPLATE_PATHS.get(post_type+"_single"),form_args, context_instance=RequestContext(request))
         else:
             raise Http404()        

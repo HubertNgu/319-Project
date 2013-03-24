@@ -7,7 +7,12 @@ Create a new listing - Virtual Deconstruction Hub
 
 {% block listings_content %}
 
+
+{% if form.get_type == 'ListingForm' %}
 <h1>Create a new post</h1>
+{% else %}
+<h1>Edit post</h1>
+{% endif %}
 
 {# context for directing to a app method call ->  <form action="{% url 'listings:submit_new' listing.id %}" method="post"> #}
 

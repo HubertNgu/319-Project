@@ -11,7 +11,6 @@ def index(request):
         logtext = "Login"
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
-    
     return render_to_response("statistics/statistics_main.html",{'logparams': logparams},
                               context_instance=RequestContext(request))
     

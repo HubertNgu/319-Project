@@ -90,7 +90,7 @@ if(document.getElementById('password').value != document.getElementById('confirm
  }
  
  function cancelButton(){
- window.location.href="myaccount/profile.html";
+ window.location.href="profile";
  }
  
   function checkLogin(){

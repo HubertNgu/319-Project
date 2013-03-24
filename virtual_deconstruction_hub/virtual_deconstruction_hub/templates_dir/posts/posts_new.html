@@ -6,7 +6,12 @@ Create a New {{ post_type_title }} Post
 
 {% block posts_content %}
 
+{% if form.get_type == 'PostForm' %}
 <h1>Create a new {{post_type_title|lower}} post:</h1>
+{% else %}
+<h1>Edit {{post_type_title|lower}} post:</h1>
+{% endif %}
+
 
 {# context for directing to a app method call ->  <form action="{% url 'listings:submit_new' listing.id %}" method="post"> #}
 

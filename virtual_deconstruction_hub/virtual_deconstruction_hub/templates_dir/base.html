@@ -2,10 +2,18 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
 <script  type="text/javascript" src="{{ STATIC_URL }}javascript\main.js"></script>
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles\main.css">
-
-
+{% block head_extra %}
+<script type="text/javascript">
+    $(document).ready(function() {
+         window.onload = function() {
+         $("#search_text").focus();
+        };  
+    }); 
+    </script> 
+{% endblock head_extra %}
 <title>
 {% block window_title %}{% endblock window_title %} - Virtual Deconstruction Hub
 </title>
@@ -26,7 +34,7 @@
 	</ul></nav>
 	{% block nav_search %}
 	<form id="header_search_form" action={% block search_action %}"/search"{% endblock search_action %} method="get" >
-		<input id="search_text" type="search" name="q">
+		<input id="search_text" type="search" name="q" value="{% if query %}{{query}}{%endif%}">
 		<select id="select" name="type">
 	  		<option value="list" {% block listings_option %}{% endblock listings_option %}>Listings</option>
 	  		<option value="blog" {% block blog_option %}{% endblock blog_option %}>Blog Posts</option>
@@ -43,13 +51,20 @@
 	
 {% if logparams != None %}
 {%  if logparams.0  == "Login"%}
- <a href = "/myaccount/login">{{logparams.0}}</a> 
+<div style="padding: 10px 0 10px 0;float:right">
+ <a href="/myaccount/login?prevPage={{ request.get_full_path }}">{{logparams.0}}</a> 
  <a href= "/myaccount/signup">{{logparams.1}}</a> 
+</div>
 {% else %}
- <p> Welcome {{logparams.2}} </p>
- <a href = "/myaccount/logout">{{logparams.0}}</a>
- <a href = "/myaccount/myaccount"> {{logparams.1}} </a>
-{% endif %}
+ <div style="padding: 10px 0 10px 40%;float:left" >
+    <b>Welcome {{logparams.2}}</b>
+ </div>
+ <div style="padding: 10px 0 10px 0;float:right">
+    <a href = "/myaccount/logout?prevPage={{ request.get_full_path }}">{{logparams.0}}</a>
+    <a href = "/myaccount"> {{logparams.1}} </a>
+ </div>
+ {% endif %}
+<hr style="width:100%" > 
 {% endif %}
 </div>
 {% block base_content %}

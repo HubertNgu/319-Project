@@ -24,7 +24,7 @@
 
     <ul>
     {% for listing in listings %}
-        <li> <a href="{{ listing.id }}"> {{ listing.title }} </a> - ({{listing.created}}) </li>
+        <li> <a href="{{ listing.get_url }}">{{ listing.title }} </a> - {{listing.created}}</li>
     {% endfor %}
     </ul>
     

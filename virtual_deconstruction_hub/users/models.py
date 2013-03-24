@@ -1,15 +1,17 @@
 from django.db import models
 
-class User(models.Model):
+
+class UserProfile(models.Model):
     username = models.CharField(max_length = 20)
     firstname = models.CharField(max_length = 50)
     lastname = models.CharField(max_length = 50)
-    email = models.CharField(max_length = 50)
     phoneno = models.CharField(max_length = 10)
-    password = models.CharField(max_length = 20)
-    signupdate = models.DateTimeField('signupdate')
-    lastloggedindate = models.DateTimeField('lastloggedindate')
-    role = models.IntegerField('role')
-    profileid = models.IntegerField('profileid')
+    address = models.CharField(max_length = 50)
+    city = models.CharField(max_length = 50)
+    country = models.CharField(max_length = 50)
+    province = models.CharField(max_length = 50)
+    description = models.CharField(max_length = 500)
     isverified = models.BooleanField(default = 0)
-    
+
+def __unicode__(self):
+        return self.name
