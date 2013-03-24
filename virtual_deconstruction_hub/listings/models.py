@@ -1,6 +1,6 @@
 import uuid
 import datetime
-
+import os
 from django.db import models
 from django.utils import timezone
 from django.forms import ModelForm
@@ -12,8 +12,8 @@ CATEGORIES = ['Woods', 'Bricks', 'Shingles', 'Drywall', 'Toilets', 'Sinks',
                 'Tubs', 'Windows', 'Doors', 'Fixtures', 'Cable and Wiring', 
                 'Particle board', 'Cardboard', 'Cabinetry', 'Scrap metal',
                 'Appliances', 'Other']
-CITIES = ['Abbotsford', 'Anmore', 'Belcarra', 'Burnaby', 'Chilliwack',
-             'Coquitlam', 'Delta', 'Hope', 'Kent', 'Langley', 'Maple Ridge',
+CITIES = ['Abbotsford', 'Burnaby', 'Chilliwack',
+             'Coquitlam', 'Delta', 'Hope', 'Langley', 'Maple Ridge',
              'Mission', 'New Westminster', 'North Vancouver', 'Pitt Meadows',
              'Port Coquitlam', 'Port Moody', 'Richmond', 'Squamish', 'Surrey',
              'Vancouver', 'West Vancouver', 'White Rock', 'Whistler']
@@ -36,7 +36,7 @@ class Listing(models.Model):
     category = models.CharField(max_length=20, choices=CAT_CHOICES, default=CAT_CHOICES[0][0])
     price = models.CharField(max_length=20, blank=True)
     address = models.CharField(max_length=100, blank=True)
-    city = models.CharField(max_length=30, choices=CITY_CHOICES, default=CITY_CHOICES[0][0])
+    city = models.CharField(max_length=30, choices=CITY_CHOICES, default='Vancouver')
     flag_count = models.SmallIntegerField("flag count", default=0)
     expires = models.DateTimeField("expiry date", 
         default=(timezone.now() + datetime.timedelta(days=30)), editable=True)
@@ -135,6 +135,12 @@ class ListingForm(ModelForm):
         self.fields['city'].label = "City"
         self.fields['text_content'].label = "Description"
         self.fields['for_sale'].label = "Type of listing"
+        # setting attribute names for css
+        self.fields['address'].widget.attrs.update({'id' : 'detail_address'})
+        self.fields['city'].widget.attrs.update({'id' : 'detail_city'})
+        self.fields['text_content'].widget.attrs.update({'id' : 'detail_text_content'})
+        self.fields['for_sale'].widget.attrs.update({'id' : 'detail_type'})
+
     
     class Meta:
         model = Listing
@@ -147,7 +153,6 @@ class ListingForm(ModelForm):
         creator_email = cleaned_data.get('creator')
         verified_email = cleaned_data.get('email_verification')
         category = cleaned_data.get('category')
-        zipcode = cleaned_data.get('zipcode')
         type = cleaned_data.get('type')
         
         if creator_email != verified_email:
@@ -180,9 +185,12 @@ class Photo(models.Model):
    def imagename(self):
        return os.path.basename(self.photo.name)
    
-
-
-            
+class PostPictures(models.Model):
+   postid = models.IntegerField() 
+   photo =  models.ImageField(upload_to='photos/%Y/%B/%d/')
+   
+class UploadForm(forms.Form):
+        picture  = forms.ImageField(label='Add a picture:',)
         
         
         
