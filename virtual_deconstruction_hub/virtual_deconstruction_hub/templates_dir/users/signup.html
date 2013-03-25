@@ -18,8 +18,10 @@
 {% if errormessage != None %}
 <span id= "sameusername" style="color:red;display:inline">{{errormessage}}</span><br/>
 {%endif%}
+<div style="height:18px">
 <span id = "error" style="color:red;display:none"></span>
-  <form action="" method="post" onSubmit = "return onSignUpClick();">
+</div>
+  <form action="" method="post" onSubmit="return onSignUpClick()"  >
   {% csrf_token %}
   <div style="width:120px;text-align:right; float:left">
    <label style = "line-height:26px">Email:</label><br/>

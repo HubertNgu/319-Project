@@ -16,11 +16,13 @@ Create a new listing - Virtual Deconstruction Hub
 
 {# context for directing to a app method call ->  <form action="{% url 'listings:submit_new' listing.id %}" method="post"> #}
 
-<form id="new_post_form" action="{{ submit_action }}" method="post" enctype="multipart/form-data">
+<form id="new_post_form" action="{{ submit_action }}" method="post" onSubmit="return checkNewPost();" enctype="multipart/form-data">
 {% csrf_token %}
 <input type = "hidden" name = "pictureform" id = "pictureform" value = "0"></input>
 <input type = "hidden" name = "issubmit" id = "issubmit" value = "0"></input>
-
+<div style="height:18px">
+<span id = "error" style="color:red;display:none"></span>
+</div>
 <table>
 {{ form.as_table }}
 </table>

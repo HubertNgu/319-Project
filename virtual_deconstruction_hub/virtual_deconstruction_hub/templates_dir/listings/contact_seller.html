@@ -6,7 +6,10 @@ Contact Seller - Virtual Deconstruction Hub
 
 {% block base_content %}
 <h1>Contact Seller</h1>
-  <form action="" method="post">
+  <div style="height:18px" >
+    <span id = "error" style="color:red;display:none"></span>
+  </div>
+  <form action="" method="post" onSubmit="return checkContactFields()" >
 {% csrf_token %}
 	  <div>
 			<div style="line-height:26px;text-align:right;vertical-align:text-bottom;float:left;position:relative;width:200px;display:block" >

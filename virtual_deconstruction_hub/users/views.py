@@ -150,10 +150,10 @@ def editaccount(request):
     username = request.user.username
     profile = UserProfile.objects.get(username = username) 
     if request.method == "POST":
-        print "1"
         email = username
         firstname = request.POST.get('firstname')
         lastname = request.POST.get('lastname')
+        password = request.POST.get('password')
         phoneno = request.POST.get('phone')
         address = request.POST.get('address')
         province = request.POST.get('province')
@@ -165,6 +165,9 @@ def editaccount(request):
         profile.city = city
         profile.province = province
         profile.save()
+        u = User.objects.get(username__exact=username)
+        u.set_password(password)
+        u.save()
         return redirect('/myaccount/profile')
     
     else:

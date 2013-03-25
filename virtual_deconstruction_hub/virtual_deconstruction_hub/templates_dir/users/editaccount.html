@@ -4,23 +4,50 @@
 <span id = "error" style="color:red;display:none"></span>
 <form action="" method="post" onSubmit = "return onEditClick();">
   {% csrf_token %}
-<label> Username: </label> {{username}} <br/>
 <label> Email: </label> {{email}}<br/>
 <label> First Name: </label>
 <input type = "text" name = "firstname" id = "firstname"  value={{firstname}}>  <br/> 
-<label> Last Name: </label> {{lastname}}
+<label> Last Name: </label>
 <input type = "text" name = "lastname" id = "lastname" value={{lastname}} >  <br/>
-
+<label> New Password: </label>
+<input type="password" name = "password" id="password" > <br />
+<label> Confirm New Password: </label>
+<input type="password" name = "confirmpassword" id="confirmpassword" ><br />
 <label> Phone Number: </label> 
 <input type = "text" onkeypress="return isNumberKey(event)" name = "phone" id = "phone" value= {{phone}} >  <br/>
 <label> Address: </label> 
 <input type = "text" name = "address" id = "address" value= {{address}} ><br/>
 <label> City: </label> 
-<input type = "text" name = "city" id = "city" value= {{city}} ><br/>
+<select name = "city" id = "city"/><br/>
+    <option value = ""></option>
+    <option value="Abbotsford">Abbotsford</option>
+    <option value="Anmore">Anmore</option>
+    <option value="Burnaby">Burnaby</option>
+    <option value="Chilliwack">Chilliwack</option>
+    <option value="Coquitlam">Coquitlam</option>
+    <option value="Delta">Delta</option>
+    <option value="Hope">Hope</option>
+    <option value="Kent">Kent</option>
+    <option value="Langley">Langley</option>
+    <option value="Maple Ridge">Maple Ridge</option>
+    <option value="Mission">Mission</option>
+    <option value="New Westminster">New Westminster</option>
+    <option value="North Vancouver">North Vancouver</option>
+    <option value="Pitt Meadows">Pitt Meadows</option>
+    <option value="Port Coquitlam">Port Coquitlam</option>
+    <option value="Port Moody">Port Moody</option>
+    <option value="Richmond">Richmond</option>
+    <option value="Squamish">Squamish</option>
+    <option value="Surrey">Surrey</option>
+    <option value="Vancouver">Vancouver</option>
+    <option value="West Vancouver">West Vancouver</option>
+    <option value="White Rock">White Rock</option>
+    <option value="Whistler">Whistler</option> 
+</select><br/>
 <label> Province: </label>
-<select name = "province" id = "province">
-<option value = "" selected = "selected"></option>
-<option value="AB">Alberta</option>
+<select name = "province" id = "province" >
+    <option value = ""></option>
+    <option value="AB">Alberta</option>
 	<option value="BC">British Columbia</option>
 	<option value="MB">Manitoba</option>
 	<option value="NB">New Brunswick</option>
@@ -33,10 +60,12 @@
 	<option value="NT">Northwest Territories</option>
 	<option value="NU">Nunavut</option>
 	<option value="YT">Yukon</option>
- </select><br/>
- 
+</select><br/>
+ <script type="text/javascript">
+    setDDL(document.getElementById('city'), '{{city}}');
+    setDDL(document.getElementById('province'), '{{province}}');
+</script>
 <input type="submit" value = "Save">  
 </form>
 <button OnClick = "return cancelButton();">Cancel</button>
-
 {% endblock account_content %}
