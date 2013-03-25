@@ -30,7 +30,7 @@ urlpatterns = patterns('',
     url(r"^about/", include('statistics_generator.urls')),
 
     # root url - home page
-    url(r'^$', 'statistics_generator.views.home'),
+    url(r'^$', 'posts.views.home'),
     
     # Examples:
     # url(r'^$', 'virtual_deconstruction_hub.views.home', name='home'),

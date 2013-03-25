@@ -217,7 +217,7 @@ def edit_verify_listing(request):
         edit_form = EditListingForm(request.POST, instance=listing)
         #if post_form valid, process new post
         if edit_form.is_valid():
-            post_url = HttpRequest.build_absolute_uri(request, edit_form.cleaned_data.get('url'))
+            listing_url = HttpRequest.build_absolute_uri(request, edit_form.cleaned_data.get('url'))
             edit_form.save()
             # This redirects back to edit form, should change to a render_to_response with a message that edit successful
             #return redirect(post_url,context_instance=RequestContext(request))

@@ -6,6 +6,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 #from django.contrib.auth.models import User
 from posts.models import *
+from listings.models import Listing
 #from django.contrib.auth import authenticate,login,get_user
 from django.shortcuts import redirect
 from django import forms
@@ -274,7 +275,39 @@ def delete_verify_post(request):
         form_args = { "message" : message, }
         return render_to_response(TEMPLATE_PATHS.get("posts_delete"), form_args, context_instance=RequestContext(request))
     else:
-        raise Http404     
+        raise Http404
+    
+def home(request):
+    # Checking for logged in user
+    if request.user.is_authenticated():
+        logtext = "Logout"
+        accounttext = "My Account"
+        welcometext = request.user.username
+        logparams=[logtext,accounttext, welcometext]
+    else: 
+        logtext = "Login"
+        accounttext = "Sign Up"
+        logparams=[logtext,accounttext]
+    
+    #Try to fetch objects from database, if there aren't any, set to none
+    try:
+        latest_blog = Post.objects.filter(type='blog').latest('created')
+    except:
+        latest_blog = None
+    try:
+        blog_photo = latest_blog.photo_set.all()
+        blog_photo = blog_photo[0]
+    except:
+        blog_photo = None
+    try:
+        listings = Listing.objects.filter(verified=True, expired=False).order_by('-last_modified')[:5]
+    except:
+        listings = None
+    
+    # render response form with form_args list of parameters  
+    form_args = {'post': latest_blog, 'listings': listings, 'logparams': logparams, 'blog_photo': blog_photo}
+    return render_to_response('statistics_generator/home_page.html', form_args, context_instance=RequestContext(request))
+
                                                                                                         
     
         
@@ -294,16 +327,5 @@ def tag_maker(space_replacement_char, post):
 def random_string_generator(size, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
-def multiple_entries_for_testing(number, type):
-    ## fill in test data in db: writes 100 post objects of same type as whatever new form you are entering
-    email = 'sean@testing.com'
-    title = ' Test Title '
-
-    for i in xrange(0,number):
-        content = str(number) + ' - Bah blah blah blahahab labalaba hbaalavhgvsha balobuebfuewbfuebfue jefbuefuewbfuewbfuwefbuwebfuweb fiunbefiuwef uefbuwefbwuefbeufb;efuebf'
-        p = Post(creator=email, title=type.upper()+title,text_content=str(i)+content, type=type.lower(), verified=True)
-        p.set_url( tag_maker('_', p) )
-        p.save()
-    return
 
 
