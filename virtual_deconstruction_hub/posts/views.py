@@ -58,6 +58,8 @@ def new_post(request, post_type):
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
     post_type = str(post_type.lower())
+    if request.user.is_authenticated() == False:
+         return render_to_response("users/not_user.html", {'logparams': logparams}, context_instance=RequestContext(request))
     if post_type == "blog" and request.user.is_superuser == False:
         return render_to_response("users/not_admin.html", {'logparams': logparams}, context_instance=RequestContext(request))
     #action for submit button
