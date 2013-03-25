@@ -22,6 +22,9 @@ class="active"
 	<li><a href="/posts/{{post.type}}/{{ post.get_url }}"><b>{{ post.title }}</b></a> </li>
 	<p><i>{{ post.last_modified }}</i></p>
 	<p>{{ post.text_content|truncatechars:400 }}</p>
+	{% if blog_photo %}
+	<p><img src="{{MEDIA_URL}}{{blog_photo.get_url}}" id="front_page_blog_photo" class="front_page_blog" /></p>
+	{% endif %}
 	</div>
 {% endif %}
 

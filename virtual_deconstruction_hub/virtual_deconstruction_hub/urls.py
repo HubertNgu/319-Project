@@ -23,9 +23,6 @@ urlpatterns = patterns('',
     # posts URLs
     (r'^posts/', include('posts.urls')),
     
-    #statistics urls
-    (r'^statistics/', include('statistics_generator.urls')),
-
     # admin site url
     url(r'^admin/', include(admin.site.urls)),
 
@@ -33,7 +30,7 @@ urlpatterns = patterns('',
     url(r"^about/", include('statistics_generator.urls')),
 
     # root url - home page
-    url(r"^$", include('statistics_generator.urls')),
+    url(r'^$', 'statistics_generator.views.home'),
     
     # Examples:
     # url(r'^$', 'virtual_deconstruction_hub.views.home', name='home'),

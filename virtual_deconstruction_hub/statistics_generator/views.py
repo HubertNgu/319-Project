@@ -104,10 +104,15 @@ def home(request):
     except:
         latest_blog = None
     try:
+        blog_photo = latest_blog.photo_set.all()
+        blog_photo = blog_photo[0]
+    except:
+        blog_photo = None
+    try:
         listings = Listing.objects.filter(verified=True, expired=False).order_by('-last_modified')[:5]
     except:
         listings = None
     
     # render response form with form_args list of parameters  
-    form_args = {'post': latest_blog, 'listings': listings, 'logparams': logparams}
+    form_args = {'post': latest_blog, 'listings': listings, 'logparams': logparams, 'blog_photo': blog_photo}
     return render_to_response('statistics_generator/home_page.html', form_args, context_instance=RequestContext(request))

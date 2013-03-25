@@ -38,6 +38,7 @@ Create a New {{ post_type_title }} Post
 {{pictureform.as_p}}
 <input type="submit" value="Submit"  onclick="setSubmitTrue()"/>
 <button onclick= "return addAnotherPicture()">Add Another Picture</button>
+{% block delete_button %}{% endblock delete_button %}
 </form>
 
 {% endblock posts_content %}

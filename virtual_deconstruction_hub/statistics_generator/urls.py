@@ -20,8 +20,6 @@ urlpatterns = patterns('',
     #===========================================================================    
    
     # /about page
-    url(r'^about/', 'statistics_generator.views.index'),
+    url(r'^$', 'statistics_generator.views.index'),
     
-    # home page
-    url(r'^$', 'statistics_generator.views.home'),
     )

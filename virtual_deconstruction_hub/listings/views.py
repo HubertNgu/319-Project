@@ -168,7 +168,6 @@ def create_listing(request):
         user_email = listing.get_creator()
         verify_url = '%s/listings/edit-verify?listing_id=%s&uuid=%s' % (Site.objects.get_current(), listing.id, listing.get_uuid())
         send_post_verification_email(verify_url, user_email, 'list')
-        multiple_entries_for_testing(100)
                 
         return render_to_response(TEMPLATE_PATHS.get('listings_success'), form_args, context_instance=RequestContext(request))    
         
