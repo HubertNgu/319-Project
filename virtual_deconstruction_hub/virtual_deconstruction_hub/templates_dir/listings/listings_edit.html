@@ -9,11 +9,13 @@ Create a new listing - Virtual Deconstruction Hub
 
 <h1>Edit or delete your listing:</h1>
 
-<form id="edit_form" action="{{ submit_action }}" method="post" enctype="multipart/form-data">
+<form id="edit_form" action="{{ submit_action }}" method="post" onSubmit="return checkNewPost()" enctype="multipart/form-data">
 {% csrf_token %}
 <input type = "hidden" name = "pictureform" id = "pictureform" value = "0"></input>
 <input type = "hidden" name = "issubmit" id = "issubmit" value = "0"></input>
-
+<div style="height:18px">
+<span id = "error" style="color:red;display:none"></span>
+</div>
 <table>
 {{ form.as_table }}
 </table>
