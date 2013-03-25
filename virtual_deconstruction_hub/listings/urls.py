@@ -14,7 +14,11 @@ urlpatterns = patterns('',
 
     url(r"^$", 'listings.views.index'),
     url(r'^new', 'listings.views.create_listing'),
+<<<<<<< HEAD
     url(r'^(?P<tag>\w+)/$', 'listings.views.detail', name='detail'),
+=======
+    url(r'^(?P<listing_url>\w+)/$', 'listings.views.detail', name='detail'),
+>>>>>>> b4a3c42... fixed lots of stuff
     url(r"edit-verify", 'listings.views.edit_verify_listing'),
     url(r'^contactSeller/(?P<listing_url>\w+)/$', 'listings.views.contact_seller'),
     url(r"^delete-verify", 'listings.views.delete_verify_listing'),
