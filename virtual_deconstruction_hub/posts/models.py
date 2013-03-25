@@ -135,4 +135,4 @@ class Photo(models.Model):
    
 class UploadForm(forms.Form):
         picture  = forms.ImageField(label='Add a picture')
-        caption = forms.Textarea()
+        caption = forms.CharField(label = 'Add a caption for your picture',required=False)

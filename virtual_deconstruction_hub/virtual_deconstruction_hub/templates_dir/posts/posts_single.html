@@ -18,7 +18,7 @@
 {% if photos %}
     {% for photo in photos %}
     <div id="post_photo_div" class="body">
-    	<img src="{{MEDIA_URL}}{{photo.get_url}}" width="400px" style="padding-bottom:0.5em;" />{{photo.get_caption}}
+    	<strong>{{photo.get_caption}}</strong><br/><br/><img src="{{MEDIA_URL}}{{photo.get_url}}" width="400px" style="padding-bottom:0.5em;" /><br/>
     	</div>
    {% endfor %}
 {% endif %}
