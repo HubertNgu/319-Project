@@ -17,7 +17,7 @@
 
             {% for result in page.object_list %}
                 <p>
-                    <a href="/listings/{{result.object.id}}/">{{ result.object.title }}</a>
+                    <a href="/listings/{{result.object.get_url}}/">{{ result.object.title }}</a>
                 </p>
             {% empty %}
                 <p>No results found.</p>

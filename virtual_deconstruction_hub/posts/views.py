@@ -20,19 +20,23 @@ from mailer.views import send_post_verification_email
 from django.contrib.sites.models import Site
 from haystack.query import SearchQuerySet
 import logging
+from util import constants
 
 logger = logging.getLogger(__name__)
 
-#PAGE_SIZE = int(constants.results_page_size)
-PAGE_SIZE = settings.RESULTS_PAGE_SIZE
+#PAGE_SIZE = int(constants.posts_results_page_size)
+PAGE_SIZE = 10
 
 TEMPLATE_PATHS = {'proj_list': 'posts/posts_list.html', 'blog_list': 'posts/posts_list.html', 'stry_list': 'posts/posts_list.html',
                   'proj_single': 'posts/posts_single.html', 'blog_single': 'posts/posts_single.html', 'stry_single': 'posts/posts_single.html',
                   'posts_new': 'posts/posts_new.html',
+                  'posts_delete': 'posts/posts_delete.html',
+                  'posts_edit': 'posts/posts_edit.html',
                   'posts_success':'posts/new_post_success.html',
                   'posts_upload': 'uploadfile/upload.html',
                   }
 URL_PATHS = {'posts_edit-verify': '/posts/edit-verify',
+             'posts_delete-verify': '/posts/delete-verify/',
              'posts_root': '/posts/',
              'blog_new': '/posts/blog/new',
              'proj_new': '/posts/proj/new',
@@ -87,10 +91,6 @@ def new_post(request, post_type):
             if request.user.is_authenticated():
                 post.verified = True
             
-            #===================================================================
-            # if request.user.is_authenticated():
-            #    post.verified = True  
-            #===================================================================
             post.save()
             postid = post.id
         
@@ -98,8 +98,8 @@ def new_post(request, post_type):
         if request.POST.get("notnewpost") != None:
             postid = request.POST.get("postid")
             post = Post.objects.get(id = postid )
-            post.set_type(post_type.lower())
-            post.set_url( tag_maker("_", post) )
+            #post.set_type(post_type.lower())
+            #post.set_url( tag_maker("_", post) )
             post_url = post.get_url()
         form_args = {'form':post_form, 'submit_action':submit_action, 'post_url' : post_url, 'post':post, 'logparams':logparams}
         
@@ -117,33 +117,26 @@ def new_post(request, post_type):
                               'pictureform': pictureform,
                              'postid' :postid, 'addanotherprevious' : addanotherprevious, 'logparams':logparams}
                 return render_to_response("posts/posts_new.html", form_args, context_instance=RequestContext(request))
-                
-            # if phot_upload tag triggered, save the current post as object in db
-            # thentake current photo from form, save to child db table for post
-            # photo and hold on to form, but render a new photo upload form and 
-            # repeat as long as photo_pload tag triggered, once photo_upload no longer
-            # trigered, redirect to success page  
-               
-           
-           #====================================================================
-           # Testing - REMOVE LATER - this just creates x # of posts of a given
-           # type whenever a single one is created from the web, just used to 
-           # populate db for testing purposes
-           #====================================================================
-           #multiple_entries_for_testing(100, post_type)
+            
+        #====================================================================
+        # Testing - REMOVE LATER - this just creates x # of posts of a given
+        # type whenever a single one is created from the web, just used to 
+        # populate db for testing purposes
+        #====================================================================
+        #multiple_entries_for_testing(100, post_type)
 
         if post.is_verified():
                     # if post is already verified, redirect user to their newly created post
             return redirect("/posts/" + post_type +"/" + post.url, context_instance=RequestContext(request))
 
-            # create a verification/edit link and send with mailer then direct to success message page
+        # create a verification/edit link and send with mailer then direct to success message page
         user_email = post.get_creator()
         verify_url = '%s/posts/%s?post_id=%s&uuid=%s' % (Site.objects.get_current(), URL_PATHS.get('posts_edit-verify'), post.id, post.get_uuid())
         send_post_verification_email(verify_url, user_email, post_type)
         return render_to_response(TEMPLATE_PATHS.get("posts_success"), form_args, context_instance=RequestContext(request))
     else:
       
-            # if form submission not valid, redirect back to form with error messages
+        # if form submission not valid, redirect back to form with error messages
         form_args = {'form':post_form, 'submit_action':submit_action, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post_type), 'pictureform': pictureform, 'post_type': post_type}
         return render_to_response(TEMPLATE_PATHS.get("posts_new"), form_args, context_instance=RequestContext(request))
 
@@ -184,24 +177,24 @@ def edit_verify_post(request):
                 raise Http404
         #post verified by this point, render edit page with message
         edit_form = EditPostForm(instance=post)
-        form_args = {'form':edit_form, 'message': message, 'submit_action': submit_action, 'post_type_title':POST_TYPE_TITLES.get(post.get_type()), 'logparams': logparams, 'post_type': post.get_type()}
-        return render_to_response(TEMPLATE_PATHS.get("posts_new"), form_args, context_instance=RequestContext(request))
+        delete_button = URL_PATHS.get('posts_delete-verify') + '?post_id=' + str(post.id) + '&uuid=' + uuid
+        form_args = {'form':edit_form, 'message': message, 'submit_action': submit_action, 'post_type_title':POST_TYPE_TITLES.get(post.get_type()), 'logparams': logparams, 'post_type': post.get_type(), 'delete_button': delete_button}
+        return render_to_response(TEMPLATE_PATHS.get("posts_edit"), form_args, context_instance=RequestContext(request))
         
     if request.method == 'POST':
         edit_form = EditPostForm(request.POST, instance=post)
         #if post_form valid, process new post
+        delete_button = URL_PATHS.get('posts_delete-verify') + '?post_id=' + + str(post.id) + '&uuid=' + uuid
         if edit_form.is_valid():
             post_url = HttpRequest.build_absolute_uri(request, edit_form.cleaned_data.get('url'))
             edit_form.save()
             # This redirects back to edit form, should change to a render_to_response with a message that edit successful
-            #return redirect(post_url,context_instance=RequestContext(request))
-            #return render_to_response(post_url,context_instance=RequestContext(request))
-            form_args = {'form':edit_form, 'submit_action':submit_action, 'message':MESSAGES.get('edit_success'), 'post_type_title':POST_TYPE_TITLES.get(post.get_type()), 'post_url': post_url, 'post_type': post.get_type(), 'logparams' : logparams}
-            return render_to_response(TEMPLATE_PATHS.get("posts_new"), form_args, context_instance=RequestContext(request))
+            form_args = {'form':edit_form, 'submit_action':submit_action, 'message':MESSAGES.get('edit_success'), 'post_type_title':POST_TYPE_TITLES.get(post.get_type()), 'post_url': post_url, 'post_type': post.get_type(), 'logparams' : logparams, 'delete_button': delete_button}
+            return render_to_response(TEMPLATE_PATHS.get("posts_edit"), form_args, context_instance=RequestContext(request))
         else:
             # if form submission not valid, redirect back to form with error messages
-            form_args = {'form':edit_form, 'submit_action':submit_action, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post.get_type()), 'post_type': post.get_type(),  'logparams':logparams}
-            return render_to_response(TEMPLATE_PATHS.get("posts_new"), form_args, context_instance=RequestContext(request))   
+            form_args = {'form':edit_form, 'submit_action':submit_action, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post.get_type()), 'post_type': post.get_type(),  'logparams':logparams, 'delete_button': delete_button}
+            return render_to_response(TEMPLATE_PATHS.get("posts_edit"), form_args, context_instance=RequestContext(request))   
     
 def posts_index(request, post_type):
     loggedin = None
@@ -265,20 +258,22 @@ def posts_specific(request, post_type, tag):
             form_args = {'post':form, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post_type), 'post_type': post_type, 'photos': photos, 'logparams' : logparams}
             return render_to_response( TEMPLATE_PATHS.get(post_type+"_single"),form_args, context_instance=RequestContext(request))
         else:
-            raise Http404()        
+            raise Http404()   
+        
+def delete_verify_post(request): 
+    if request.method == 'POST':  
+        post_id = request.GET.get('post_id')
+        uuid = request.GET.get('uuid')
+        #action for submit button
+        post = get_object_or_404(Post, id=str(post_id))
+        post.verified = False
+        post.save()
+        message = "Your post will no longer be displayed."
+        form_args = { "message" : message, }
+        return render_to_response(TEMPLATE_PATHS.get("posts_delete"), form_args, context_instance=RequestContext(request))
+    else:
+        raise Http404     
                                                                                                         
-#def upload_file(request):
-#    if request.method == 'POST':
-#        form = UploadForm(request.POST, request.FILES)
-#        if form.is_valid():
-#            photo = PostPictures(photo = request.FILES['picture'], postid = 1 )
-#            photo.save()
-#            form_args = {'form':form, 'message': None, 'post_type_title':POST_TYPE_TITLES.get('upload'), 'post_type': form.post.get_type() }
-#            return render_to_response(TEMPLATE_PATHS.get('posts_new'), form_args, context_instance=RequestContext(request))
-#    else:
-#        form = UploadForm()
-#        form_args = {'form':form, 'message': None, 'post_type_title':POST_TYPE_TITLES.get('upload'), 'post_type': form.post.get_type() }
-#        return render_to_response(TEMPLATE_PATHS.get('posts_upload'), form_args, context_instance=RequestContext(request))
     
         
 #===============================================================================
@@ -309,19 +304,4 @@ def multiple_entries_for_testing(number, type):
         p.save()
     return
 
-def delete_verify_listing(request): 
-     
-    post_id = request.GET.get('listing_id')
-    uuid = request.GET.get('uuid')
-    #action for submit button
-    delete_submit_action = URL_PATHS.get('posts_delete-verify') + '?listing_id=' + post_id + '&uuid=' + uuid
-    listing = get_object_or_404(Post, id=str(post_id))
-    if not listing:
-        message = "Listing does not exist or it has already been deleted"
-        form_args = { "message" : message }
-        return render_to_response(TEMPLATE_PATHS.get("listings_delete"), form_args, context_instance=RequestContext(request))
-    else:
-        listing.delete()
-        message = "Listing is successfully deleted"
-        form_args = { "message" : message }
-        return render_to_response(TEMPLATE_PATHS.get("listings_delete"), form_args, context_instance=RequestContext(request))
+

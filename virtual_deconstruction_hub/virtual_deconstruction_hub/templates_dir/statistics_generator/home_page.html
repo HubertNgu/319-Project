@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block window_title %}
+Home
+{% endblock window_title %}
+ 
+
+{% block nav_home %}
+class="active"
+{% endblock nav_home %}
+
+{% block base_content %}
+
+{% block stats_content %}
+
+
+{% if post %}
+<br>
+<h2>Latest Blog Post:</h2>
+<br>
+	<div id="{{post.get_url}}", class="post_preview">
+	<li><a href="/posts/{{post.type}}/{{ post.get_url }}"><b>{{ post.title }}</b></a> </li>
+	<p><i>{{ post.last_modified }}</i></p>
+	<p>{{ post.text_content|truncatechars:400 }}</p>
+	{% if blog_photo %}
+	<p><img src="{{MEDIA_URL}}{{blog_photo.get_url}}" id="front_page_blog_photo" class="front_page_blog" /></p>
+	{% endif %}
+	</div>
+{% endif %}
+
+{% if listings %}
+
+	<br>
+	<h2>{{listings.count}} Most Recent Listings:</h2>
+	<br>
+
+{% for l in listings %}
+
+	<div id="{{l.get_url}}", class="listing_preview">
+	<li><a href="/listings/{{ l.get_url }}"><b>{{ l.title }}</b></a> </li>
+	<p><i>{{ l.last_modified }}</i></p>
+	<p>{{ l.text_content|truncatechars:400 }}</p>
+	</div>
+	<br>
+	<br>
+
+{% endfor %}
+{% endif %}
+
+{% endblock stats_content %}
+
+{% endblock base_content %}
