@@ -24,13 +24,14 @@
 
     <ul>
     {% for listing in listings %}
-        <li> <a href="{{ listing.get_url}}"> {{ listing.title }} </a> - ({{listing.created}}) </li>
+        <li> <a href="{{listing.url}}"> {{ listing.title }} </a> - ({{listing.created}}) </li>
     {% endfor %}
     </ul>
     
 {% else %}
-
-    <p>No listings are available.</p>
+	<br>
+    <p><h2> No listings are available at this time.</h2></p>
+    <br>
     
 {% endif %}
 	

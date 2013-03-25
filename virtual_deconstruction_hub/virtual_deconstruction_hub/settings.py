@@ -16,7 +16,7 @@ PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.\
-        'NAME': 'cs319dennis',                      # Or path to database file if using sqlite3.
+        'NAME': 'cs319sean',                      # Or path to database file if using sqlite3.
         'USER': 'cs319team4',                      # Not used with sqlite3.
         'PASSWORD': 'qwerty',                  # Not used with sqlite3.
         'HOST': '174.7.161.223',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -100,8 +100,8 @@ MIDDLEWARE_CLASSES = (
 			'django.middleware.csrf.CsrfViewMiddleware',
 			'django.contrib.auth.middleware.AuthenticationMiddleware',
 			'django.contrib.messages.middleware.MessageMiddleware',
-# Uncomment the next line for simple clickjacking protection:
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+            # Uncomment the next line for simple clickjacking protection:
+            'django.middleware.clickjacking.XFrameOptionsMiddleware',
     )
 
 ROOT_URLCONF = 'virtual_deconstruction_hub.urls'
@@ -143,9 +143,6 @@ INSTALLED_APPS = (
 		'listings',
 		'statistics_generator',
 		'survey_system',
-		'verificationapp',
-		'fileupload',
-		'postpictures',
         'chart_tools',
         'mailer',
         'haystack',

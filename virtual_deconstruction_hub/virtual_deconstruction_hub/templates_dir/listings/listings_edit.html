@@ -7,9 +7,7 @@ Create a new listing - Virtual Deconstruction Hub
 
 {% block listings_content %}
 
-<h1>Edit/Delete a new post</h1>
-
-{# context for directing to a app method call ->  <form action="{% url 'listings:submit_new' listing.id %}" method="post"> #}
+<h1>Edit or delete your listing:</h1>
 
 <form id="edit_form" action="{{ submit_action }}" method="post" enctype="multipart/form-data">
 {% csrf_token %}

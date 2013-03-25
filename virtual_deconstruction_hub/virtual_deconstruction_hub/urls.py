@@ -23,9 +23,6 @@ urlpatterns = patterns('',
     # posts URLs
     (r'^posts/', include('posts.urls')),
     
-    # profile URLs
-    (r'^profiles/', include('userprofile.urls')),
-    
     #statistics urls
     (r'^statistics/', include('statistics_generator.urls')),
 

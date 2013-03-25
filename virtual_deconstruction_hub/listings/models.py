@@ -166,6 +166,14 @@ class ListingForm(ModelForm):
         return "ListingForm"
         
 class EditListingForm(ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(EditListingForm, self).__init__(*args, **kwargs)
+        self.fields['address'].label = "Address"
+        self.fields['city'].label = "City"
+        self.fields['text_content'].label = "Description"
+        self.fields['for_sale'].label = "Type of listing"
+        
     class Meta:
         model = Listing
 
@@ -181,7 +189,13 @@ class Photo(models.Model):
    listing = models.ForeignKey(Listing)
    photo =  models.ImageField(upload_to='photos/listings/%Y/%B/%d/')
    caption = models.CharField(max_length=200)
-   
+
+   def get_caption(self):
+        return self.caption
+
+   def get_url(self):
+        return self.photo
+    
    def imagename(self):
        return os.path.basename(self.photo.name)
    

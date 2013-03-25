@@ -74,6 +74,7 @@ class ListingSearchForm(FacetedSearchForm):
     for_sale = forms.CharField(required=False, widget=forms.Select(choices=get_sale_categories()))
     city = forms.CharField(required=False, widget=forms.Select(choices=get_city_categories()))
     
+    
     def search(self):
         # First, store the SearchQuerySet received from other processing.
         sqs = super(ListingSearchForm, self).search()

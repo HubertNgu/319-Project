@@ -18,7 +18,10 @@ urlpatterns = patterns('',
     # declare a r"current" in urls below and that will trigger the redirect for 
     # domain.com/statistics/current
     #===========================================================================    
-
-    #set root for static files (css, images, etc)
-    url(r'^$', 'statistics_generator.views.index'),
+   
+    # /about page
+    url(r'^about/', 'statistics_generator.views.index'),
+    
+    # home page
+    url(r'^$', 'statistics_generator.views.home'),
     )

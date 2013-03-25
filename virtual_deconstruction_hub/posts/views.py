@@ -20,11 +20,12 @@ from mailer.views import send_post_verification_email
 from django.contrib.sites.models import Site
 from haystack.query import SearchQuerySet
 import logging
+from util import constants
 
 logger = logging.getLogger(__name__)
 
-#PAGE_SIZE = int(constants.results_page_size)
-PAGE_SIZE = settings.RESULTS_PAGE_SIZE
+#PAGE_SIZE = int(constants.posts_results_page_size)
+PAGE_SIZE = 10
 
 TEMPLATE_PATHS = {'proj_list': 'posts/posts_list.html', 'blog_list': 'posts/posts_list.html', 'stry_list': 'posts/posts_list.html',
                   'proj_single': 'posts/posts_single.html', 'blog_single': 'posts/posts_single.html', 'stry_single': 'posts/posts_single.html',
@@ -87,10 +88,6 @@ def new_post(request, post_type):
             if request.user.is_authenticated():
                 post.verified = True
             
-            #===================================================================
-            # if request.user.is_authenticated():
-            #    post.verified = True  
-            #===================================================================
             post.save()
             postid = post.id
         
@@ -98,8 +95,8 @@ def new_post(request, post_type):
         if request.POST.get("notnewpost") != None:
             postid = request.POST.get("postid")
             post = Post.objects.get(id = postid )
-            post.set_type(post_type.lower())
-            post.set_url( tag_maker("_", post) )
+            #post.set_type(post_type.lower())
+            #post.set_url( tag_maker("_", post) )
             post_url = post.get_url()
         form_args = {'form':post_form, 'submit_action':submit_action, 'post_url' : post_url, 'post':post, 'logparams':logparams}
         
@@ -117,33 +114,26 @@ def new_post(request, post_type):
                               'pictureform': pictureform,
                              'postid' :postid, 'addanotherprevious' : addanotherprevious, 'logparams':logparams}
                 return render_to_response("posts/posts_new.html", form_args, context_instance=RequestContext(request))
-                
-            # if phot_upload tag triggered, save the current post as object in db
-            # thentake current photo from form, save to child db table for post
-            # photo and hold on to form, but render a new photo upload form and 
-            # repeat as long as photo_pload tag triggered, once photo_upload no longer
-            # trigered, redirect to success page  
-               
-           
-           #====================================================================
-           # Testing - REMOVE LATER - this just creates x # of posts of a given
-           # type whenever a single one is created from the web, just used to 
-           # populate db for testing purposes
-           #====================================================================
-           #multiple_entries_for_testing(100, post_type)
+            
+        #====================================================================
+        # Testing - REMOVE LATER - this just creates x # of posts of a given
+        # type whenever a single one is created from the web, just used to 
+        # populate db for testing purposes
+        #====================================================================
+        multiple_entries_for_testing(100, post_type)
 
         if post.is_verified():
                     # if post is already verified, redirect user to their newly created post
             return redirect("/posts/" + post_type +"/" + post.url, context_instance=RequestContext(request))
 
-            # create a verification/edit link and send with mailer then direct to success message page
+        # create a verification/edit link and send with mailer then direct to success message page
         user_email = post.get_creator()
         verify_url = '%s/posts/%s?post_id=%s&uuid=%s' % (Site.objects.get_current(), URL_PATHS.get('posts_edit-verify'), post.id, post.get_uuid())
         send_post_verification_email(verify_url, user_email, post_type)
         return render_to_response(TEMPLATE_PATHS.get("posts_success"), form_args, context_instance=RequestContext(request))
     else:
       
-            # if form submission not valid, redirect back to form with error messages
+        # if form submission not valid, redirect back to form with error messages
         form_args = {'form':post_form, 'submit_action':submit_action, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post_type), 'pictureform': pictureform, 'post_type': post_type}
         return render_to_response(TEMPLATE_PATHS.get("posts_new"), form_args, context_instance=RequestContext(request))
 

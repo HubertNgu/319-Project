@@ -9,7 +9,7 @@ from mailer.views import send_contact_email
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import timezone
 from django.contrib.sites.models import Site
-from mailer.views import send_post_verification_emai
+from mailer.views import send_post_verification_email
 from users.models import UserProfile
 import re
 import string
@@ -17,6 +17,7 @@ import random
 from listings.models import Photo
 from listings.models import UploadForm, PostPictures
 import logging
+from util import constants
 
 logger = logging.getLogger(__name__)
 
@@ -36,6 +37,8 @@ URL_PATHS = {'listings_edit-verify': '/listings/edit-verify',
 MESSAGES = {'verified_listing': "Your listing has been verified and will be displayed on the site. You can make changes to your listing here if you wish.",
             'edit_success': "Your changes have been saved. You can make further changes to your listing if you wish."}
 
+#PAGE_SIZE = int(constants.listings_results_page_size)
+PAGE_SIZE = 100
 
 def index(request):
 #    if request.
@@ -48,8 +51,8 @@ def index(request):
         logtext = "Login"
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
-    listings_list = Listing.objects.filter(verified = True, expired = False).order_by('-created')
-    paginator = Paginator(listings_list, 25)
+    listings_list = Listing.objects.filter(verified = True, expired = False).order_by('-last_modified')
+    paginator = Paginator(listings_list, PAGE_SIZE)
     page = request.GET.get('page')
     try:
         listings = paginator.page(page)
@@ -96,7 +99,7 @@ def create_listing(request):
     pictureform = UploadForm()
     if request.method == 'GET':
         if request.user.is_authenticated():
-            city = User.objects.get(username = request.user.email)
+            city = UserProfile.objects.get(username = request.user.email)
             form = ListingForm(instance=Listing(), initial={'creator':request.user.email, 'email_verification':request.user.email,'city':city})
             form.fields['creator'].widget = forms.HiddenInput()
             form.fields['email_verification'].widget = forms.HiddenInput()
@@ -118,7 +121,7 @@ def create_listing(request):
             if request.user.is_authenticated():
                 listing.verified = True
             
-            listing.set_url( tag_maker("_", listing) )
+            listing.set_url(tag_maker("_", listing))
             listing_url = listing.url           
             listing_url = HttpRequest.build_absolute_uri(request, listing_url)
 
@@ -149,10 +152,16 @@ def create_listing(request):
                                  'logparams': logparams}
                     
                 return render_to_response("listings/listings_new.html", form_args, context_instance=RequestContext(request))
+                
+        #====================================================================
+        # Testing - REMOVE LATER - this just creates x # of posts of a given
+        # type whenever a single one is created from the web, just used to 
+        # populate db for testing purposes
+        #====================================================================
+        multiple_entries_for_testing(100)
                       
         if listing.verified:
-             # if post is already verified, redirect user to their newly created post
-            multiple_entries_for_testing(100)
+            # if post is already verified, redirect user to their newly created post)
             return redirect("/listings/" + listing.url, context_instance=RequestContext(request))
             
         # create a verification/edit link and send with mailer then direct to success message page
@@ -316,6 +325,7 @@ def multiple_entries_for_testing(number):
             city='Surrey'
         l = Listing(creator=email, title = str(i) + " - " + title, text_content=content, category = 'wood', for_sale=sale,
                      city = city, verified = ver, expired=exp)
+        l.set_url( tag_maker('_', l) )
         l.save()
     return
 
