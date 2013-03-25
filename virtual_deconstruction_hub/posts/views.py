@@ -58,7 +58,7 @@ def new_post(request, post_type):
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
     post_type = str(post_type.lower())
-    if post_type == "blog" and request.user.username != "admin":
+    if post_type == "blog" and request.user.is_superuser == False:
         return render_to_response("users/not_admin.html", {'logparams': logparams}, context_instance=RequestContext(request))
     #action for submit button
     pictureform = UploadForm()
@@ -105,7 +105,7 @@ def new_post(request, post_type):
         
         if form.is_valid():
             form_args = {'post':post, 'post_url': post_url, 'logparams':logparams}
-            photo = Photo(photo = request.FILES['picture'], post = post )
+            photo = Photo(photo = request.FILES['picture'], post = post, caption = request.POST.get('caption') )
             photo.save()            
             if request.POST.get('pictureform') == "1" and request.POST.get("issubmit") != "1":
                 photolist = Photo.objects.filter(post_id = post.id)
@@ -210,8 +210,8 @@ def posts_index(request, post_type):
         logparams=[logtext,accounttext]
     username = None
     postname = None
-    if request.user.username == "admin":
-        username = "admin"
+    if request.user.is_superuser == True:
+        username = request.user.username
     if(post_type == "blog" and username == None) or loggedin == None:
         loggedin = None
     if post_type == "blog":
