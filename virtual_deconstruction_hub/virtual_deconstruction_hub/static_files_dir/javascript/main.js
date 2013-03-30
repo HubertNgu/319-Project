@@ -124,8 +124,8 @@ function checkLogin(){
 function checkNewPost(){
     document.getElementById('id_title').style.border = "";
     document.getElementById('id_price').style.border = "";
-    document.getElementById('id_address').style.border = "";
-    document.getElementById('id_text_content').style.border = "";
+    document.getElementById('detail_address').style.border = "";
+    document.getElementById('detail_text_content').style.border = "";
     error = document.getElementById('error');
     
     if(document.getElementById('id_title').value == "" ){
@@ -136,12 +136,12 @@ function checkNewPost(){
         showErrorAndFocus(error, "Please enter a price", document.getElementById('id_price'));
         return false;
     }
-    if(document.getElementById('id_address').value == "" ){
-        showErrorAndFocus(error, "Please enter an address", document.getElementById('id_address'));
+    if(document.getElementById('detail_address').value == "" ){
+        showErrorAndFocus(error, "Please enter an address", document.getElementById('detail_address'));
         return false;
     }
-    if(document.getElementById('id_text_content').value == "" ){
-        showErrorAndFocus(error, "Please enter enter a description", document.getElementById('id_text_content'));
+    if(document.getElementById('detail_text_content').value == "" ){
+        showErrorAndFocus(error, "Please enter enter a description", document.getElementById('detail_text_content'));
         return false;
     }
 } 
@@ -218,3 +218,4 @@ function setDDL(ddl, value)
  document.getElementById('issubmit').value = "1";
  }
  
+

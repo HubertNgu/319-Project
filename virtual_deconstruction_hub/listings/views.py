@@ -158,7 +158,7 @@ def create_listing(request):
         # type whenever a single one is created from the web, just used to 
         # populate db for testing purposes
         #====================================================================
-        multiple_entries_for_testing(100)
+        #multiple_entries_for_testing(100)
                       
         if listing.verified:
             # if post is already verified, redirect user to their newly created post)
@@ -304,9 +304,9 @@ def contact_seller(request, listing_url):
 
 def multiple_entries_for_testing(number):
     ## fill in test data in db: writes 100 post objects of same type as whatever new form you are entering
-    email = 'tisevelyn@gmail.com'
-    title = ' Furniture for sale '
-    content = ' - Bah blah blah blahahab labalaba hbaalavhgvsha balobuebfuewbfuebfue jefbuefuewbfuewbfuwefbuwebfuweb fiunbefiuwef uefbuwefbwuefbeufb;efuebf'
+    email = 'seanslipetz@gmail.com'
+    title = ' Test Listing Data '
+    content = 'Bah blah blah blahahab labalaba hbaalavhgvsha balobuebfuewbfuebfue jefbuefuewbfuewbfuwefbuwebfuweb fiunbefiuwef uefbuwefbwuefbeufb;efuebf'
     for i in xrange(0,number):
         sale="sell"
         ver=True

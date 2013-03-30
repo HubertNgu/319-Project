@@ -73,6 +73,7 @@ class ListingSearchForm(FacetedSearchForm):
     type = forms.CharField(required=False, widget=forms.HiddenInput)
     for_sale = forms.CharField(required=False, widget=forms.Select(choices=get_sale_categories()))
     city = forms.CharField(required=False, widget=forms.Select(choices=get_city_categories()))
+    q = forms.CharField(required=False, label=('Search'), widget=forms.HiddenInput)
     
     
     def search(self):

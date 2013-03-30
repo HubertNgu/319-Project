@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block window_title %}
+Home
+{% endblock window_title %}
+ 
+
+{% block nav_home %}
+class="active"
+{% endblock nav_home %}
+
+{% block base_content %}
+
+{% if post %}
+
+	<h2>Latest News:</h2>
+
+<div id="featured_blog" class="body"><article>
+			{% if blog_photo %}
+	<figure id="featured_blog_figure">
+
+		<img src="{{MEDIA_URL}}{{blog_photo.get_url}}" alt="Virtual Deconstruction Hub" />
+
+
+	</figure>
+			{% endif %}
+	<hgroup>
+		<h3><a href="/posts/{{post.type}}/{{ post.get_url }}">{{ post.title }}</a></h3>
+		<p><i>{{ post.last_modified }}</i></p>
+	</hgroup>
+	<p>{{ post.text_content|truncatechars:450 }}</p>
+ 
+</article>
+</div><!-- /#featured -->
+
+
+{% endif %}
+
+{% if listings %}
+		 
+
+	<h2>Most Recent Listings:</h2>
+
+	
+ 		{% for l in listings %}
+ 		
+ 			<div id="featured_listing" class="body">
+	
+			 	<h3><a href="/listings/{{ l.get_url }}">{{ l.title }}</a></h3>
+				<i>{{ l.last_modified }}</i>
+				<p>{{ l.text_content|truncatechars:200 }}</p>			 
+			</div><!-- /#featured -->
+
+		{% endfor %}
+
+
+
+{% endif %}
+
+{% endblock base_content %}

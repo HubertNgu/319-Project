@@ -147,6 +147,7 @@ INSTALLED_APPS = (
         'mailer',
         'haystack',
         'whoosh',
+        'verificationapp',
 )
 
 HAYSTACK_CONNECTIONS = {

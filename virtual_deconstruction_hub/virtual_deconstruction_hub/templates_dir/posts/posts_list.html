@@ -5,7 +5,7 @@
 {% block posts_content %}
 
 <div id="create_new" class="body">
-{% if loggedin == None %}{%else%}<a href="/posts/{{ post_type }}/new"> Create a new {{post_type_title}} </a>{% endif %}
+{% if loggedin == None %}{%else%}<a href="/posts/{{ post_type }}/new"> Create a new {{post_type_title}}</a>{% endif %}
 </div>
 <br>
 <br>
@@ -16,7 +16,7 @@
 	<div id="{{post.get_url}}", class="post_preview">
 	<li><a href="/posts/{{post_type}}/{{ post.get_url }}"><b>{{ post.title }}</b></a> </li>
 	<p><i>{{ post.last_modified }}</i></p>
-	<p>{{ post.text_content|truncatechars:400 }}</p>
+	<p>{{ post.text_content|truncatechars:450 }}</p>
 	</div>
 
 {% endfor %}
