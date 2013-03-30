@@ -18,7 +18,7 @@ CITIES = ['Abbotsford', 'Burnaby', 'Chilliwack',
              'Port Coquitlam', 'Port Moody', 'Richmond', 'Squamish', 'Surrey',
              'Vancouver', 'West Vancouver', 'White Rock', 'Whistler']
 
-SALE_CHOICES=(("sell", 'Items for sale'), ("want", 'Items wanted'))
+SALE_CHOICES=[("sell", 'Items for sale'), ("want", 'Items wanted')]
 CAT_CHOICES = [(category, category) for category in CATEGORIES]
 CITY_CHOICES = [(city, city) for city in CITIES]
 

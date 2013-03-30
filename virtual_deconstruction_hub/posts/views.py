@@ -291,7 +291,7 @@ def home(request):
     
     #Try to fetch objects from database, if there aren't any, set to none
     try:
-        latest_blog = Post.objects.filter(type='blog').latest('created')
+        latest_blog = Post.objects.filter(type='blog').filter(verified=True).latest('created')
     except:
         latest_blog = None
     try:
@@ -306,7 +306,7 @@ def home(request):
     
     # render response form with form_args list of parameters  
     form_args = {'post': latest_blog, 'listings': listings, 'logparams': logparams, 'blog_photo': blog_photo}
-    return render_to_response('statistics_generator/home_page.html', form_args, context_instance=RequestContext(request))
+    return render_to_response('posts/home_page.html', form_args, context_instance=RequestContext(request))
 
                                                                                                         
     
