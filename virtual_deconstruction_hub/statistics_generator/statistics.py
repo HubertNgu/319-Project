@@ -50,7 +50,7 @@ def __average_time_successful_transaction(survey_listings):
 	'''
 	transaction_times = list()
 	for survey, listing in survey_listings:
-		transaction_times.append((listing.created - survey.time_submitted).seconds)
+		transaction_times.append((survey.time_submitted - listing.created).days)
 	return sum(transaction_times) / len(transaction_times) \
 			if len(transaction_times) > 0 else 0
 			
@@ -61,12 +61,12 @@ def __listing_transaction_success_rate(buyer_surveys, seller_surveys,
 	and all transactions.
 	'''
 	buyer_success_rate = 100*float(len(buyer_surveys)) / float(len(buyer_listings)) \
-		if len(buyer_listings) > 0 else 0
+		if len(buyer_listings) > 0 else 100
 	seller_success_rate = 100*float(len(seller_surveys)) / float(len(seller_listings)) \
-		if len(seller_listings) > 0 else 0
+		if len(seller_listings) > 0 else 100
 	total_success_rate = 100*float(len(buyer_surveys) + len(seller_surveys)) / \
 			float((len(buyer_listings) + len(seller_listings))) \
-			if len(buyer_listings) + len(seller_listings) > 0 else 0
+			if len(buyer_listings) > 0 or len(seller_listings) > 0 else 100
 	return buyer_success_rate, seller_success_rate, total_success_rate
 
 def generate_statistics():
