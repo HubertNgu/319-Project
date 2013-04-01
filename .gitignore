@@ -6,5 +6,6 @@ org.eclipse.ltk.core.refactoring.prefs
 *.sh
 *.pyc
 *.exe
+*.toc
 
 .DS_Store

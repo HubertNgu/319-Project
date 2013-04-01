@@ -1,3 +1,4 @@
+import sys
 
 # Django settings for virtual_deconstruction_hub project.
 DEBUG = True
@@ -24,6 +25,8 @@ DATABASES = {
     }
 }
 
+if 'test' in sys.argv:
+    DATABASES['default'] = {'ENGINE': 'django.db.backends.sqlite3'}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -147,6 +150,7 @@ INSTALLED_APPS = (
         'mailer',
         'haystack',
         'whoosh',
+        'verificationapp',
 )
 
 HAYSTACK_CONNECTIONS = {

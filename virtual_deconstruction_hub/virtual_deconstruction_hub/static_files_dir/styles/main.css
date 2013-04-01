@@ -9,9 +9,15 @@ aside, nav, article, figure {
 }
  
 /***** Global *****/
+
+/** prevents "page-shifting" a few pixels sometimes due to overflow **/
+html {
+    overflow-y: scroll;
+}
+
 /* Body */
 	body {
-		background: #F5F4EF url('../images/paper-bg3.jpg');
+	background: #F5F4EF url('../images/paper-bg.jpg');
 		background-attachment: fixed;
 		color: #000305;
 		font-size: 87.5%; /* Base font size: 14px */
@@ -20,6 +26,10 @@ aside, nav, article, figure {
 		margin: 0;
 		padding: 0;
 		text-align: left;
+		/** -webkit-background-size: cover;
+        -moz-background-size: cover;
+       -o-background-size: cover; **/
+        background-size: cover;
 	}
 	
 /*** Banner Title, Slogan and Logo***/
@@ -116,9 +126,6 @@ table {margin: .5em auto 1.5em auto; width: 98%;}
 	
 /*	Header
 *****************/
-/** #banner {
-	margin: 0 auto;
-} **/
  
 	/* Banner */
 	#banner h1 {font-size: 3.571em; line-height: .6;}
@@ -150,7 +157,7 @@ table {margin: .5em auto 1.5em auto; width: 98%;}
 	}
 	
 	#select {
-		width:125px;
+		width:115px;
 	}
 	
 	#search_button {
@@ -164,7 +171,7 @@ table {margin: .5em auto 1.5em auto; width: 98%;}
 
 	
 /***** Layout *****/
-.body {clear: both; margin: 0 auto; width: 800px;}
+.body {clear: both; margin-left: auto; margin-right: auto; width: 800px;}
 img.right figure.right {float: right; margin: 0 0 2em 2em;}
 img.left, figure.left {float: right; margin: 0 0 2em 2em;}
 
@@ -237,3 +244,54 @@ img.left, figure.left {float: right; margin: 0 0 2em 2em;}
 	text-align: center;
 }
 	
+	
+/*** Home Page Featured Blog Post ***/
+#featured_blog {
+	background: #fff;
+	margin-bottom: 2em;
+	overflow: visible;
+	padding: 20px;
+	width: 760px;
+ 
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+ /** set's the max container size for
+  * the preview image of the featured blog **/
+#featured_blog figure {
+	float: right;
+	margin: 0.786em 2em 0 5em;
+	width: 248px;
+	height: 248px;
+}
+/**ensures that preview image is scaled properly to fit container
+ * 	(ie a really tall narrow image will be scaled to fit as will a wide short one) **/
+#featured_blog figure img {float: right; max-height: 100%; max-width: 100%;}
+ 
+#featured_blog h2 {color: #C74451; font-size: 1.714em; margin-bottom: 0.333em;}
+#featured_blog h3 {font-size: 1.429em; margin-bottom: .5em;}
+ 
+#featured_blog h3 a:link, #featured h3 a:visited {color: #000305; text-decoration: none;}
+#featured_blog h3 a:hover, #featured h3 a:active {color: #fff;}
+
+/***  Home Page - Recent Listings  ***/
+#featured_listing {
+	background: #fff;
+	margin-bottom: 2em;
+	overflow: hidden;
+	padding: 20px;
+	width: 760px;
+ 
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+ 
+ 
+#featured h2 {color: #C74451; font-size: 1.714em; margin-bottom: 0.333em;}
+#featured h3 {font-size: 1.429em; margin-bottom: .5em;}
+ 
+#featured h3 a:link, #featured h3 a:visited {color: #000305; text-decoration: none;}
+#featured h3 a:hover, #featured h3 a:active {color: #fff;}
+

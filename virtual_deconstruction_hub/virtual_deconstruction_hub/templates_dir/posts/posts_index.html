@@ -1,28 +1,23 @@
 {% extends "base.html" %}
 
 {% block window_title %}
-
 {% ifequal post_type "blog" %}Blog{% endifequal %}
 {% ifequal post_type "proj" %}Project Ideas{% endifequal %}
 {% ifequal post_type "stry" %}Success Stories{% endifequal %}
-
 {% endblock window_title %}
  
-
 {% block nav_blog %}
 {% ifequal post_type "blog" %}class="active"{% endifequal %}
 {% endblock nav_blog %}
 {% block blog_option %}
 {% ifequal post_type "blog" %}selected="selected"{% endifequal %}
 {% endblock blog_option %}
-
 {% block nav_story %}
 {% ifequal post_type "stry" %}class="active"{% endifequal %}
 {% endblock nav_story %}
 {% block stry_option %}
 {% ifequal post_type "stry" %}selected="selected"{% endifequal %}
 {% endblock stry_option %}
-
 {% block nav_projects %}
 {% ifequal post_type "proj" %}class="active"{% endifequal %}
 {% endblock nav_projects %}
@@ -33,14 +28,9 @@
 {% block base_content %}
 
 {% if message %}
-
 <p id="system_message" class="body"> {{ message }} </p>
-
 {% endif %}
 
 {% block posts_content %}
-
-
 {% endblock posts_content %}
-
 {% endblock base_content %}
