@@ -1,3 +1,4 @@
+import sys
 
 # Django settings for virtual_deconstruction_hub project.
 DEBUG = False
@@ -16,7 +17,7 @@ PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.\
-        'NAME': 'cs319sean',                      # Or path to database file if using sqlite3.
+        'NAME': 'cs319hubert',                      # Or path to database file if using sqlite3.
         'USER': 'cs319team4',                      # Not used with sqlite3.
         'PASSWORD': 'qwerty',                  # Not used with sqlite3.
         'HOST': '174.7.161.223',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -24,6 +25,8 @@ DATABASES = {
     }
 }
 
+if 'test' in sys.argv:
+    DATABASES['default'] = {'ENGINE': 'django.db.backends.sqlite3'}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
