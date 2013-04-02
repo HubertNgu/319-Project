@@ -6,22 +6,17 @@
 
 {% block posts_content %}
 
-<table>
-    {% for field in post %}
-        <tr>
-            <td>{{ field.name }}</td>
-            <td>{{ field.value }}</td>
-        </tr>
-    {% endfor %}
-</table>
 
+<div id="single_post" class="body">
+<h2>{{post.title.value}}</h2>
+<p><pre>{{post.text_content.value}}</pre></p>
 {% if photos %}
     {% for photo in photos %}
-    <div id="post_photo_div" class="body">
-    	<strong>{{photo.get_caption}}</strong><br/><br/><img src="{{MEDIA_URL}}{{photo.get_url}}" width="400px" style="padding-bottom:0.5em;" /><br/>
-    	</div>
+	<img src="{{MEDIA_URL}}{{photo.get_url}}" align="center"/>
+	<p id="caption">{{photo.get_caption}}</p>
    {% endfor %}
 {% endif %}
+</div>
 
 
 {% endblock posts_content %}

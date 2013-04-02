@@ -1,0 +1,12 @@
+{% extends "error.html" %}
+
+{% block window_title %}
+Page Not Found!
+{% endblock window_title %}
+
+{% block error_content %}
+	<h1>Page Not Found</h1>
+
+	<p>The page you're looking for does not exist at the URL entered:</p>
+	<p>{{request.META.HTTP_HOST }}{{ request.get_full_path }}</p>
+{% endblock error_content %}

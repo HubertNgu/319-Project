@@ -24,7 +24,7 @@
 
     <ul>
     {% for listing in listings %}
-        <li> <a href="{{listing.url}}"> {{ listing.title }} </a> - ({{listing.created}}) </li>
+        <li> {{listing.created|date:"M m"}} - <a href="{{listing.url}}"> {{ listing.title }} </a></li>
     {% endfor %}
     </ul>
     
