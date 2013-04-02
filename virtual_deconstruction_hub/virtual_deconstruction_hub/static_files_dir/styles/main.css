@@ -26,9 +26,9 @@ html {
 		margin: 0;
 		padding: 0;
 		text-align: left;
-		/** -webkit-background-size: cover;
+		-webkit-background-size: cover;
         -moz-background-size: cover;
-       -o-background-size: cover; **/
+        -o-background-size: cover;
         background-size: cover;
 	}
 	
@@ -64,12 +64,11 @@ h2, h3, h4, h5, h6 {
 a {outline: 0;}
 a img {border: 0px; text-decoration: none;}
 a:link, a:visited {
-	color: #000000; /* #00dd68; /* #C74350; */
+	color: #000000;
 	padding: 0 1px;
 	text-decoration: underline;
 }
 a:hover, a:active {
-	/*background-color: #C74350;*/
 	background-color: #00dd68;
 	color: #fff;
 	text-decoration: none;
@@ -85,44 +84,20 @@ em, i {font-style: italic;}
  
 /* Lists */
 ul {
-	list-style: outside disc;
+	list-style: none; /** removes bullets from the list **/
 	margin-left:auto;
 	margin-right:auto;
-/** margin: 1em 0 1.5em 1.5em; **/
 }
  
 ol {
 	list-style: outside decimal;
-	margin: 1em 0 1.5em 1.5em;
+/** margin: 1em 0 1.5em 1.5em; **/
 }
  
 dl {margin: 0 0 1.5em 0;}
 dt {font-weight: bold;}
 dd {margin-left: 1.5em;}
  
-/* Quotes */
-blockquote {font-style: italic;}
-cite {}
- 
-q {}
- 
-/* Tables */
-table {margin: .5em auto 1.5em auto; width: 98%;}
- 
-	/* Thead */
-	thead th {padding: .5em .4em; text-align: left;}
-	thead td {}
- 
-	/* Tbody */
-	tbody td {padding: .5em .4em;}
-	tbody th {}
- 
-	tbody .alt td {}
-	tbody .alt th {}
- 
-	/* Tfoot */
-	tfoot th {}
-	tfoot td {}
 	
 /*	Header
 *****************/
@@ -152,6 +127,11 @@ table {margin: .5em auto 1.5em auto; width: 98%;}
 		}
 		
 	/**** Search Bar ****/
+	
+	#header_search_form {
+		overflow: hidden;
+	}
+	
 	#search_text {
 		width:600px;
 	}
@@ -161,7 +141,7 @@ table {margin: .5em auto 1.5em auto; width: 98%;}
 	}
 	
 	#search_button {
-		width:70px;
+		width:75px;
 	}
 	
 /**** Main Content Block ****/
@@ -199,9 +179,7 @@ img.left, figure.left {float: right; margin: 0 0 2em 2em;}
 		width: 800px;
 		}
 	#banner nav li {
-	/** float: left; **/
 		display: inline;
-		/** margin between nav links, can use to center **/
 		margin: 0;
 		}
 	
@@ -221,15 +199,6 @@ img.left, figure.left {float: right; margin: 0 0 2em 2em;}
 		text-shadow: none !important;
 	}
 	
-	#banner nav li:first-child a {
-		/* border-top-left-radius: 5px; */
-	/**	-moz-border-radius-topleft: 5px;
-	-webkit-border-top-left-radius: 5px; **/
-		
-	/**	border-bottom-left-radius: 5px;
-		-moz-border-radius-bottomleft: 5px;
-	-webkit-border-bottom-left-radius: 5px; **/
-	}
 	
 	/** (NOT-COMPLETE) sign up form div **/
 	#signupform {
@@ -259,7 +228,7 @@ img.left, figure.left {float: right; margin: 0 0 2em 2em;}
 }
  /** set's the max container size for
   * the preview image of the featured blog **/
-#featured_blog figure {
+#featured_blog div {
 	float: right;
 	margin: 0.786em 2em 0 5em;
 	width: 248px;
@@ -267,7 +236,7 @@ img.left, figure.left {float: right; margin: 0 0 2em 2em;}
 }
 /**ensures that preview image is scaled properly to fit container
  * 	(ie a really tall narrow image will be scaled to fit as will a wide short one) **/
-#featured_blog figure img {float: right; max-height: 100%; max-width: 100%;}
+#featured_blog div img {float: right; max-height: 100%; max-width: 100%;}
  
 #featured_blog h2 {color: #C74451; font-size: 1.714em; margin-bottom: 0.333em;}
 #featured_blog h3 {font-size: 1.429em; margin-bottom: .5em;}
@@ -280,18 +249,51 @@ img.left, figure.left {float: right; margin: 0 0 2em 2em;}
 	background: #fff;
 	margin-bottom: 2em;
 	overflow: hidden;
-	padding: 20px;
+	padding: 20px; 
 	width: 760px;
  
 	border-radius: 10px;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
 }
- 
- 
-#featured h2 {color: #C74451; font-size: 1.714em; margin-bottom: 0.333em;}
-#featured h3 {font-size: 1.429em; margin-bottom: .5em;}
- 
-#featured h3 a:link, #featured h3 a:visited {color: #000305; text-decoration: none;}
-#featured h3 a:hover, #featured h3 a:active {color: #fff;}
 
+
+/***  Error pages (404, 500, etc) ***/
+#error {
+	width: 60%;
+    margin: 50px auto;
+    text-align:center;
+}
+
+/**** Individual Posts****/
+#single_post p {
+	width: 760px;
+}
+
+pre {    /* handles wrapping the textfield content of the post within the div */
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+#single_post {
+	background: #fff;
+	margin-bottom: 2em;
+	overflow: visible;
+	padding: 20px;
+	width: 760px;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+
+/** Post photos, scaled by width to 500px and centered **/
+#single_post img {
+	width: 500px;
+	padding: 0 0 0 130px;
+   }
+#caption {
+    text-align:center;
+}
