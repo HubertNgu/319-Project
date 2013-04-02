@@ -10,16 +10,15 @@
 <br>
 <br>
 
-
+<ul id="posts">
 {% for post in posts %}
-
 	<div id="{{post.get_url}}", class="post_preview">
 	<li><a href="/posts/{{post_type}}/{{ post.get_url }}"><b>{{ post.title }}</b></a> </li>
 	<p><i>{{ post.last_modified }}</i></p>
 	<p>{{ post.text_content|truncatechars:450 }}</p>
 	</div>
-
 {% endfor %}
+</ul>
 
 <div id="page_links_bottom" class="pagination">
     <span class="step-links">

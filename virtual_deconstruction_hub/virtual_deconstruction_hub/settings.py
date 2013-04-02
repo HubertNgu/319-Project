@@ -1,7 +1,7 @@
 import sys
 
 # Django settings for virtual_deconstruction_hub project.
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -65,7 +65,7 @@ MEDIA_URL = '/photos/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = os.path.join(PROJECT_PATH, 'static_files_dir')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
