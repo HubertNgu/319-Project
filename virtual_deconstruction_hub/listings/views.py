@@ -96,6 +96,7 @@ def create_listing(request):
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
     submit_action = '/listings/new'
+    #create a new upload form that will be rendered to page
     pictureform = UploadForm()
     if request.method == 'GET':
         if request.user.is_authenticated():
@@ -114,6 +115,7 @@ def create_listing(request):
         if request.user.is_authenticated():
             listing_form.fields['creator'].widget = forms.HiddenInput()
             listing_form.fields['email_verification'].widget = forms.HiddenInput()
+        #if the listing form is valid and the listing has not yet been created
         if listing_form.is_valid() and request.POST.get("notnewlisting") == None:
             listing = listing_form.save(commit=False)
             
@@ -135,14 +137,16 @@ def create_listing(request):
                 listing = Listing.objects.get(id = listingid )
                 listing_url = listing.get_url()
         form_args = {'form':listing_form, 'submit_action':submit_action, 'listing_url' : listing_url, 'listing':listing, 'logparams' : logparams}
-           
+           # if the picture form is valid, save the picture
         if form.is_valid():
             form_args = {'listing':listing, 'listing_url': listing_url, 'logparams':logparams}
             photo = Photo(photo = request.FILES['picture'], listing = listing )
-            photo.save()            
+            photo.save()    
+            #if user wants to add another picture        
             if request.POST.get('pictureform') == "1" and request.POST.get("issubmit") != 1:
                 photolist = Photo.objects.filter(listing_id = listing.id)
                 addanotherprevious = list()
+                #get all the names of the previously added pictures
                 for o in Photo.objects.filter(listing_id = listing.id): 
                     addanotherprevious.append(o.photo.name)
                 
