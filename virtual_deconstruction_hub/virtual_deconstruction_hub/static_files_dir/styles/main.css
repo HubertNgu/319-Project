@@ -307,6 +307,16 @@ img.left, figure.left {float: right; margin: 0 0 2em 2em;}
 	font-size: 110%; 
 }
 
+/**** Listings Index ****/
+#listings_index {
+	margin-bottom: 5px;
+	overflow: visible;
+	padding: 20px;
+}
+
+#listings_index p {
+	width: 760px;
+}
 
 
 /***** GENERAL: FORMATS ALL <pre> tags so that they
