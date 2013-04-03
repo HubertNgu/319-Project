@@ -12,9 +12,6 @@ Create a New {{ post_type_title }} Post
 <h1>Edit {{post_type_title|lower}} post:</h1>
 {% endif %}
 
-
-{# context for directing to a app method call ->  <form action="{% url 'listings:submit_new' listing.id %}" method="post"> #}
-
 <form id="new_post_form" action="{{ submit_action }}" method="post" onSubmit="return checkNewBlog()" enctype="multipart/form-data">
 {% csrf_token %}
 <input type = "hidden" name = "pictureform" id = "pictureform" value = "0"></input>

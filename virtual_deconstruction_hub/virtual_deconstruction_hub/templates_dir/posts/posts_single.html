@@ -1,19 +1,19 @@
 {% extends "posts/posts_index.html" %}
 
 {% block window_title %}
-{{ post.title.value }} - Blog
+{{ post.title }} - Blog
 {% endblock window_title %}
 
 {% block posts_content %}
-
-
 <div id="single_post" class="body">
-<h2>{{post.title.value}}</h2>
-<p><pre>{{post.text_content.value}}</pre></p>
-{% if photos %}
-    {% for photo in photos %}
-	<img src="{{MEDIA_URL}}{{photo.get_url}}" align="center"/>
-	<p id="caption">{{photo.get_caption}}</p>
+<p id="single_post_title"><h2><strong><pre>{{post.title}}</pre></strong></h2></p><p id="single_post_created"><i><pre>{{post.created}}</pre></i></p>
+<p><pre><span id="single_post_content">{{post.text_content}}</span></pre></p>
+{% if post.photo_set.all %}
+    {% for photo in post.photo_set.all %}
+    <div id="single_post_photo" align="center">
+    <p id="single_post_caption"><h6><strong><pre>{{photo.get_caption}}</pre></strong></h6></p>
+	<img src="{{MEDIA_URL}}{{photo.get_url}}" />
+	</div>
    {% endfor %}
 {% endif %}
 </div>

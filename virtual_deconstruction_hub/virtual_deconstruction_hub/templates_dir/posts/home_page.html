@@ -13,45 +13,35 @@ class="active"
 
 {% if post %}
 
-	<h2>Latest News:</h2>
-
-<div id="featured_blog" class="body"><article>
-			{% if blog_photo %}
-	<div id="featured_blog_figure">
-
-		<img src="{{MEDIA_URL}}{{blog_photo.get_url}}" alt="Virtual Deconstruction Hub" />
-
-
-	</div>
-			{% endif %}
-	<hgroup>
-		<h3><a href="/posts/{{post.type}}/{{ post.get_url }}">{{ post.title }}</a></h3>
-		<p><i>{{ post.last_modified }}</i></p>
-	</hgroup>
-	<p>{{ post.text_content|truncatechars:450 }}</p>
- 
-</article>
-</div><!-- /#featured -->
+<div id="home_blog_title"><h2>Latest News:</h2></div>
+<div id="featured_blog" class="body">
+	<article>
+		{% if blog_photo %}
+		<div id="featured_blog_figure">
+			<img src="{{MEDIA_URL}}{{blog_photo.get_url}}" alt="Virtual Deconstruction Hub" />
+		</div>
+		{% endif %}
+		<hgroup>
+			<h3><a href="/posts/{{post.type}}/{{ post.get_url }}">{{ post.title }}</a></h3>
+			<p><i>{{ post.last_modified }}</i></p>
+		</hgroup>
+		<p><pre>{{ post.text_content|truncatechars:450 }}</pre></p>
+	</article>
+</div>
+<hr style="width:100%" > 
 
 
 {% endif %}
 
 {% if listings %}
-		 
-
-	<h2>Most Recent Listings:</h2>
-
-	 			<div id="featured_listing" class="body">
+	<div id="home_listings_title"><h2>Most Recent Listings:</h2></div>
+	 	<div id="featured_listing" class="body">
  		{% for l in listings %}
- 		
-			 	<li><i>{{ l.last_modified }}</i><h3><a href="/listings/{{ l.get_url }}">{{ l.title }}</a></h3></li>
-				<p>{{ l.text_content|truncatechars:200 }}</p>			 
-
-
+			 	<h3><a href="/listings/{{ l.get_url }}">{{ l.title }}</a></h3>
+			 	<p><i>{{ l.last_modified }}</i></p>
+				<p><pre>{{ l.text_content|truncatechars:200 }}</pre></p>		 
 		{% endfor %}
-			</div><!-- /#featured -->
-
-
+		</div><!-- /#featured -->
 {% endif %}
 
 {% endblock base_content %}
