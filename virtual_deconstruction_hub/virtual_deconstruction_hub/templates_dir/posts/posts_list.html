@@ -7,19 +7,28 @@
 <div id="create_new" class="body">
 {% if loggedin == None %}{%else%}<a href="/posts/{{ post_type }}/new"> Create a new {{post_type_title}}</a>{% endif %}
 </div>
-<br>
-<br>
-
 
 {% for post in posts %}
-
-	<div id="{{post.get_url}}", class="post_preview">
-	<li><a href="/posts/{{post_type}}/{{ post.get_url }}"><b>{{ post.title }}</b></a> </li>
-	<p><i>{{ post.last_modified }}</i></p>
-	<p>{{ post.text_content|truncatechars:450 }}</p>
-	</div>
+<div id="featured_blog" class="body">
+	<article>
+		<div id="featured_blog_figure">
+		{% if post.photo_set.all %}
+			<img src="{{MEDIA_URL}}{{post.photo_set.all.0.get_url}}" alt="Virtual Deconstruction Hub" />
+		{% else %}
+    		<img src="{{STATIC_URL}}images/header-logo.png" alt="Virtual Deconstruction Hub" class="image">
+		{% endif %}
+		</div>
+		<hgroup>
+			<h3><pre><a href="/posts/{{post.type}}/{{ post.get_url }}">{{ post.title|truncatechars:35 }}</a></pre></h3>
+			<p><i>{{ post.last_modified }}</i></p>
+		</hgroup>
+		<p><pre>{{ post.text_content|truncatechars:450 }}</pre></p>
+	</article>
+</div>
+<hr style="width:100%" > 
 
 {% endfor %}
+
 
 <div id="page_links_bottom" class="pagination">
     <span class="step-links">

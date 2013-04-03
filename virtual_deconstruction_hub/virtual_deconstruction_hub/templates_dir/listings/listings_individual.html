@@ -8,40 +8,33 @@
 {% block listings_content %}
 
 
-<h1 class="listing_detail" id="detail_title">{{ listing.title }}</h1>
+<div id="single_listing">
+<h1 class="listing_detail" align="center"><pre>{{ listing.title }}</pre></h1>
 <form id="listing_detail_form">
-<ul>
 
-     <li>Created: {{ listing.created }}</li>
-     <li>Price: {{ listing.price }}</li> 
-     <li>Category: {{ listing.category }}</li>
-     <li>Type of listing: {% ifequal listing.for_sale "want" %}Wanted{% else %}For Sale{% endifequal %}</li>
-     <li>Location: {{ listing.address }} {{listing.city}}</li>
-      <li>Description: </li> </br>
+ <li>Posted: {{listing.created}}</li>
+ <li>Price: {{ listing.price }}</li> 
+ <li>Category: {{ listing.category }}</li>
+ <li>Type of listing: {% ifequal listing.for_sale "want" %}Wanted{% else %}For Sale{% endifequal %}</li>
+ <li>Location: {{ listing.address }} {{listing.city}}</li>
+ <button formaction={{reply_action}}> Contact Listing Owner </button> <button formaction={{go_back_action}}> Go Back To Listings </button>
+ <p><pre><span id="single_listing_content">{{ listing.text_content }}</span></pre></p>
       
-      	{{ listing.text_content }}
-      
-</ul>
-{% if listing.photo_set.count > 0 %}
-{% for photo in listing.photo_set.all %}
-    <div id="listing_photo_div" class="body">
-    	<img src="{{MEDIA_URL}}{{photo.get_url}}" width="400px" style="padding-bottom:0.5em;" />{{photo.get_caption}}
-    	</div>
+{% if listing.photo_set.all %}
+	{% for photo in listing.photo_set.all %}
+		<div id="single_listing_photo" align="center"><img src="{{MEDIA_URL}}{{photo.get_url}}"/></div>
    {% endfor %}
 {% endif %}
 
-<iframe width="800" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" 
+{% if listing.address %}
+<iframe width="760" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" 
 src="https://maps.google.com/maps?f=q&source=s_q&hl=en&geocode&q={{ address }}&aq&sll=49.251784%2C-123.11039
 &sspn=0.065325%2C0.169086&doflg=ptk&ie=UTF8&hq&hnear={{ address }}%2C+Canada&t=m&z=12&iwloc=A&output=embed">
 </iframe>
-</br>
-</br>
-</br>
-<button formaction={{reply_action}}> Reply </button> <button formaction={{go_back_action}}> Back To Listings </button>
-</br>
-</br>
+{% endif %}
 </br>
 </form>
+</div>
 {% endblock listings_content %}
 
 

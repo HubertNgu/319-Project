@@ -3,37 +3,22 @@
 
 {% block listings_content %}
 
-</br> <a href="/listings/new/"> Create New Listing </a>
+<a href="/listings/new/"> Create New Listing </a>
 
-<div id="page_links_top" class="pagination">
-    <span class="step-links">
-        {% if listings.has_previous %}
-            <a href="?page={{ listings.previous_page_number }}">Previous</a>
-        {% endif %}
-        <span class="current">
-            Page {{ listings.number }} of {{ listings.paginator.num_pages }}
-        </span>
-        {% if listings.has_next %}
-            <a href="?page={{ listings.next_page_number }}">Next</a>
-        {% endif %}
-    </span>
-</div>
-<br>
-
+	<div id="listings_index" class="body">
 {% if listings %}
 
-    <ul>
     {% for listing in listings %}
-        <li> <a href="{{listing.url}}"> {{ listing.title }} </a> - ({{listing.created}}) </li>
+        <p>{{listing.created|date:"M m"}} - <a href="{{listing.url}}"> {{ listing.title }} </a> - {{ listing.price }} ({{ listing.city }}) {{ listing.category }} - {{ listing.for_sale }}</p>
     {% endfor %}
-    </ul>
-    
+
 {% else %}
 	<br>
     <p><h2> No listings are available at this time.</h2></p>
     <br>
     
 {% endif %}
+	</div>
 	
 <div id="page_links_bottom" class="pagination">
     <span class="step-links">
