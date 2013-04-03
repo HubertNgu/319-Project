@@ -151,7 +151,7 @@ def create_listing(request):
                     addanotherprevious.append(o.photo.name)
                 
                 form_args = {'form':listing_form, 'submit_action':submit_action, 
-                                  'pictureform': pictureform,
+                                  'pictureform': form,
                                  'listingid' :listingid, 'addanotherprevious' : addanotherprevious,
                                  'logparams': logparams}
                     

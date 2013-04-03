@@ -342,9 +342,7 @@ def posts_specific(request, post_type, tag):
         # otherwise render the single post template with the post object
         query = get_object_or_404(Post, url=tag)
         if query.is_verified():
-            form = PostForm(instance=query)
-            photos = query.photo_set.all()
-            form_args = {'post':form, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post_type), 'post_type': post_type, 'photos': photos, 'logparams' : logparams}
+            form_args = {'post':query, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post_type), 'post_type': post_type, 'logparams' : logparams}
             return render_to_response( TEMPLATE_PATHS.get(post_type+"_single"),form_args, context_instance=RequestContext(request))
         else:
             raise Http404()   

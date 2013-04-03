@@ -7,5 +7,7 @@ org.eclipse.ltk.core.refactoring.prefs
 *.pyc
 *.exe
 *.toc
+*.jpg
+*.jpeg
 
 .DS_Store

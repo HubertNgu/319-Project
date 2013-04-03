@@ -1,7 +1,3 @@
-div {
-	outline: 2px;
-}
-
 /* HTML5 tags */
 header, section, footer,
 aside, nav, article, figure {
@@ -216,7 +212,7 @@ img.left, figure.left {float: right; margin: 0 0 2em 2em;}
 	
 /*** Home Page Featured Blog Post ***/
 #featured_blog {
-	background: #fff;
+/** background: #fff; **/
 	margin-bottom: 2em;
 	overflow: visible;
 	padding: 20px;
@@ -231,31 +227,38 @@ img.left, figure.left {float: right; margin: 0 0 2em 2em;}
 #featured_blog div {
 	float: right;
 	margin: 0.786em 2em 0 5em;
-	width: 248px;
-	height: 248px;
+	width: 200px;
+	height: 200px;
 }
 /**ensures that preview image is scaled properly to fit container
  * 	(ie a really tall narrow image will be scaled to fit as will a wide short one) **/
 #featured_blog div img {float: right; max-height: 100%; max-width: 100%;}
- 
 #featured_blog h2 {color: #C74451; font-size: 1.714em; margin-bottom: 0.333em;}
 #featured_blog h3 {font-size: 1.429em; margin-bottom: .5em;}
- 
 #featured_blog h3 a:link, #featured h3 a:visited {color: #000305; text-decoration: none;}
 #featured_blog h3 a:hover, #featured h3 a:active {color: #fff;}
 
 /***  Home Page - Recent Listings  ***/
 #featured_listing {
-	background: #fff;
+/** background: #fff; **/
 	margin-bottom: 2em;
 	overflow: hidden;
 	padding: 20px; 
 	width: 760px;
- 
 	border-radius: 10px;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
 }
+#featured_listing div img {float: right; max-height: 100%; max-width: 100%;}
+#featured_listing h2 {color: #C74451; font-size: 1.714em; margin-bottom: 0.333em;}
+#featured_listing h3 {font-size: 1.429em; margin-bottom: .5em;}
+#featured_listing h3 a:link, #featured h3 a:visited {color: #000305; text-decoration: none;}
+#featured_listing h3 a:hover, #featured h3 a:active {color: #fff;}
+
+/** center the section titles **/
+#home_blog_title h2 {text-align:center;}
+#home_listings_title h2 {text-align:center;}
+
 
 
 /***  Error pages (404, 500, etc) ***/
@@ -265,22 +268,15 @@ img.left, figure.left {float: right; margin: 0 0 2em 2em;}
     text-align:center;
 }
 
+
 /**** Individual Posts****/
 #single_post p {
 	width: 760px;
 }
 
-pre {    /* handles wrapping the textfield content of the post within the div */
- white-space: pre-wrap;       /* css-3 */
- white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
- white-space: -pre-wrap;      /* Opera 4-6 */
- white-space: -o-pre-wrap;    /* Opera 7 */
- word-wrap: break-word;       /* Internet Explorer 5.5+ */
-}
-
 #single_post {
-	background: #fff;
-	margin-bottom: 2em;
+	background: #fff; 
+	margin-bottom: 5px;
 	overflow: visible;
 	padding: 20px;
 	width: 760px;
@@ -288,12 +284,39 @@ pre {    /* handles wrapping the textfield content of the post within the div */
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
 }
-
-/** Post photos, scaled by width to 500px and centered **/
-#single_post img {
-	width: 500px;
-	padding: 0 0 0 130px;
-   }
-#caption {
-    text-align:center;
+#single_post_content {
+	font-size: 110%; /* Base font size: 14px */
 }
+
+/**** Individual Listings****/
+#single_listing p {
+	width: 760px;
+}
+
+#single_listing {
+	/** background: #fff; **/ 
+	margin-bottom: 5px;
+	overflow: visible;
+	padding: 20px;
+	width: 760px;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+#single_listing_content {
+	font-size: 110%; 
+}
+
+
+
+/***** GENERAL: FORMATS ALL <pre> tags so that they
+ do not overflow their content containers ****/
+pre { 
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+ font-family: 'Trebuchet MS', Trebuchet, 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
