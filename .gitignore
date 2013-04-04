@@ -11,3 +11,5 @@ org.eclipse.ltk.core.refactoring.prefs
 *.jpeg
 
 .DS_Store
+
+*.seg

@@ -39,7 +39,9 @@ class="active"
  		{% for l in listings %}
 			 	<h3><a href="/listings/{{ l.get_url }}">{{ l.title }}</a></h3>
 			 	<p><i>{{ l.last_modified }}</i></p>
-				<p><pre>{{ l.text_content|truncatechars:200 }}</pre></p>		 
+				<p><pre>{{ l.text_content|truncatechars:200 }}</pre></p>
+				<br />
+				<hr />		 
 		{% endfor %}
 		</div><!-- /#featured -->
 {% endif %}

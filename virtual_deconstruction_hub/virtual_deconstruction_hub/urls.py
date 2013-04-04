@@ -20,6 +20,13 @@ urlpatterns = patterns('',
     # survey system URLs
     (r'^survey/', include('survey_system.urls')),
     
+    # new listing
+    (r'^new/listing$', 'listings.views.create_listing'),
+    #delete-verify listing
+    (r"^delete-verify", 'listings.views.delete_verify_listing'),
+    #edit-verify listing
+    (r"^edit-verify", 'listings.views.edit_verify_listing'),
+    
     # posts URLs
     (r'^posts/', include('posts.urls')),
     
@@ -30,13 +37,10 @@ urlpatterns = patterns('',
     url(r"^about/", include('statistics_generator.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     
     # search application
     url(r'^search/', 'search.views.search'),    
-       
-    # if no other URLs match, raise 404 error
-    #url(r'^', 'django.views.defaults.page_not_found'),
     
     #set root for static files (css, images, etc)
     url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),

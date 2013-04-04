@@ -1,6 +1,7 @@
 {{ object.title }}
 {{ object.text_content }}
 {{ object.created }}
+{{ object.last_modified }}
 {{ object.url }}
 {{ object.category }}
 {{ object.price }}

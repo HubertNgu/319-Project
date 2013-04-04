@@ -25,8 +25,8 @@ from django.http import Http404
 
 logger = logging.getLogger(__name__)
 
-#PAGE_SIZE = int(constants.RESULTS_PAGE_SIZE)
-PAGE_SIZE = settings.RESULTS_PAGE_SIZE
+#PAGE_SIZE = int(constants.listings_results_page_size)
+PAGE_SIZE = int(settings.LISTINGS_PAGE_SIZE)
 
 def index(request):
     #this view is used to login the user

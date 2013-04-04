@@ -22,7 +22,9 @@ from util import constants
 logger = logging.getLogger(__name__)
 
 #PAGE_SIZE = int(constants.posts_results_page_size)
-PAGE_SIZE = 10
+#DB_RESULTS_MAX = int(constants.db_max_results)
+PAGE_SIZE = int(settings.POSTS_PAGE_SIZE)
+DB_RESULTS_MAX = int(settings.DB_RESULTS_MAX)
 
 # Dictionary of pairings for relative template paths. Every rendering of a template for a post object references it's specific key and uses the associated
 # template path from this dictionary. For example, the index view is type dependent and will user the template associated with "proj_list" key if asked 
@@ -43,9 +45,9 @@ TEMPLATE_PATHS = {'proj_list': 'posts/posts_list.html', 'blog_list': 'posts/post
 URL_PATHS = {'posts_edit-verify': '/posts/edit-verify',
              'posts_delete-verify': '/posts/delete-verify/',
              'posts_root': '/posts/',
-             'blog_new': '/posts/blog/new',
-             'proj_new': '/posts/proj/new',
-             'stry_new': '/posts/stry/new'}
+             'blog_new': '/posts/new/blog',
+             'proj_new': '/posts/new/proj',
+             'stry_new': '/posts/new/stry'}
 
 # Dictionary of pairings for post page titles. Every form render for post creation/edits references it's specific key and uses the associated title
 # from this dictionary to insert into the template text.
@@ -310,7 +312,7 @@ def posts_index(request, post_type):
     post_type = str(post_type.lower())
     # build database query for index page results. Only return posts with the specified type
     # that have been verified and order by created from newest to oldest.
-    query = Post.objects.filter(type=post_type).filter(verified=True).order_by('-created')
+    query = Post.objects.filter(type=post_type).filter(verified=True).order_by('-created')[:DB_RESULTS_MAX]
     # paginate the results and if page paramter provided, set to that page
     paginator = Paginator(query , PAGE_SIZE)
     page = request.GET.get('page')

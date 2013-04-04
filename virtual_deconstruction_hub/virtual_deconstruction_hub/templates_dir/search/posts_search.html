@@ -6,9 +6,23 @@
             <h3>Search results for "{{ query }}":</h3>
 
             {% for result in page.object_list %}
-                <p>
-                    <a href="/posts/{{result.object.get_type}}/{{ result.object.get_url }}">{{ result.object.title }}</a>
-                </p>
+			<div id="featured_blog" class="body">
+				<article>
+					<div id="featured_blog_figure">
+					{% if result.object.photo_set.all %}
+						<img src="{{MEDIA_URL}}{{result.object.photo_set.all.0.get_url}}" alt="Virtual Deconstruction Hub" />
+					{% else %}
+			    		<img src="{{STATIC_URL}}images/header-logo.png" alt="Virtual Deconstruction Hub" class="image">
+					{% endif %}
+					</div>
+					<hgroup>
+						<h3><pre><a href="/posts/{{result.object.type}}/{{ result.object.get_url }}">{{ result.object.title|truncatechars:35 }}</a></pre></h3>
+						<p><i>{{ result.object.last_modified }}</i></p>
+					</hgroup>
+					<p><pre>{{ result.object.text_content|truncatechars:450 }}</pre></p>
+				</article>
+			</div>
+			<hr style="width:100%" > 
             {% empty %}
                 <p>No results found.</p>
             {% endfor %}
