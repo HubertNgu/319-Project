@@ -151,6 +151,7 @@ INSTALLED_APPS = (
         'haystack',
         'whoosh', 
         'verificationapp',
+        'integration_test',
 )
 
 HAYSTACK_CONNECTIONS = {
