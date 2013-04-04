@@ -146,10 +146,10 @@ INSTALLED_APPS = (
 		'listings',
 		'statistics_generator',
 		'survey_system',
-        'chart_tools',
+#        'chart_tools',
         'mailer',
         'haystack',
-        'whoosh',
+        'whoosh', 
         'verificationapp',
 )
 

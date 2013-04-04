@@ -41,6 +41,9 @@ MESSAGES = {'verified_listing': "Your listing has been verified and will be disp
 PAGE_SIZE = 100
 
 def index(request):
+    '''
+    Loads the index page showing all of the (verified/not expired) listings in a list
+    '''
 #    if request.
     if request.user.is_authenticated():
         logtext = "Logout"
@@ -66,6 +69,10 @@ def index(request):
     return render(request, TEMPLATE_PATHS.get('listings_list'), { "listings" : listings, 'logparams':logparams })
 
 def detail(request, tag):
+    '''
+    Loads the detail page of an individual listing with details 
+    when one of the listings in the list is selected
+    '''
     if request.user.is_authenticated():
         logtext = "Logout"
         accounttext = "My Account"
@@ -86,6 +93,10 @@ def detail(request, tag):
                    'reply_action':reply_action, 'go_back_action':go_back_action})  
 
 def create_listing(request):
+    '''
+    Loads the page for the users to post a new listing (either sale items or wanted items)
+    and when a new listing is submitted, it is saved in the database
+    '''
     if request.user.is_authenticated():
         logtext = "Logout"
         accounttext = "My Account"
@@ -176,7 +187,11 @@ def create_listing(request):
         return render_to_response(TEMPLATE_PATHS.get('listings_success'), form_args, context_instance=RequestContext(request))    
         
 
-def edit_verify_listing(request):  
+def edit_verify_listing(request): 
+    '''
+    Loads the page for the users to edit a listing 
+    and when the edited listing is submitted, it is updated in the database
+    '''
     if request.user.is_authenticated():
         logtext = "Logout"
         accounttext = "My Account"
@@ -236,7 +251,10 @@ def edit_verify_listing(request):
 
 
 def delete_verify_listing(request): 
-     
+    '''
+    Marks a listing to be expired (so that the listing stays in DB)
+    when a creator of a listing chooses to delete a listing
+    '''
     listing_id = request.GET.get('listing_id')
     uuid = request.GET.get('uuid')
     #action for submit button
@@ -264,24 +282,11 @@ def delete_verify_listing(request):
 #        return render_to_response(TEMPLATE_PATHS.get("listings_delete"), form_args, context_instance=RequestContext(request))
 #         
     
-
-#===============================================================================
-# Takes in a post and removes any no a-z,A-Z,0-9 characters in the title,
-# replaces all spaces with the given Space_replacement_char then returns a
-# unique string in all lowercase to use as the relative url
-#===============================================================================
-def tag_maker(space_replacement_char, listing):
-    tag = re.sub(r'\W+', '', listing.get_title().lower().replace (" ", space_replacement_char ))
-    #check that url is unique in db, if url already exists
-    # append a random 10 char string to the end
-    if Listing.objects.filter(url=tag).count() > 0:
-        tag = tag + space_replacement_char + random_string_generator(10)
-    return tag
     
-def random_string_generator(size, chars=string.ascii_uppercase + string.digits):
-    return ''.join(random.choice(chars) for x in range(size))
-
 def contact_seller(request, listing_url):
+    '''
+    Loads the page for the users to contact a creator of a listing 
+    '''
     if request.user.is_authenticated():
         logtext = "Logout"
         accounttext = "My Account"
@@ -306,8 +311,32 @@ def contact_seller(request, listing_url):
         return render_to_response('listings/contact_success.html', form_args, context_instance=RequestContext(request))
          
 
+
+def tag_maker(space_replacement_char, listing):
+    '''
+    Takes in a listing and removes any none a-z,A-Z,0-9 characters in the title,
+    replaces all spaces with the given Space_replacement_char then returns a
+    unique string in all lowercase to use as the relative url
+    '''
+    tag = re.sub(r'\W+', '', listing.get_title().lower().replace (" ", space_replacement_char ))
+    # check that url is unique in db, if url already exists
+    # append a random 10 char string to the end
+    if Listing.objects.filter(url=tag).count() > 0:
+        tag = tag + space_replacement_char + random_string_generator(10)
+    return tag
+    
+def random_string_generator(size, chars=string.ascii_uppercase + string.digits):
+    '''
+    Generates random string to put it on url for the listings with similar titles
+    '''
+    return ''.join(random.choice(chars) for x in range(size))
+
+
+
 def multiple_entries_for_testing(number):
-    ## fill in test data in db: writes 100 post objects of same type as whatever new form you are entering
+    '''
+    Fill in test data in DB: writes 'number' of listing objects 
+    '''
     email = 'seanslipetz@gmail.com'
     title = ' Test Listing Data '
     content = """Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nam cursus. Morbi ut mi. Nullam enim leo, egestas id, condimentum at, laoreet mattis, massa. Sed eleifend nonummy diam. Praesent mauris ante, elementum et, bibendum at, posuere sit amet, nibh. Duis tincidunt lectus quis dui viverra vestibulum. Suspendisse vulputate aliquam dui. Nulla elementum dui ut augue. Aliquam vehicula mi at mauris. Maecenas placerat, nisl at consequat rhoncus, sem nunc gravida justo, quis eleifend arcu velit quis lacus. Morbi magna magna, tincidunt a, mattis non, imperdiet vitae, tellus. Sed odio est, auctor ac, sollicitudin in, consequat vitae, orci. Fusce id felis. Vivamus sollicitudin metus eget eros.
