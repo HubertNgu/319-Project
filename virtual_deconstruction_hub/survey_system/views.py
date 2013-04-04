@@ -12,6 +12,7 @@ from django.http import Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
+
 logger = logging.getLogger(__name__)
 
 def __get_valid_listing(uuid):

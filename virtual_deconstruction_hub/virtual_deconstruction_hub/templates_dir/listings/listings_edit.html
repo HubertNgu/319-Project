@@ -30,7 +30,13 @@ Create a new listing - Virtual Deconstruction Hub
 	<input type = "hidden" name="paragraphtag" id = "paragraphtag" value = "1"></input>
 
 {% endif %}
-{{pictureform.as_p}}
+{#{{pictureform.as_p}}#}
+{% if listpictures != None %}
+{% for item in listpictures %}
+<li>  {{item}} </li>
+
+{% endfor %}
+{% endif %}
 <button form="edit_form" formaction="/listings/delete-verify/?listing_id={{listing.id}}&uuid={{listing.uuid}}">Delete</button>
 <input type="submit" value="Submit" />
 <button onclick= "return addAnotherPicture()">Add Another Picture</button>

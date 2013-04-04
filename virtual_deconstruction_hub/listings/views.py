@@ -67,7 +67,7 @@ def index(request):
         listings = paginator.page(paginator.num_pages)
 #    return render_to_response('listings/listings_list.html', {"listings": listings})
     return render(request, TEMPLATE_PATHS.get('listings_list'), { "listings" : listings, 'logparams':logparams })
-
+    
 def detail(request, tag):
     '''
     Loads the detail page of an individual listing with details 
@@ -185,13 +185,9 @@ def create_listing(request):
         send_post_verification_email(verify_url, user_email, 'list')
                 
         return render_to_response(TEMPLATE_PATHS.get('listings_success'), form_args, context_instance=RequestContext(request))    
-        
+    raise Http404
 
-def edit_verify_listing(request): 
-    '''
-    Loads the page for the users to edit a listing 
-    and when the edited listing is submitted, it is updated in the database
-    '''
+def edit_verify_listing(request):  
     if request.user.is_authenticated():
         logtext = "Logout"
         accounttext = "My Account"
@@ -212,7 +208,12 @@ def edit_verify_listing(request):
         listing = get_object_or_404(Listing, id=str(listing_id))
     except:
         raise Http404
-        
+    try:
+        listpictures =list()
+        for o in Photo.objects.filter(listing_id = listing_id): 
+                    listpictures.append(o.photo.name)
+    except:
+        listpictures = None
     if request.method == 'GET':      
         if not listing.is_verified():   
             if listing and (listing.get_uuid() == str(uuid)):
@@ -228,7 +229,7 @@ def edit_verify_listing(request):
         #post verified by this point, render edit page with message
         edit_form = EditListingForm(instance=listing)
 
-        form_args = {'form':edit_form, 'message': message, 'submit_action': submit_action, 'logparams':logparams, 'listing': listing}
+        form_args = {'form':edit_form, 'message': message, 'submit_action': submit_action, 'logparams':logparams, 'listing': listing,'listpictures':listpictures}
         return render_to_response(TEMPLATE_PATHS.get("listings_edit"), form_args, context_instance=RequestContext(request))
 
         
@@ -241,15 +242,16 @@ def edit_verify_listing(request):
             # This redirects back to edit form, should change to a render_to_response with a message that edit successful
             #return redirect(post_url,context_instance=RequestContext(request))
             #return render_to_response(post_url,context_instance=RequestContext(request))
-            form_args = {'form':edit_form, 'submit_action':submit_action, 'message':MESSAGES.get('edit_success'), 'listing_url': listing_url, 'logparams':logparams}
+            form_args = {'form':edit_form, 'submit_action':submit_action, 'message':MESSAGES.get('edit_success'), 'listing_url': listing_url, 'logparams':logparams, 'listpictures':listpictures}
             return render_to_response(TEMPLATE_PATHS.get("listings_edit"), form_args, context_instance=RequestContext(request))
         else:
             # if form submission not valid, redirect back to form with error messages
-            form_args = {'form':edit_form, 'submit_action':submit_action, 'message':None, 'logparams':logparams}
+            form_args = {'form':edit_form, 'submit_action':submit_action, 'message':None, 'logparams':logparams,
+                           'listpictures':listpictures}
             return render_to_response(TEMPLATE_PATHS.get("listings_edit"), form_args, context_instance=RequestContext(request)) 
 
 
-
+        raise Http404
 def delete_verify_listing(request): 
     '''
     Marks a listing to be expired (so that the listing stays in DB)

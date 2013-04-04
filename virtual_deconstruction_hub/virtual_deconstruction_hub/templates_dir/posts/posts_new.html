@@ -34,7 +34,10 @@ Create a New {{ post_type_title }} Post
 <input type="hidden" name= "postid" id = "postid" value = {{postid}}></input>
 <input type = "hidden" name="paragraphtag" id = "paragraphtag" value = "1"></input>
 {% endif %}
+{% if pictureform != None %}
 {{pictureform.as_p}}
+{% endif %}
+{% block previous_pictures_added %}{% endblock previous_pictures_added %}
 <input type="submit" value="Submit"  onclick="setSubmitTrue()"/>
 <button onclick= "return addAnotherPicture()">Add Another Picture</button>
 {% block delete_button %}{% endblock delete_button %}
