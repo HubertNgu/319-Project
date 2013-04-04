@@ -37,6 +37,12 @@ Create a new listing - Virtual Deconstruction Hub
 <input type="hidden" name= "listingid" id = "listingid" value = {{listingid}}></input>
 <input type = "hidden" name="paragraphtag" id = "paragraphtag" value = "1"></input>
 {% endif %}
+{% if listpictures != None %}
+{% for item in listpictures %}
+<li>  {{item}} </li>
+
+{% endfor %}
+{% endif %}
 <input type="submit" value="Submit" />
 <button onclick= "return addAnotherPicture()">Add Another Picture</button>
 </form>

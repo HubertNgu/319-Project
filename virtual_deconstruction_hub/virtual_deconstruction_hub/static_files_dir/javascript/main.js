@@ -132,14 +132,7 @@ function checkNewPost(){
         showErrorAndFocus(error, "Please enter a title", document.getElementById('id_title'));
         return false;
     }
-    if(document.getElementById('id_price').value == "" ){
-        showErrorAndFocus(error, "Please enter a price", document.getElementById('id_price'));
-        return false;
-    }
-    if(document.getElementById('detail_address').value == "" ){
-        showErrorAndFocus(error, "Please enter an address", document.getElementById('detail_address'));
-        return false;
-    }
+
     if(document.getElementById('detail_text_content').value == "" ){
         showErrorAndFocus(error, "Please enter enter a description", document.getElementById('detail_text_content'));
         return false;

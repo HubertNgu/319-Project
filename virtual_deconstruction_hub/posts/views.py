@@ -188,7 +188,7 @@ def new_post(request, post_type):
         form_args = {'form':post_form, 'submit_action':submit_action, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post_type), 'pictureform': pictureform, 'post_type': post_type}
         return render_to_response(TEMPLATE_PATHS.get("posts_new"), form_args, context_instance=RequestContext(request))
 
-
+    raise Http404
 def edit_verify_post(request):
     """View that users are directed to when they click the edit/verification
     link emailed to them after creating a post as an anonymous user.
@@ -219,6 +219,13 @@ def edit_verify_post(request):
     # try to get the specified post from the database,
     # raise 404 error if not found.
     post = get_object_or_404(Post, id=str(post_id))
+    
+    try:
+        listpictures =list()
+        for o in Photo.objects.filter(post_id = post_id): 
+                    listpictures.append(o.photo.name)
+    except:
+        listpictures = None
 
     if request.method == 'GET':     
         # if post hasn't been verified yet and the id and uuid
@@ -236,7 +243,8 @@ def edit_verify_post(request):
         #post verified by this point, render edit page with edit form and message
         edit_form = EditPostForm(instance=post)
         delete_button = URL_PATHS.get('posts_delete-verify') + '?post_id=' + str(post.id) + '&uuid=' + uuid
-        form_args = {'form':edit_form, 'message': message, 'submit_action': submit_action, 'post_type_title':POST_TYPE_TITLES.get(post.get_type()), 'logparams': logparams, 'post_type': post.get_type(), 'delete_button': delete_button}
+        form_args = {'form':edit_form, 'message': message, 'submit_action': submit_action, 'post_type_title':POST_TYPE_TITLES.get(post.get_type()), 'logparams': logparams, 
+                     'post_type': post.get_type(), 'delete_button': delete_button, 'listpictures':listpictures}
         return render_to_response(TEMPLATE_PATHS.get("posts_edit"), form_args, context_instance=RequestContext(request))
         
     if request.method == 'POST':
@@ -247,13 +255,21 @@ def edit_verify_post(request):
             post_url = HttpRequest.build_absolute_uri(request, edit_form.cleaned_data.get('url'))
             edit_form.save()
             # This redirects back to edit form with edit success message
-            form_args = {'form':edit_form, 'submit_action':submit_action, 'message':MESSAGES.get('edit_success'), 'post_type_title':POST_TYPE_TITLES.get(post.get_type()), 'post_url': post_url, 'post_type': post.get_type(), 'logparams' : logparams, 'delete_button': delete_button}
-            return render_to_response(TEMPLATE_PATHS.get("posts_edit"), form_args, context_instance=RequestContext(request))
+            form_args = {'form':edit_form, 'submit_action':submit_action, 
+                         'message':MESSAGES.get('edit_success'),
+                          'post_type_title':POST_TYPE_TITLES.get(post.get_type()), 
+                          'post_url': post_url, 'post_type': post.get_type(),
+                           'logparams' : logparams, 
+                           'delete_button': delete_button,
+                           'listpictures':listpictures}
+            return render_to_response(TEMPLATE_PATHS.get("posts_edit"), form_args, 
+                                      context_instance=RequestContext(request))
         else:
             # if form submission not valid, redirect back to edit form with error messages
-            form_args = {'form':edit_form, 'submit_action':submit_action, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post.get_type()), 'post_type': post.get_type(),  'logparams':logparams, 'delete_button': delete_button}
+            form_args = {'form':edit_form, 'submit_action':submit_action, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post.get_type()), 'post_type': post.get_type(),  'logparams':logparams, 'delete_button': delete_button,
+                           'listpictures':listpictures}
             return render_to_response(TEMPLATE_PATHS.get("posts_edit"), form_args, context_instance=RequestContext(request))   
-    
+        raise Http404
 def posts_index(request, post_type):
     """View that renders an index page for a specified post type.
     This view queries the database for posts with a matching type,
@@ -309,7 +325,7 @@ def posts_index(request, post_type):
     form_args = {'posts':posts, 'message': None, 'post_type_title':postname, 
                  'post_type': post_type, 'logparams': logparams, 'username': username, 'loggedin':loggedin}
     return render_to_response(TEMPLATE_PATHS.get(post_type+'_list'),form_args, context_instance=RequestContext(request))
-        
+    raise Http404        
 def posts_specific(request, post_type, tag):
     """View that renders a page for displaying a specific post.
     This view queries the database for post with a matching tag

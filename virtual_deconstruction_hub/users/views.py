@@ -21,6 +21,7 @@ from django.contrib.sites.models import Site
 import string
 import random
 import logging
+from django.http import Http404  
 
 logger = logging.getLogger(__name__)
 
@@ -56,7 +57,7 @@ def index(request):
         return redirect(prevPage) 
     else:
         return render_to_response("users/login.html", {'prevPage':prevPage}, context_instance=RequestContext(request))
-
+    raise Http404
 #this view is used to logout a user
 def logout_user(request):
     #get the previous page for redirect. If user did not visit a previous page, then redirect 
@@ -118,7 +119,7 @@ def signup(request):
     else:
         
         return render_to_response("users/signup.html",context_instance=RequestContext(request))
-
+    raise Http404
 def verification(request):
     #if user is already logged in and authenticated, then redirec tthem to their account page
     if request.user.is_authenticated():
@@ -132,7 +133,7 @@ def verification(request):
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
         return render_to_response("users/verification.html", {'logparams' : logparams}, context_instance=RequestContext(request))
- 
+    raise Http404
  #this view handles the verification of the user
 def verifyemail(request):
     
@@ -151,7 +152,8 @@ def verifyemail(request):
         verify.delete()
         return redirect("/myaccount/login")
     else: return redirect('users.views.verifyfail')
-
+    raise Http404
+    
 def verifyfail(request):
       return render_to_response("users/verifyfail.html",context_instance=RequestContext(request))
      #generates a random 10 char string used as a verification code
@@ -222,7 +224,7 @@ def editaccount(request):
                                                       'description':description,
                                                       'logparams' : logparams},context_instance=RequestContext(request))
 
-
+    raise Http404
 #this view gets all the infomation for a user
 def myaccount(request):
     if request.user.is_authenticated():
@@ -263,6 +265,7 @@ def myaccount(request):
                                                       'province':province,
                                                       'description':description,
                                                       'logparams' : logparams},context_instance=RequestContext(request))
+    raise Http404
 #this view gets all the listings that the user has                                            
 def listings(request):
     if request.user.is_authenticated():
@@ -286,6 +289,7 @@ def listings(request):
         return render(request, "users/listings.html", { "listings" : listings, 'logparams' : logparams})
     else:
         return redirect("/myaccount/login")
+    raise Http404
 def posts(request, post_type):
     if request.user.is_authenticated():
         logtext = "Logout"
@@ -307,3 +311,4 @@ def posts(request, post_type):
         return render(request, "users/posts.html", { "posts" : posts, "post_type" : post_type, 'logparams' : logparams})
     else:
         return redirect("/myaccount/login")
+    raise Http404
