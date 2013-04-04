@@ -5,7 +5,7 @@
 {% block posts_content %}
 
 <div id="create_new" class="body">
-{% if loggedin == None %}{%else%}<a href="/posts/{{ post_type }}/new"> Create a new {{post_type_title}}</a>{% endif %}
+{% if loggedin == None %}{%else%}<a href="/new/{{ post_type }}"> Create a new {{post_type_title}}</a>{% endif %}
 </div>
 
 {% for post in posts %}
