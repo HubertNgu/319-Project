@@ -18,6 +18,7 @@ from listings.models import Photo
 from listings.models import UploadForm, PostPictures
 import logging
 from util import constants
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
@@ -27,18 +28,19 @@ TEMPLATE_PATHS = {'listings_list': 'listings/listings_list.html',
                   'listings_success':'listings/new_listing_success.html',
                   'listings_delete': 'listings/listings_delete.html',
                   'listings_edit': 'listings/listings_edit.html'
-                  #'listings_upload': 'uploadfile/upload.html',
                   }
-URL_PATHS = {'listings_edit-verify': '/listings/edit-verify',
-             'listings_delete-verify': '/listings/delete-verify',
+URL_PATHS = {'listings_edit-verify': '/edit-verify',
+             'listings_delete-verify': '/delete-verify',
              'listings_root': '/listings/',
-             'listing_new': '/listing/new'}
+             'listing_new': '/new/listing'}
 
 MESSAGES = {'verified_listing': "Your listing has been verified and will be displayed on the site. You can make changes to your listing here if you wish.",
             'edit_success': "Your changes have been saved. You can make further changes to your listing if you wish."}
 
 #PAGE_SIZE = int(constants.listings_results_page_size)
-PAGE_SIZE = 100
+PAGE_SIZE = int(settings.LISTINGS_PAGE_SIZE)
+#DB_RESULTS_MAX = int(constants.db_max_results)
+DB_RESULTS_MAX = int(settings.DB_RESULTS_MAX)
 
 def index(request):
     '''
@@ -54,7 +56,7 @@ def index(request):
         logtext = "Login"
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
-    listings_list = Listing.objects.filter(verified = True, expired = False).order_by('-last_modified')
+    listings_list = Listing.objects.filter(verified = True, expired = False).order_by('-last_modified')[:DB_RESULTS_MAX]
     paginator = Paginator(listings_list, PAGE_SIZE)
     page = request.GET.get('page')
     try:
@@ -65,7 +67,6 @@ def index(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         listings = paginator.page(paginator.num_pages)
-#    return render_to_response('listings/listings_list.html', {"listings": listings})
     return render(request, TEMPLATE_PATHS.get('listings_list'), { "listings" : listings, 'logparams':logparams })
     
 def detail(request, tag):
@@ -169,8 +170,8 @@ def create_listing(request):
                 return render_to_response("listings/listings_new.html", form_args, context_instance=RequestContext(request))
                 
         #====================================================================
-        # Testing - REMOVE LATER - this just creates x # of posts of a given
-        # type whenever a single one is created from the web, just used to 
+        # Testing purposes only - this just creates x # of listings
+        # whenever a single one is created from the web, just used to 
         # populate db for testing purposes
         #====================================================================
         #multiple_entries_for_testing(10000)
@@ -220,8 +221,6 @@ def edit_verify_listing(request):
                 listing.mark_verified()
                 listing.save()
                 message = MESSAGES.get('verified_listing')
-#                post_url = HttpRequest.build_absolute_uri(request, listing.get_url())
-#                return redirect(post_url,context_instance=RequestContext(request))
             else:
                 # the listing_id and uuid provided do not match anything in db correctly
                 # so redirect to 404 as this page doesn't exist for this combination
@@ -240,8 +239,6 @@ def edit_verify_listing(request):
             listing_url = HttpRequest.build_absolute_uri(request, edit_form.cleaned_data.get('url'))
             edit_form.save()
             # This redirects back to edit form, should change to a render_to_response with a message that edit successful
-            #return redirect(post_url,context_instance=RequestContext(request))
-            #return render_to_response(post_url,context_instance=RequestContext(request))
             form_args = {'form':edit_form, 'submit_action':submit_action, 'message':MESSAGES.get('edit_success'), 'listing_url': listing_url, 'logparams':logparams, 'listpictures':listpictures}
             return render_to_response(TEMPLATE_PATHS.get("listings_edit"), form_args, context_instance=RequestContext(request))
         else:
@@ -272,17 +269,7 @@ def delete_verify_listing(request):
         message = "Listing is successfully deleted"
         form_args = { "message" : message }
         return render_to_response(TEMPLATE_PATHS.get("listings_delete"), form_args, context_instance=RequestContext(request))
-    
-#    if request.method == 'POST':      
-#        if listing.is_verified():   
-#            if listing and (listing.get_uuid() == str(uuid)):
-#                listing.delete()
-#            else:
-#                raise Http404
-#        
-#        form_args = {'listing': listing, 'delete_submit_action': submit_action}
-#        return render_to_response(TEMPLATE_PATHS.get("listings_delete"), form_args, context_instance=RequestContext(request))
-#         
+         
     
     
 def contact_seller(request, listing_url):

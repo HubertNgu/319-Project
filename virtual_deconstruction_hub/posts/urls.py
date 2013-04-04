@@ -11,6 +11,9 @@ urlpatterns = patterns('posts.views',
     # domain.com/posts/xxxx/new
     #===========================================================================    
 
+    # new posts
+    # looks for url patter domain.com/posts/new/4CHARTYPESTRING, calls posts.views.create_post(request, post_type='4CHARTYPESTRING')
+    (r'^new/(?P<post_type>[a-zA-Z]{4})$', 'new_post'),
     # users are emailed an edit-verify post url that directs them here, with query strings for the post id and post uuid
     url(r"^edit-verify$", 'edit_verify_post'),
     # users are directed here when they click the delete button while on an edit-verify page, with query strings for the post id and post uuid

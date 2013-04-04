@@ -6,6 +6,7 @@ from haystack.views import SearchView, search_view_factory
 from haystack.inputs import AutoQuery, Exact
 from listings.models import get_listings_categories, get_sale_categories, get_city_categories
 from django import forms
+from django.conf import settings
 import logging
 
 logger = logging.getLogger(__name__)
@@ -74,12 +75,6 @@ def search_listings_custom_form(request):
     
     request -- the HTTP request from the users browser 
     """
-#    q_string = request.GET['q']
-#    #category = request.GET.get('category', None)
-#    #sqs = SearchQuerySet().filter(content=AutoQuery(q_string)).models(Listing)#.facet('category').facet('for_sale')
-#    if category:
-#        category = str(category).lower() 
-#        sqs = SearchQuerySet().filter(content=AutoQuery(q_string), category=Exact(category)).models(Listing)
     view = search_view_factory(
         view_class=ListingSearchView,
         template=TEMPLATE_PATHS['listings_results'],
@@ -89,7 +84,7 @@ def search_listings_custom_form(request):
     return view(request)
 
 
-class ListingSearchForm(FacetedSearchForm):
+class ListingSearchForm(SearchForm):
     """ A model for the form representation of a the searchable
     fields for listings objects. This is used for displaying 
     to the user only the fields that they are able to filter
@@ -104,6 +99,12 @@ class ListingSearchForm(FacetedSearchForm):
     for_sale = forms.CharField(required=False, widget=forms.Select(choices=get_sale_categories()))
     city = forms.CharField(required=False, widget=forms.Select(choices=get_city_categories()))
     q = forms.CharField(required=False, label=('Search'), widget=forms.HiddenInput)
+
+    def __init__(self, *args, **kwargs):
+        super(ListingSearchForm, self).__init__(*args, **kwargs)
+        self.fields['city'].label = "City"
+        self.fields['for_sale'].label = "Type of listing"
+        self.fields['cat'].label = "Category"
     
     
     def search(self):
@@ -127,7 +128,7 @@ class ListingSearchForm(FacetedSearchForm):
         if self.cleaned_data['city']:
             sqs = sqs.filter(city=self.cleaned_data['city'])
 
-        return sqs
+        return sqs.order_by('-last_modified')
     
     
 class ListingSearchView(SearchView):
@@ -136,7 +137,12 @@ class ListingSearchView(SearchView):
     so this view is necessary in order to allow searching and
     displaying results based on the additional parameters in the
     ListingSearchForm model.
-    """
+    """    
+    def __init__(self, *args, **kwargs):
+        super(ListingSearchView, self).__init__(*args, **kwargs)
+        results_per_page = int(settings.LISTINGS_PAGE_SIZE) 
+        if not results_per_page is None:
+            self.results_per_page = results_per_page
     
     def extra_context(self):
         """ Defines the extra content used in the search view
@@ -173,7 +179,7 @@ class PostSearchForm(SearchForm):
         if self.cleaned_data.get('type', None):
             sqs = sqs.filter(type=self.cleaned_data['type'])
 
-        return sqs
+        return sqs.order_by('-created')
     
 class PostSearchView(SearchView):
     """ An extension of the default search results view.
@@ -182,6 +188,11 @@ class PostSearchView(SearchView):
     displaying results based on the additional parameters in the
     PostSearchForm model.
     """
+    def __init__(self, *args, **kwargs):
+        super(PostSearchView, self).__init__(*args, **kwargs)
+        results_per_page = int(settings.POSTS_PAGE_SIZE) 
+        if not results_per_page is None:
+            self.results_per_page = results_per_page
     
     def extra_context(self):
         """ Defines the extra content used in the search view

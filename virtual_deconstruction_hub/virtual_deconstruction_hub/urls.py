@@ -21,11 +21,11 @@ urlpatterns = patterns('',
     (r'^survey/', include('survey_system.urls')),
     
     # new listing
-    (r'^new/listing$', listings.views.create_listing),
-
-    # new posts
-    # looks for url patter domain.com/posts/4CHARTYPESTRING/new, calls posts.views.create_post(request, post_type='4CHARTYPESTRING')
-    (r'^new/(?P<post_type>[a-zA-Z]{4})$', posts.views.new_post),
+    (r'^new/listing$', 'listings.views.create_listing'),
+    #delete-verify listing
+    (r"^delete-verify", 'listings.views.delete_verify_listing'),
+    #edit-verify listing
+    (r"^edit-verify", 'listings.views.edit_verify_listing'),
     
     # posts URLs
     (r'^posts/', include('posts.urls')),

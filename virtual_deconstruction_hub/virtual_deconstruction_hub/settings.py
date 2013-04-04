@@ -1,7 +1,7 @@
 import sys
 
 # Django settings for virtual_deconstruction_hub project.
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -76,7 +76,7 @@ STATICFILES_DIRS = (
 # Put strings here, like "/home/html/static" or "C:/www/django/static".
 # Always use forward slashes, even on Windows.
 # Don't forget to use absolute paths, not relative paths.
-		os.path.join(PROJECT_PATH, 'static_files_dir'),
+        #os.path.join(PROJECT_PATH, 'static_files_dir'),
 		)
 
 # List of finder classes that know how to find static files in
@@ -146,7 +146,7 @@ INSTALLED_APPS = (
 		'listings',
 		'statistics_generator',
 		'survey_system',
-#        'chart_tools',
+        'chart_tools',
         'mailer',
         'haystack',
         'whoosh', 
@@ -171,7 +171,9 @@ EMAIL_HOST_USER = 'ubccs319team4@gmail.com'
 EMAIL_HOST_PASSWORD = '1029384756qpwoeiruty'
 EMAIL_USE_TLS = True
 
-RESULTS_PAGE_SIZE = 100
+LISTINGS_PAGE_SIZE = 100
+POSTS_PAGE_SIZE = 10
+DB_RESULTS_MAX = 2500
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

@@ -15,6 +15,7 @@ class ListingIndex(indexes.SearchIndex, indexes.Indexable):
     title = indexes.CharField(model_attr='title')
     text_content = indexes.CharField(model_attr='text_content')
     created = indexes.DateTimeField(model_attr='created')
+    last_modified = indexes.DateTimeField(model_attr='last_modified')
     url = indexes.CharField(model_attr='url')
     price = indexes.CharField(model_attr='price', null=True)
     city = indexes.CharField(model_attr='city', null=True)
