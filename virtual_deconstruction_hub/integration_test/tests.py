@@ -24,7 +24,7 @@ class IntegrationTest(TestCase):
 		constants.INITIAL_SEND_DELAY = 0
 		constants.REPEAT_SEND_DELAY = 0
 
-	def test_listing_to_statisics_no_survey(self):
+	def test_listing_to_statistics_no_survey(self):
 		listing = Listing(id=1, for_sale='sell', url='test', 
 				creator='test@test.com', created=datetime.now(),
 				last_modified=datetime.now(), title='test',
