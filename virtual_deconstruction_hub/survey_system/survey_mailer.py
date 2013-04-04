@@ -57,9 +57,12 @@ def __send_surveys(listings):
     '''
     Emails all surveys that are ready to be sent.
     '''
+    counter = 0
     for listing in listings:
         if __is_survey_ready(listing):
             __send_survey(listing)
+            counter += 1
+    return counter
     logger.info('Finished sending all ready surveys')
 
 def expire_and_mail_surveys():
@@ -68,6 +71,6 @@ def expire_and_mail_surveys():
     should be called in this module.
     '''
     listings = Listing.objects.filter(expired=False)
-    #__expire_listings(listings)
-    __send_surveys(listings)
+    __expire_listings(listings)
+    return __send_surveys(listings)
 
