@@ -241,7 +241,11 @@ def myaccount(request):
     #get all the information of the user
     username = request.user.username
     email = request.user.email
-    profile = UserProfile.objects.get(username = username) 
+    try:
+        profile = UserProfile.objects.get(username = username) 
+    except: 
+        profile = UserProfile( username = username,  province='', phoneno ='', city = '', address ='', isverified = 1)
+        profile.save()
     address = profile.address
     city = profile.city
     phone = profile.phoneno

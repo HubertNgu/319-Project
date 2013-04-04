@@ -1,7 +1,7 @@
 import sys
 
 # Django settings for virtual_deconstruction_hub project.
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
