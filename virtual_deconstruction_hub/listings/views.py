@@ -78,7 +78,7 @@ def detail(request, tag):
     
     address = ''
     listing = get_object_or_404(Listing, url=tag)
-    reply_action = '/listings/contactSeller/' + str(listing.id) + '/'
+    reply_action = '/listings/contactSeller/' + str(listing.url) + '/'
     go_back_action = '/listings'
     address = '%s%%2C+%s' % (str(listing.address).replace(' ', '+'), listing.city)
     return render(request, TEMPLATE_PATHS.get('listings_single'), 
@@ -303,7 +303,7 @@ def contact_seller(request, listing_url):
         subject = request.POST.get('emailSubject')
         message = request.POST.get('emailMsg')
         send_contact_email(toemail, fromemail, subject, message)
-        return render_to_response('listings/new_listing_success.html', form_args, context_instance=RequestContext(request))
+        return render_to_response('listings/contact_success.html', form_args, context_instance=RequestContext(request))
          
 
 def multiple_entries_for_testing(number):
