@@ -194,9 +194,11 @@ def editaccount(request):
         profile.province = province
         #save profile with all edited items
         profile.save()
-        u = User.objects.get(username__exact=username)
-        u.set_password(password)
-        u.save()
+        if (password != None and password != ''):
+            u = User.objects.get(username__exact=username)
+            u.set_password(password)
+            u.save()
+            
         return redirect('/myaccount/profile')
     
     else:
