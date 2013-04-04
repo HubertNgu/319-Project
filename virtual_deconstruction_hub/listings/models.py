@@ -60,10 +60,10 @@ class Listing(models.Model):
         self.last_modified = timezone.now()
 
     def flag(self):
-        self.flag_count + 1
+        self.flag_count += 1
 
     def is_expired(self):
-        return self.expires <= timezone.now()
+        return self.expired
     
     def renew(self):
         self.save()
