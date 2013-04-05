@@ -211,4 +211,86 @@ function setDDL(ddl, value)
  document.getElementById('issubmit').value = "1";
  }
  
+ function listedmost(){
+ 	removeHoverBackground();
+ 	hideAllPictures();
+ 	document.getElementById("listedmost").style.background = "#00dd68"
+ 	document.getElementById('surveycategoryrank').style.display = 'inline';
+ 	reAddHover();
+ 
+ }
+ function highestsale(){
+ 	removeHoverBackground();
+ 	hideAllPictures();
+ 	document.getElementById("highestsale").style.background = "#00dd68"
+ 	document.getElementById('sellercategoryrank').style.display = 'inline';
+ 	reAddHover();
+ }
+ function boughtmost(){
+  	removeHoverBackground();
+ 	hideAllPictures();
+ 	document.getElementById("boughtmost").style.background = "#00dd68"
+ 	document.getElementById('buyercategoryrank').style.display = 'inline';
+ 	reAddHover();
+ 	
+ }
+ function averagetransactioneach(){
+  	removeHoverBackground();
+ 	hideAllPictures();
+ 	document.getElementById("averagetransactioneach").style.background = "#00dd68"
+ 	document.getElementById('categorytransactionamount').style.display = 'inline';
+ 	reAddHover();
+ 	
+ }
+ function averagetransactionamount(){
+  	removeHoverBackground();
+ 	hideAllPictures();
+ 	document.getElementById("averagetransactionamount").style.background = "#00dd68"
+ 	document.getElementById('amountsellerbuyer').style.display = 'inline';
+ 	reAddHover();
+ 	
+ }
+ function transactiontime(){
+  	removeHoverBackground();
+ 	hideAllPictures();
+ 	document.getElementById("transactiontime").style.background = "#00dd68"
+ 	document.getElementById('averagetransactiontime').style.display = 'inline';
+ 	reAddHover();
+ 	
+ }
+ function ratesucess(){
+  	removeHoverBackground();
+ 	hideAllPictures();
+ 	document.getElementById("ratesucess").style.background = "#00dd68"
+ 	document.getElementById('successrate').style.display = 'inline';
+ 	reAddHover();
+ 	
+ }
+ 
+ function removeHoverBackground(){
+	document.getElementById("listedmost").style.background = "black"
+	document.getElementById("highestsale").style.background = "black"
+	document.getElementById("boughtmost").style.background = "black"
+	document.getElementById("averagetransactioneach").style.background = "black"
+	document.getElementById("averagetransactionamount").style.background = "black"
+	document.getElementById("transactiontime").style.background = "black"
+	document.getElementById("ratesucess").style.background = "black"
+       
+ }
+ 
+ 
+ function hideAllPictures()
+ {
+ 	document.getElementById('surveycategoryrank').style.display = 'none';
+ 	document.getElementById('successrate').style.display = 'none';
+  	document.getElementById('averagetransactiontime').style.display = 'none';
+  	document.getElementById('amountsellerbuyer').style.display = 'none';
+  	document.getElementById('categorytransactionamount').style.display = 'none';
+  	document.getElementById('sellercategoryrank').style.display = 'none';
+  	document.getElementById('buyercategoryrank').style.display = 'none';
+ }
 
+function reAddHover()
+{
+	document.styleSheets[0].insertRule('#itemsinlist:hover { background-color: #00dd68; }', 0);
+}

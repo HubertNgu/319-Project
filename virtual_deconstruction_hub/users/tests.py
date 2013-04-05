@@ -15,20 +15,7 @@ from django.contrib.auth import authenticate,login,get_user
 
 class UserTest(TestCase):
    
-    def test_login_logout(self):
-        username = "testusersignup"
-        password = "hihihihi"
-        request = HttpRequest()
-        request.method = 'POST'
-        request.__setattr__('username', username)
-        request.__setattr__('password', password)
-        signup(request)
-        u = authenticate(username=username, password=password)
-        login(request,u)
-        self.assertTrue(request.user.is_authenticated())
-        logout(request)
-        #self.assertFalse(request.user.is_authenticated())
-        
+
    
     def test_signup(self):
         username = "testusersignup"
@@ -56,13 +43,13 @@ class UserTest(TestCase):
             user = Users(username = username)
             userprofile = UserProfile(username=username)
             verificationapp = VerificationApp(username= username )
-            self.assertTrue(user.firstname == firstname)
-            self.assertTrue(user.lastname == lastname)
-            self.assertTrue(user.email == email)
-            self.assertTrue(user.phone == phone)
-            self.assertTrue(user.address == address)
-            self.assertTrue(user.province == province)
-            self.assertTrue(user.city == city)
+            self.assertTrue(userprofile.firstname == firstname)
+            self.assertTrue(userprofile.lastname == lastname)
+            self.assertTrue(userprofile.email == email)
+            self.assertTrue(userprofile.phone == phone)
+            self.assertTrue(userprofile.address == address)
+            self.assertTrue(userprofile.province == province)
+            self.assertTrue(userprofile.city == city)
             user.delete()
             userprofile.delete()
             verificationapp.delete()
