@@ -5,19 +5,18 @@
 {% block posts_content %}
 
 <div id="create_new" class="body">
-{% if loggedin == None %}{%else%}<a href="/new/{{ post_type }}"> Create a new {{post_type_title}}</a>{% endif %}
+{% if loggedin == None %}{%else%}<a href="/posts/new/{{ post_type }}"> Create a new {{post_type_title}}</a>{% endif %}
 </div>
 
 {% for post in posts %}
 <div id="featured_blog" class="body">
 	<article>
-		<div id="featured_blog_figure">
 		{% if post.photo_set.all %}
+		<div id="featured_blog_figure">
 			<img src="{{MEDIA_URL}}{{post.photo_set.all.0.get_url}}" alt="Virtual Deconstruction Hub" />
-		{% else %}
-    		<img src="{{STATIC_URL}}images/header-logo.png" alt="Virtual Deconstruction Hub" class="image">
-		{% endif %}
 		</div>
+		{% endif %}
+
 		<hgroup>
 			<h3><pre><a href="/posts/{{post.type}}/{{ post.get_url }}">{{ post.title|truncatechars:35 }}</a></pre></h3>
 			<p><i>{{ post.last_modified }}</i></p>

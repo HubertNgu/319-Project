@@ -13,7 +13,7 @@ html {
 
 /* Body */
 	body {
-	background: #F5F4EF url('../images/paper-bg2.jpg');
+	background: #F5F4EF url('../images/paper-bg.jpg');
 		background-attachment: fixed;
 		color: #000305;
 		font-size: 87.5%; /* Base font size: 14px */
@@ -163,8 +163,8 @@ img.left, figure.left {float: right; margin: 0 0 2em 2em;}
 		width: 800px;
 				
 		border-radius: 5px; 
-		/** -moz-border-radius: 5px;
-		-webkit-border-radius: 5px; **/
+		-moz-border-radius: 5px;
+		-webkit-border-radius: 5px;
 	}
 	
 	#banner nav ul {
@@ -270,7 +270,7 @@ img.left, figure.left {float: right; margin: 0 0 2em 2em;}
 }
 
 #single_post {
-	background: #fff; 
+	/**background: #fff;**/ 
 	margin-bottom: 5px;
 	overflow: visible;
 	padding: 20px;
@@ -281,6 +281,10 @@ img.left, figure.left {float: right; margin: 0 0 2em 2em;}
 }
 #single_post_content {
 	font-size: 110%; /* Base font size: 14px */
+}
+
+#single_post_photo {
+	width:760px;
 }
 
 /**** Individual Listings****/
