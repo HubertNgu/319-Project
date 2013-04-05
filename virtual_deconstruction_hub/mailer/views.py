@@ -5,6 +5,7 @@ from django.template import RequestContext
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from mailer.models import Email
+from django.conf import settings
 import logging
 
 logger = logging.getLogger(__name__)
@@ -38,7 +39,7 @@ def send_survey_email(url, userEmail):
     sub = SUBJECT_MAPPINGS.get('survey')
     context = {"url" : url}
     msg = render_to_string('mailer/surveyTemplate.txt', context)
-    fromEmail = "from@email.com"
+    fromEmail = settings.FROM_EMAIL
     send_mail(sub, msg, fromEmail, [userEmail], fail_silently=False)
     
     email = Email(to_email=userEmail, from_email=fromEmail,subject=sub,message=msg,email_type=SIGNUP_VERIFY)
@@ -49,7 +50,7 @@ def send_signup_verification_email(url, userEmail):
     sub = SUBJECT_MAPPINGS.get('signup')
     context = {"url": url }
     msg = render_to_string('mailer/signupTemplate.txt', context)
-    fromEmail = "from@email.com"
+    fromEmail = settings.FROM_EMAIL
     send_mail(sub, msg, fromEmail, [userEmail], fail_silently=False)
 			  
     email = Email(to_email=userEmail, from_email=fromEmail,subject=sub,message=msg,email_type=SIGNUP_VERIFY)
@@ -60,7 +61,7 @@ def send_post_verification_email(url, userEmail, postType):
     sub = SUBJECT_MAPPINGS.get(postType)
     context = {"url" : url, "object" : POST_MAPPINGS.get(postType)}
     msg = render_to_string('mailer/postTemplate.txt', context)
-    fromEmail = "from@email.com"
+    fromEmail = settings.FROM_EMAIL
     send_mail(sub, msg, fromEmail, [userEmail], fail_silently=False)
     
     email = Email(to_email=userEmail, from_email=fromEmail,subject=sub,message=msg,email_type=SIGNUP_VERIFY)

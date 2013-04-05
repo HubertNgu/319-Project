@@ -13,7 +13,7 @@ html {
 
 /* Body */
 	body {
-	background: #F5F4EF url('../images/paper-bg.jpg');
+	background: #F5F4EF url('../images/paper-bg2.jpg');
 		background-attachment: fixed;
 		color: #000305;
 		font-size: 87.5%; /* Base font size: 14px */
@@ -313,6 +313,26 @@ img.left, figure.left {float: right; margin: 0 0 2em 2em;}
 	width: 760px;
 }
 
+/*** Account Styles ***/
+.accountDiv {
+    width:130px;
+    padding: 12px 0 12px 30px;
+    cursor:pointer;
+    text-align:left;
+}
+.accountDiv:hover{
+    background-color:#00dd68;
+}
+
+.accountLink {
+    color:#fff !important;
+    text-decoration:none !important;
+    padding: 0 0 0 0 !important;
+    background:none !important;
+}
+.accountLink:hover{
+    text-shadow:none !important;
+}
 
 /***** GENERAL: FORMATS ALL <pre> tags so that they
  do not overflow their content containers ****/
