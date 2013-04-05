@@ -140,6 +140,7 @@ class ListingForm(ModelForm):
         self.fields['city'].widget.attrs.update({'id' : 'detail_city'})
         self.fields['text_content'].widget.attrs.update({'id' : 'detail_text_content'})
         self.fields['for_sale'].widget.attrs.update({'id' : 'detail_type'})
+        self.fields['price'].label = "Price $"
 
     
     class Meta:
@@ -173,6 +174,7 @@ class EditListingForm(ModelForm):
         self.fields['city'].label = "City"
         self.fields['text_content'].label = "Description"
         self.fields['for_sale'].label = "Type of listing"
+        self.fields['price'].label = "Price $"
         
     class Meta:
         model = Listing

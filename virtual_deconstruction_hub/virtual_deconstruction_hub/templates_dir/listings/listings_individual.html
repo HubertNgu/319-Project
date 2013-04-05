@@ -12,17 +12,15 @@
 <h1 class="listing_detail" ><pre>{% ifequal listing.for_sale "want" %}Wanted{% else %}For Sale{% endifequal %}: {{ listing.title }} - ${{ listing.price }}</pre></h1>
 <form id="listing_detail_form">
 <p><pre><span id="single_listing_content">{{ listing.text_content }}</span></pre></p>
+<button formaction={{reply_action}}> Contact Listing Owner </button> <button formaction={{go_back_action}}> Go Back To Listings </button>
+<br/>
+<br/>
 {% if listing.photo_set.all %}
 	{% for photo in listing.photo_set.all %}
 		<div id="single_listing_photo" align="center"><img src="{{MEDIA_URL}}{{photo.get_url}}"/></div>
    {% endfor %}
 {% endif %}
 <br/>
-
-
- <button formaction={{reply_action}}> Contact Listing Owner </button> <button formaction={{go_back_action}}> Go Back To Listings </button>
-
-      <br/><br/>
  <span>Location: {{ listing.address }} {{listing.city}}</span>
 {% if listing.address %}
 <iframe width="760" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" 
