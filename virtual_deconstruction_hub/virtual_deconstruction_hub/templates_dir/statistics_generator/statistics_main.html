@@ -18,17 +18,17 @@ class="active"
 <div id = "statistic_text_links">
 
 <div id = "listedmost" class = "itemsinlist" style="margin-top:40px" onclick="listedmost()">
-<label>Items that are Listed the Most</label></div>
+<label>Successful Transaction by Category</label></div>
 <div id = "highestsale" class = "itemsinlist" onclick="highestsale()">
-<label>Items with the Highest Sales</label></div>
+<label>Number of "Sell" Listings by Category</label></div>
 <div id = "boughtmost" class = "itemsinlist" onclick="boughtmost()">
-<label>Items that are Bought Most</label></div>
+<label>Number of "Buy" Listings by Category</label></div>
 <div id = "averagetransactioneach" class = "itemsinlist" onclick="averagetransactioneach()">
-<label>Average Transaction Amount of Each Item</label></div>
+<label>Average Transaction Amount by Category</label></div>
 <div id = "averagetransactionamount" class = "itemsinlist" onclick="averagetransactionamount()">
-<label>Average Transaction Amount</label></div>
+<label>Average Transaction Amount by Listing Type</label></div>
 <div id = "transactiontime" class = "itemsinlist" onclick="transactiontime()">
-<label>Average Transaction Time</label></div>
+<label>Average Time to Successful Transaction</label></div>
 <div id = "ratesucess" class = "itemsinlist" onclick="ratesucess()">
 <label>Transaction Success Rate</label></div>
 </div>
@@ -42,7 +42,7 @@ class="active"
 	&chco=FF0000|FF5F00|FF9C00|FFC900|FFF100|BAF300|4DDE00|00A383|086FA1|1533AD|4512AE|5E0DAC|8F04A8|BE008A|D8005F|A68600|FFAE73|36BBCE
          &chd={{ category_survey_values }}
          &chdl={{ labels }}
-         &chtt=Survey+Category+Rank
+
       {% endchart %}
    </span>
    </div>
@@ -54,7 +54,6 @@ class="active"
                  &cht=p3
                  &chd={{ category_buyer_values }}
                  &chdl={{ labels }}
-                 &chtt=Buyer+Category+Rank
 		&chco=FF0000|FF5F00|FF9C00|FFC900|FFF100|BAF300|4DDE00|00A383|086FA1|1533AD|4512AE|5E0DAC|8F04A8|BE008A|D8005F|A68600|FFAE73|36BBCE
       {% endchart %}
    </span>
@@ -67,7 +66,6 @@ class="active"
                  &cht=p3
                  &chd={{ category_seller_values }}
                  &chdl={{ labels }}
-                 &chtt=Seller+Category+Rank
 		&chco=FF0000|FF5F00|FF9C00|FFC900|FFF100|BAF300|4DDE00|00A383|086FA1|1533AD|4512AE|5E0DAC|8F04A8|BE008A|D8005F|A68600|FFAE73|36BBCE
       {% endchart %}
    </span>
@@ -77,17 +75,18 @@ class="active"
    	{% load chart_tags %}
       {% chart %}
        
-	?chxl=1:|dollar(%24)|
-   	&chxp=0,0
-     	 &chxt=y, t
-	&chbh=a,3
+	?chxl=1:|dollar(%24)
+   	&chxp=2,0,
+     	 &chxt=y, y
+     	 &chxr=0,5,100
+		&chbh=a,6	
       &chds=0,{{ category_amount_max }}
   		&chs=400x400
    		&cht=bvs
-   		&chco=aaaaaa
+   		&chco=FF0000|FF5F00|FF9C00|FFC900|FFF100|BAF300|4DDE00|00A383|086FA1|1533AD|4512AE|5E0DAC|8F04A8|BE008A|D8005F|A68600|FFAE73|36BBCE
    		&chd={{ category_amount_values }}
    		&chdl={{ labels }}
-   		&chtt=Category+Transaction+Amounts
+
       {% endchart %}
    </span>
  </div>
@@ -96,17 +95,19 @@ class="active"
 	<span class="amountsellerbuyer">
    	{% load chart_tags %}
       {% chart %}
-   		&chxt=y
-   		&chbh=a,3
+   		?chxl=1:|dollar(%24)
+   	&chxp=2,0,
+     	 &chxt=y, y
+     	 &chxr=0,5,100
+		&chbh=a,6	
   		&chs=400x400
-   		&cht=bvs
-      &chco=4D89F9
+   		&cht=bvg
+      &chco=04B431,2E9AFE,FFFF00
   		&chds= 0,{{ successful_transaction_amount }}
   		&chts=676767,10.5
   		&chg=-1,0
-      &chd=t:{{ buyer_transaction_amount }},{{ seller_transaction_amount}},{{successful_transaction_amount}}
+      &chd=t:{{ buyer_transaction_amount }}|{{ seller_transaction_amount}}|{{successful_transaction_amount}}
       &chdl=Buyers|Sellers|Total
-  		&chtt=Transaction+Amounts+(Average:${{average_transaction_amount}}CAD)
       {% endchart %}
    </span>
  
@@ -119,18 +120,18 @@ class="active"
   <span class="successrate">
     {% load chart_tags %}
       {% chart %}
-	?chxl=1:|Count|
-   	&chxp=0,0
+	?chxl=1:|Count
+   	&chxp=1,0
       ?chxr=0,0,{{number_listings}}
-      &chxt=y, t
-      &chbh=a
+      &chxt=y, y
+      &chbh=a,6
       &chds=0,{{ number_listings }}
       &chs=400x400
       &cht=bvg
-      &chco=A2C180,3D7930,4D89F9,C6D9fD,aaaaaa,bbbbbb
+      &chco=7AEE3C,04B431,A9E2F3, 2E9AFE,F4FA58,FFFF00
       &chd=t:{{number_buyer_surveys}}|{{number_buyer_listings}}|{{number_seller_surveys}}|{{number_seller_listings}}|{{number_surveys}}|{{number_listings}}
-      &chdl=Buyer+Surveys|Buyer+Listing|Seller+Surveys|Seller+Listings|Surveys|Listings
-      &chtt=Transaction+Success+Rate
+      &chdl=Succ.+Buyer+Listing|Buyer+Listing|Succ.+Seller+Listing|Seller+Listings|Succ.+Total+Listing|All+Listings
+   
       {% endchart %}
   </span>
 </div>
