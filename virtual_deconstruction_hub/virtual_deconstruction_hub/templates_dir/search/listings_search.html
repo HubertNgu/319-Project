@@ -16,16 +16,17 @@
             <h3>Search results for "{{ query }}":</h3>
 
             {% for result in page.object_list %}
-        		<p>{{result.object.created|date:"M m"}} - <a href="/listings/{{result.object.url}}"> {{ result.object.title }} </a> - {{ result.object.price }} ({{ result.object.city }}) {{ result.object.category }} - {{ result.object.for_sale }}</p>
+        		<p>{{result.object.created|date:"M m"}} - ${{ result.object.price }} - <a href="/listings/{{result.object.url}}"> {{ result.object.title }} </a> - {{ result.object.city }} - {{ result.object.category|title }} - {% ifequal result.object.for_sale "sell" %}Item For Sale{% else %}Item Wanted{% endifequal %}</p>
+
             {% empty %}
                 <p>No results found.</p>
             {% endfor %}
 
             {% if page.has_previous or page.has_next %}
                 <div>
-                    {% if page.has_previous %}<a href="?q={{ query }}{% if city %}&amp;city={{city}}{% endif %}{% if cat %}&amp;cat={{cat}}{% endif %}{% if for_sale %}&amp;for_sale={{for_sale}}{% endif %}&amp;type={{post_type}}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
+                    {% if page.has_previous %}<a href="?q={{ query }}{% if city %}&amp;city={{city}}{% endif %}{% if category %}&amp;category={{category}}{% endif %}{% if for_sale %}&amp;for_sale={{for_sale}}{% endif %}&amp;type={{post_type}}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
                     |
-                    {% if page.has_next %}<a href="?q={{ query }}{% if city %}&amp;city={{city}}{% endif %}{% if cat %}&amp;cat={{cat}}{% endif %}{% if for_sale %}&amp;for_sale={{for_sale}}{% endif %}&amp;type={{post_type}}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
+                    {% if page.has_next %}<a href="?q={{ query }}{% if city %}&amp;city={{city}}{% endif %}{% if category %}&amp;category={{category}}{% endif %}{% if for_sale %}&amp;for_sale={{for_sale}}{% endif %}&amp;type={{post_type}}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
                 </div>
             {% endif %}
         {% else %}

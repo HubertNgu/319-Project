@@ -101,17 +101,17 @@ class ListingSearchForm(SearchForm):
     searching, however it is necessary to differentiate a 
     listing objects search from a posts objects search)  
     """
-    category = forms.CharField(required=False, widget=forms.Select(choices=get_listings_categories()))
+    category = forms.CharField(required=False, widget=forms.Select(choices=[("", "")]+get_listings_categories()))
     type = forms.CharField(required=False, widget=forms.HiddenInput)
-    for_sale = forms.CharField(required=False, widget=forms.Select(choices=get_sale_categories()))
-    city = forms.CharField(required=False, widget=forms.Select(choices=get_city_categories()))
+    for_sale = forms.CharField(required=False, widget=forms.Select(choices=[("", "")]+get_sale_categories()))
+    city = forms.CharField(required=False, widget=forms.Select(choices=[("", "")]+get_city_categories()))
     q = forms.CharField(required=False, label=('Search'), widget=forms.HiddenInput)
 
     def __init__(self, *args, **kwargs):
         super(ListingSearchForm, self).__init__(*args, **kwargs)
         self.fields['city'].label = "City"
         self.fields['for_sale'].label = "Type of listing"
-        self.fields['cat'].label = "Category"
+        self.fields['category'].label = "Category"
     
     
     def search(self):

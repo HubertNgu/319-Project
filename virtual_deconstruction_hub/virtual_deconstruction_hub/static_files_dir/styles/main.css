@@ -283,14 +283,14 @@ img.left, figure.left {float: right; margin: 0 0 2em 2em;}
 	font-size: 110%; /* Base font size: 14px */
 }
 
-#single_post_photo {
+#single_post_photo img {
 	width:760px;
 }
 
 /**** Individual Listings****/
 #single_listing p {
 	width: 760px;
-}
+} 
 
 #single_listing {
 	/** background: #fff; **/ 
@@ -304,6 +304,10 @@ img.left, figure.left {float: right; margin: 0 0 2em 2em;}
 }
 #single_listing_content {
 	font-size: 110%; 
+}
+
+#single_listing_photo img {
+	width:760px;
 }
 
 /**** Listings Index ****/

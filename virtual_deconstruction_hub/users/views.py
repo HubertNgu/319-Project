@@ -172,7 +172,7 @@ def editaccount(request):
         logtext = "Login"
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
-        return render_to_response("users\login.html",{'logparams':logparams},context_instance=RequestContext(request))
+        return render_to_response("users/login.html",{'logparams':logparams},context_instance=RequestContext(request))
         
     user =request.user
     username = request.user.username
@@ -213,7 +213,7 @@ def editaccount(request):
         description = profile.description
         firstname = profile.firstname
         lastname = profile.lastname
-        return render_to_response("users\editaccount.html",{'username':username,
+        return render_to_response("users/editaccount.html",{'username':username,
                                                       'firstname':firstname,
                                                       'lastname':lastname,
                                                       'email':email,
@@ -236,7 +236,7 @@ def myaccount(request):
         logtext = "Login"
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
-        return render_to_response("users\login.html",{'logparams':logparams},context_instance=RequestContext(request))
+        return render_to_response("users/login.html",{'logparams':logparams},context_instance=RequestContext(request))
          
     if request.method == 'POST':
         return redirect("users.views.editaccount")
@@ -255,7 +255,7 @@ def myaccount(request):
     description = profile.description
     firstname = profile.firstname
     lastname = profile.lastname
-    return render_to_response("users\profile.html",{'username':username,
+    return render_to_response("users/profile.html",{'username':username,
                                                       'firstname':firstname,
                                                       'lastname':lastname,
                                                       'email':email,
@@ -266,7 +266,8 @@ def myaccount(request):
                                                       'description':description,
                                                       'logparams' : logparams},context_instance=RequestContext(request))
     raise Http404
-#this view gets all the listings that the user has                                            
+#this view gets all the listings that the user has  
+                                          
 def listings(request):
     if request.user.is_authenticated():
         logtext = "Logout"
