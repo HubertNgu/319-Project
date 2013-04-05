@@ -14,5 +14,6 @@ urlpatterns = patterns('',
 
     url(r'^(?P<tag>\w+)/$', 'listings.views.detail', name='detail'),
     url(r'^contactSeller/(?P<listing_url>\w+)/$', 'listings.views.contact_seller'),
+    url(r'^edit-verify/$', 'listings.views.edit_verify_listing'),
     url(r"^$", 'listings.views.index'),
     )
