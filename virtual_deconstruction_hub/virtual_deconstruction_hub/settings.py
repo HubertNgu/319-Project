@@ -65,7 +65,7 @@ MEDIA_URL = '/photos/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = os.path.join(PROJECT_PATH, 'static_files_dir')
+#STATIC_ROOT = os.path.join(PROJECT_PATH, 'static_files_dir')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -163,10 +163,13 @@ HAYSTACK_CONNECTIONS = {
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # Host for sending e-mail
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'pop.gmail.com'
 # Port for sending e-mail
 EMAIL_PORT = 587
 # Option SMTP authentication information for EMAIL_HOST.
+#EMAIL_HOST_USER = ''
+#EMAIL_HOST_PASSWORD = ''
+#EMAIL_USE_TLS = False
 EMAIL_HOST_USER = 'ubccs319team4@gmail.com'
 EMAIL_HOST_PASSWORD = '1029384756qpwoeiruty'
 EMAIL_USE_TLS = True
@@ -174,6 +177,8 @@ EMAIL_USE_TLS = True
 LISTINGS_PAGE_SIZE = 100
 POSTS_PAGE_SIZE = 10
 DB_RESULTS_MAX = 2500
+
+FROM_EMAIL = 'from@email.com'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
