@@ -11,13 +11,29 @@ class="active"
 
 {% block base_content %}
 
-Home/Statistics Page
 
 {% block stats_content %}
 
-Here you will find some statistical information
 
-<div class="category_stat">
+<div id = "statistic_text_links">
+
+<div id = "listedmost" class = "itemsinlist" style="margin-top:40px" onclick="listedmost()">
+<label>Items that are Listed the Most</label></div>
+<div id = "highestsale" class = "itemsinlist" onclick="highestsale()">
+<label>Items with the Highest Sales</label></div>
+<div id = "boughtmost" class = "itemsinlist" onclick="boughtmost()">
+<label>Items that are Bought Most</label></div>
+<div id = "averagetransactioneach" class = "itemsinlist" onclick="averagetransactioneach()">
+<label>Average Transaction Amount of Each Item</label></div>
+<div id = "averagetransactionamount" class = "itemsinlist" onclick="averagetransactionamount()">
+<label>Average Transaction Amount</label></div>
+<div id = "transactiontime" class = "itemsinlist" onclick="transactiontime()">
+<label>Average Transaction Time</label></div>
+<div id = "ratesucess" class = "itemsinlist" onclick="ratesucess()">
+<label>Transaction Success Rate</label></div>
+</div>
+
+  <div id= 'surveycategoryrank'>
    <span class="survey_category_rank">
       {% load chart_tags %}
       {% chart %}
@@ -29,7 +45,8 @@ Here you will find some statistical information
          &chtt=Survey+Category+Rank
       {% endchart %}
    </span>
-   
+   </div>
+   <div id = "buyercategoryrank">
    <span class="buyer_category_rank">
       {% load chart_tags %}
       {% chart %}
@@ -41,7 +58,8 @@ Here you will find some statistical information
 		&chco=FF0000|FF5F00|FF9C00|FFC900|FFF100|BAF300|4DDE00|00A383|086FA1|1533AD|4512AE|5E0DAC|8F04A8|BE008A|D8005F|A68600|FFAE73|36BBCE
       {% endchart %}
    </span>
-
+	</div>
+	<div id = "sellercategoryrank">
    <span class="seller_category_rank">
       {% load chart_tags %}
       {% chart %}
@@ -53,16 +71,18 @@ Here you will find some statistical information
 		&chco=FF0000|FF5F00|FF9C00|FFC900|FFF100|BAF300|4DDE00|00A383|086FA1|1533AD|4512AE|5E0DAC|8F04A8|BE008A|D8005F|A68600|FFAE73|36BBCE
       {% endchart %}
    </span>
-      
+     </div>
+     <div id = "categorytransactionamount" >
    <span class="amount">
    	{% load chart_tags %}
       {% chart %}
+       
 	?chxl=1:|dollar(%24)|
    	&chxp=0,0
      	 &chxt=y, t
 	&chbh=a,3
       &chds=0,{{ category_amount_max }}
-  		&chs=300x225
+  		&chs=400x400
    		&cht=bvs
    		&chco=aaaaaa
    		&chd={{ category_amount_values }}
@@ -72,13 +92,13 @@ Here you will find some statistical information
    </span>
  </div>
 
-<div class="amountsellerbuyer">
+<div id="amountsellerbuyer">
 	<span class="amountsellerbuyer">
    	{% load chart_tags %}
       {% chart %}
    		&chxt=y
    		&chbh=a,3
-  		&chs=300x225
+  		&chs=400x400
    		&cht=bvs
       &chco=4D89F9
   		&chds= 0,{{ successful_transaction_amount }}
@@ -89,11 +109,13 @@ Here you will find some statistical information
   		&chtt=Transaction+Amounts+(Average:${{average_transaction_amount}}CAD)
       {% endchart %}
    </span>
+ 
  </div>
+<div id="averagetransactiontime">
+<h1>Average Transaction Time:<br/></h1><center><h1> {{ average_transaction_time }} secs</h1><center>
+</div>
 
-<h1>Average Transaction Time: {{ average_transaction_time }}</h1>
-
-<div class="successrate">
+<div id="successrate">
   <span class="successrate">
     {% load chart_tags %}
       {% chart %}
@@ -103,7 +125,7 @@ Here you will find some statistical information
       &chxt=y, t
       &chbh=a
       &chds=0,{{ number_listings }}
-      &chs=500x300
+      &chs=400x400
       &cht=bvg
       &chco=A2C180,3D7930,4D89F9,C6D9fD,aaaaaa,bbbbbb
       &chd=t:{{number_buyer_surveys}}|{{number_buyer_listings}}|{{number_seller_surveys}}|{{number_seller_listings}}|{{number_surveys}}|{{number_listings}}
@@ -112,6 +134,7 @@ Here you will find some statistical information
       {% endchart %}
   </span>
 </div>
+
 
 {% endblock stats_content %}
 

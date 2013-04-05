@@ -94,7 +94,7 @@ class ListingSearchForm(SearchForm):
     searching, however it is necessary to differentiate a 
     listing objects search from a posts objects search)  
     """
-    cat = forms.CharField(required=False, widget=forms.Select(choices=get_listings_categories()))
+    category = forms.CharField(required=False, widget=forms.Select(choices=get_listings_categories()))
     type = forms.CharField(required=False, widget=forms.HiddenInput)
     for_sale = forms.CharField(required=False, widget=forms.Select(choices=get_sale_categories()))
     city = forms.CharField(required=False, widget=forms.Select(choices=get_city_categories()))
@@ -117,8 +117,8 @@ class ListingSearchForm(SearchForm):
         sqs = super(ListingSearchForm, self).search()
             
         # Check to see if a category was chosen.
-        if self.cleaned_data['cat']:
-            sqs = sqs.filter(category=self.cleaned_data['cat'])
+        if self.cleaned_data['category']:
+            sqs = sqs.filter(category=self.cleaned_data['category'])
             
         # Check to see if a type was chosen.
         if self.cleaned_data['for_sale']:
@@ -150,7 +150,7 @@ class ListingSearchView(SearchView):
         extra = super(ListingSearchView, self).extra_context()
 
         extra['post_type'] = self.request.GET.get('type', None)
-        extra['cat'] = self.request.GET.get('cat', None)
+        extra['category'] = self.request.GET.get('category', None)
         extra['for_sale'] = self.request.GET.get('for_sale', None)
         extra['city'] = self.request.GET.get('city', None)
 

@@ -1,0 +1,173 @@
+<<<<<<< HEAD
+=======
+[2013-04-04 09:59:37,380] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 09:59:37,506] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 10:00:55,496] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 10:00:55,571] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 10:01:56,620] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 10:01:56,697] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 10:02:15,843] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 10:02:15,916] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 10:02:25,031] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 10:02:25,060] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 10:03:07,205] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 10:03:07,291] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 10:03:29,337] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 10:03:29,378] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 10:05:24,938] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 10:05:25,035] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 10:06:04,833] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 10:06:04,962] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 10:07:20,486] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 10:07:20,574] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 10:07:48,513] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 10:07:48,552] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 10:08:28,465] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 10:08:28,553] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 10:08:55,833] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 10:08:55,862] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 10:09:27,436] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 10:09:27,469] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 10:10:13,671] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 10:10:13,812] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 10:11:00,668] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 10:11:00,745] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 12:37:53,746] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 12:37:53,832] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 12:38:21,624] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 12:38:21,762] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 12:38:38,141] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 12:38:38,269] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 12:45:31,976] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 12:45:32,008] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 12:48:41,973] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 12:48:42,051] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 12:50:00,738] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 12:50:00,862] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 12:52:16,197] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 12:52:16,326] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 12:52:49,052] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 12:52:49,085] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 12:53:31,936] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 12:53:31,971] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 12:54:37,189] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 12:54:37,222] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 12:56:04,579] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 12:56:04,710] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 12:56:05,987] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 12:56:06,130] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 12:56:44,566] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 12:56:44,643] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 12:57:41,655] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 12:57:41,817] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 12:58:42,692] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 12:58:42,719] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 12:59:01,743] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 12:59:01,844] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 13:00:20,197] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 13:00:20,291] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 13:00:56,565] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 13:00:56,663] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 13:02:02,939] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 13:02:03,032] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 13:06:31,310] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 13:06:31,379] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 13:09:32,118] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 13:09:32,255] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 13:11:02,164] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 13:11:02,306] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 13:11:37,563] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 13:11:37,656] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 13:16:12,936] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 13:16:13,031] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 13:19:03,740] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 13:19:03,873] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 13:23:21,161] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 13:23:21,289] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 14:49:13,402] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 14:49:13,486] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 14:49:19,508] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 14:49:19,604] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 14:50:31,565] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 14:50:31,656] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 14:53:01,424] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 14:53:01,537] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 14:54:59,033] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 14:54:59,114] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 15:02:54,258] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 15:02:54,334] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 15:04:26,085] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 15:04:26,589] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 15:04:39,371] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 15:04:39,520] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 15:08:17,108] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 15:08:17,189] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 15:10:45,433] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 15:10:45,532] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 15:11:36,158] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 15:11:36,190] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 15:13:10,084] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 15:13:10,210] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 15:13:29,995] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 15:13:30,080] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 15:15:26,144] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 15:15:26,239] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 15:15:35,992] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 15:15:36,103] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 17:58:03,120] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 17:58:03,282] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 17:58:30,910] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 17:58:31,021] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 17:59:25,286] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 17:59:25,436] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 18:00:24,989] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 18:00:25,127] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 18:03:42,436] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 18:03:42,532] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 18:05:47,436] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 18:05:47,532] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 18:07:20,481] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 18:07:20,575] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 18:07:52,234] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 18:07:52,329] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 18:09:12,571] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 18:09:12,657] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 18:09:41,090] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 18:09:41,185] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 18:10:25,923] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 18:10:26,254] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 18:10:45,039] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 18:10:45,127] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 18:11:21,786] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 18:11:21,879] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 18:12:24,677] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 18:12:24,763] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 18:12:49,230] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 18:12:49,367] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 18:13:09,476] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 18:13:09,563] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 18:13:28,374] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 18:13:28,468] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 18:13:53,315] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 18:13:53,401] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 18:15:14,307] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 18:15:14,404] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 18:15:48,139] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 18:15:48,224] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 18:16:02,191] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 18:16:02,288] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 18:16:17,378] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 18:16:17,470] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 18:17:42,850] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 18:17:42,934] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 19:20:30,727] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 19:20:30,815] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 19:21:03,437] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 19:21:03,523] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 19:21:20,035] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 19:21:20,197] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 19:21:45,709] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 19:21:45,794] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+[2013-04-04 19:22:11,310] [DEBUG] (views.py:38): Successfully found the lastest Statistics instance
+[2013-04-04 19:22:11,394] [DEBUG] (views.py:59): Successfully formatted statistics labels and values for graphs
+>>>>>>> c200c18... I make pretty things

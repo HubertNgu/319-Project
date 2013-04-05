@@ -325,3 +325,81 @@ pre {
  font-family: 'Trebuchet MS', Trebuchet, 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
+#statistic_text_links {
+width: 300px;
+height: 400px;
+float:left;
+background:black;
+margin-top:40px;
+border-radius:25px;
+
+}
+
+#statistic_text_links label{
+font-size: 15px;
+font-family: 'Trebuchet MS', Trebuchet, 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+color:white;
+}
+
+.itemsinlist {
+padding-top : 20px;
+height :40px;
+text-align:center;
+}
+
+
+#listedmost{
+background-color: #00dd68;
+}
+
+
+#surveycategoryrank{
+height:400px;
+width: 400px;
+float:right;
+margin-top:80px;
+display:inline;
+}
+
+#successrate{
+height:400px;
+width: 400px;
+float:right;
+margin-top:80px;
+display:none;
+}
+#averagetransactiontime{
+height:400px;
+width: 400px;
+float:right;
+margin-top:80px;
+display:none;
+}
+#amountsellerbuyer{
+height:400px;
+width: 400px;
+float:right;
+margin-top:80px;
+display:none;
+}
+#categorytransactionamount{
+height:400px;
+width: 400px;
+float:right;
+margin-top:80px;
+display:none;
+}
+#sellercategoryrank{
+height:400px;
+width: 400px;
+float:right;
+margin-top:80px;
+display:none;
+}
+#buyercategoryrank{
+height:400px;
+width: 400px;
+float:right;
+margin-top:80px;
+display:none;
+}
