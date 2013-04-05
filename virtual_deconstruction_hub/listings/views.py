@@ -38,8 +38,8 @@ MESSAGES = {'verified_listing': "Your listing has been verified and will be disp
             'edit_success': "Your changes have been saved. You can make further changes to your listing if you wish."}
 
 #PAGE_SIZE = int(constants.listings_results_page_size)
-PAGE_SIZE = int(settings.LISTINGS_PAGE_SIZE)
 #DB_RESULTS_MAX = int(constants.db_max_results)
+PAGE_SIZE = int(settings.LISTINGS_PAGE_SIZE)
 DB_RESULTS_MAX = int(settings.DB_RESULTS_MAX)
 
 def index(request):
@@ -107,7 +107,7 @@ def create_listing(request):
         logtext = "Login"
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
-    submit_action = '/listings/new'
+    submit_action = URL_PATHS.get('listing_new') 
     #create a new upload form that will be rendered to page
     pictureform = UploadForm()
     if request.method == 'GET':
@@ -327,7 +327,7 @@ def multiple_entries_for_testing(number):
     Fill in test data in DB: writes 'number' of listing objects 
     '''
     email = 'seanslipetz@gmail.com'
-    title = ' Test Listing Data '
+    title = ' of ' + str(number) + ' test listings'
     content = """Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nam cursus. Morbi ut mi. Nullam enim leo, egestas id, condimentum at, laoreet mattis, massa. Sed eleifend nonummy diam. Praesent mauris ante, elementum et, bibendum at, posuere sit amet, nibh. Duis tincidunt lectus quis dui viverra vestibulum. Suspendisse vulputate aliquam dui. Nulla elementum dui ut augue. Aliquam vehicula mi at mauris. Maecenas placerat, nisl at consequat rhoncus, sem nunc gravida justo, quis eleifend arcu velit quis lacus. Morbi magna magna, tincidunt a, mattis non, imperdiet vitae, tellus. Sed odio est, auctor ac, sollicitudin in, consequat vitae, orci. Fusce id felis. Vivamus sollicitudin metus eget eros.
 Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In posuere felis nec tortor. Pellentesque faucibus. Ut accumsan ultricies elit. Maecenas at justo id velit placerat molestie. Donec dictum lectus non odio. Cras a ante vitae enim iaculis aliquam. Mauris nunc quam, venenatis nec, euismod sit amet, egestas placerat, est. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Cras id elit. Integer quis urna. Ut ante enim, dapibus malesuada, fringilla eu, condimentum quis, tellus. Aenean porttitor eros vel dolor. Donec convallis pede venenatis nibh. Duis quam. Nam eget lacus. Aliquam erat volutpat. Quisque dignissim congue leo.
 Mauris vel lacus vitae felis vestibulum volutpat. Etiam est nunc, venenatis in, tristique eu, imperdiet ac, nisl. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In iaculis facilisis massa. Etiam eu urna. Sed porta. Suspendisse quam leo, molestie sed, luctus quis, feugiat in, pede. Fusce tellus. Sed metus augue, convallis et, vehicula ut, pulvinar eu, ante. Integer orci tellus, tristique vitae, consequat nec, porta vel, lectus. Nulla sit amet diam. Duis non nunc. Nulla rhoncus dictum metus. Curabitur tristique mi condimentum orci. Phasellus pellentesque aliquam enim. Proin dui lectus, cursus eu, mattis laoreet, viverra sit amet, quam. Curabitur vel dolor ultrices ipsum dictum tristique. Praesent vitae lacus. Ut velit enim, vestibulum non, fermentum nec, hendrerit quis, leo. Pellentesque rutrum malesuada neque.

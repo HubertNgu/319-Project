@@ -12,7 +12,7 @@ urlpatterns = patterns('',
     # domain.com/listings/new
     #===========================================================================    
 
-    url(r"^$", 'listings.views.index'),
     url(r'^(?P<tag>\w+)/$', 'listings.views.detail', name='detail'),
     url(r'^contactSeller/(?P<listing_url>\w+)/$', 'listings.views.contact_seller'),
+    url(r"^$", 'listings.views.index'),
     )

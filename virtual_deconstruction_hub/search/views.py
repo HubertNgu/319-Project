@@ -1,6 +1,6 @@
 from django.http import Http404
 from listings.models import Listing
-from haystack.forms import SearchForm, FacetedSearchForm
+from haystack.forms import SearchForm
 from haystack.query import SearchQuerySet 
 from haystack.views import SearchView, search_view_factory
 from haystack.inputs import AutoQuery, Exact
@@ -8,8 +8,15 @@ from listings.models import get_listings_categories, get_sale_categories, get_ci
 from django import forms
 from django.conf import settings
 import logging
-
+ 
 logger = logging.getLogger(__name__)
+
+#POSTS_PAGE_SIZE = int(constants.posts_results_page_size)
+#LISTINGS_PAGE_SIZE = int(constants.listings_results_page_size)
+#DB_RESULTS_MAX = int(constants.db_max_results)
+POSTS_PAGE_SIZE = int(settings.POSTS_PAGE_SIZE)
+LISTINGS_PAGE_SIZE = int(settings.LISTINGS_PAGE_SIZE)
+DB_RESULTS_MAX = int(settings.DB_RESULTS_MAX)
 
 # Dictionary of pairings for relative template paths. Every rendering of a template for a search references it's specific key and uses the associated
 # template path from this dictionary. For example, a listings search will use the callue associated with the 'listings_results' key if asked 
@@ -128,7 +135,7 @@ class ListingSearchForm(SearchForm):
         if self.cleaned_data['city']:
             sqs = sqs.filter(city=self.cleaned_data['city'])
 
-        return sqs.order_by('-last_modified')
+        return sqs.order_by('-last_modified')[:DB_RESULTS_MAX]
     
     
 class ListingSearchView(SearchView):
@@ -140,7 +147,7 @@ class ListingSearchView(SearchView):
     """    
     def __init__(self, *args, **kwargs):
         super(ListingSearchView, self).__init__(*args, **kwargs)
-        results_per_page = int(settings.LISTINGS_PAGE_SIZE) 
+        results_per_page = LISTINGS_PAGE_SIZE 
         if not results_per_page is None:
             self.results_per_page = results_per_page
     
@@ -179,7 +186,7 @@ class PostSearchForm(SearchForm):
         if self.cleaned_data.get('type', None):
             sqs = sqs.filter(type=self.cleaned_data['type'])
 
-        return sqs.order_by('-created')
+        return sqs.order_by('-created')[:DB_RESULTS_MAX]
     
 class PostSearchView(SearchView):
     """ An extension of the default search results view.
@@ -190,7 +197,7 @@ class PostSearchView(SearchView):
     """
     def __init__(self, *args, **kwargs):
         super(PostSearchView, self).__init__(*args, **kwargs)
-        results_per_page = int(settings.POSTS_PAGE_SIZE) 
+        results_per_page = POSTS_PAGE_SIZE
         if not results_per_page is None:
             self.results_per_page = results_per_page
     
