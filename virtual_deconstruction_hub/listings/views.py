@@ -143,7 +143,7 @@ def create_listing(request):
             listing.save()
             listingid = listing.id
             logger.debug('format', "createListing: debug")
-        form = UploadForm(request.POST, request.FILES)
+        
         if request.POST.get("notnewlisting") != None:
                 listingid = request.POST.get("listingid")
                 listing = Listing.objects.get(id = listingid )
@@ -198,6 +198,7 @@ def edit_verify_listing(request):
         logtext = "Login"
         accounttext = "Sign Up"
         logparams=[logtext,accounttext]
+    pictureform = UploadForm()
     listing_id = request.GET.get('listing_id')
     uuid = request.GET.get('uuid')
     #action for submit button
@@ -209,13 +210,13 @@ def edit_verify_listing(request):
         listing = get_object_or_404(Listing, id=str(listing_id))
     except:
         raise Http404
-    try:
-        listpictures =list()
-        for o in Photo.objects.filter(listing_id = listing_id): 
+    listpictures =list()
+    if request.method == 'GET':   
+        try:
+            for o in Photo.objects.filter(listing_id = listing_id): 
                     listpictures.append(o.photo.name)
-    except:
-        listpictures = None
-    if request.method == 'GET':      
+        except:
+            listpictures = None   
         if not listing.is_verified():   
             if listing and (listing.get_uuid() == str(uuid)):
                 listing.mark_verified()
@@ -228,23 +229,38 @@ def edit_verify_listing(request):
         #post verified by this point, render edit page with message
         edit_form = EditListingForm(instance=listing)
 
-        form_args = {'form':edit_form, 'message': message, 'submit_action': submit_action, 'logparams':logparams, 'listing': listing,'listpictures':listpictures}
+        form_args = {'form':edit_form, 'message': message, 'submit_action': submit_action, 
+                     'logparams':logparams, 'listing': listing,'listpictures':listpictures,
+                     'pictureform':pictureform
+                     }
         return render_to_response(TEMPLATE_PATHS.get("listings_edit"), form_args, context_instance=RequestContext(request))
 
         
     if request.method == 'POST':
+        form = UploadForm(request.POST, request.FILES)
         edit_form = EditListingForm(request.POST, instance=listing)
         #if post_form valid, process new post
         if edit_form.is_valid():
             listing_url = HttpRequest.build_absolute_uri(request, edit_form.cleaned_data.get('url'))
             edit_form.save()
+            if form.is_valid():
+                photo = Photo(photo = request.FILES['picture'], listing = listing )
+                photo.save()    
+            #if user wants to add another picture        
+            if request.POST.get('pictureform') == "1" and request.POST.get("issubmit") != 1:
+                photolist = Photo.objects.filter(listing_id = listing.id)
+                addanotherprevious = list()
+                #get all the names of the previously added pictures
+                for o in Photo.objects.filter(listing_id = listing.id): 
+                    listpictures.append(o.photo.name)
             # This redirects back to edit form, should change to a render_to_response with a message that edit successful
-            form_args = {'form':edit_form, 'submit_action':submit_action, 'message':MESSAGES.get('edit_success'), 'listing_url': listing_url, 'logparams':logparams, 'listpictures':listpictures}
+            form_args = {'form':edit_form, 'submit_action':submit_action, 'message':MESSAGES.get('edit_success'), 'listing_url': listing_url, 'logparams':logparams,
+                         'pictureform':pictureform, 'listpictures':listpictures}
             return render_to_response(TEMPLATE_PATHS.get("listings_edit"), form_args, context_instance=RequestContext(request))
         else:
             # if form submission not valid, redirect back to form with error messages
             form_args = {'form':edit_form, 'submit_action':submit_action, 'message':None, 'logparams':logparams,
-                           'listpictures':listpictures}
+                           'listpictures':listpictures, 'pictureform':pictureform}
             return render_to_response(TEMPLATE_PATHS.get("listings_edit"), form_args, context_instance=RequestContext(request)) 
 
 

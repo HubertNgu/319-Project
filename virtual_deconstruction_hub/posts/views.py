@@ -221,23 +221,24 @@ def edit_verify_post(request):
     # try to get the specified post from the database,
     # raise 404 error if not found.
     post = get_object_or_404(Post, id=str(post_id))
-    
-    try:
-        listpictures =list()
-        for o in Photo.objects.filter(post_id = post_id): 
-                    listpictures.append(o.photo.name)
-    except:
-        listpictures = None
-
+   
+    pictureform = UploadForm()
+    listpictures =list()
     if request.method == 'GET':     
         # if post hasn't been verified yet and the id and uuid
         # in the url query string are correct, mark as verified
         # set verified message and redirect to post edit form. 
+         
+        try:
+            for o in Photo.objects.filter(post_id = post_id): 
+                    listpictures.append(o.photo.name)
+        except:
+            listpictures = None
         if not post.is_verified():   
             if post and (post.get_uuid() == str(uuid)):
-                post.mark_verified()
-                post.save()
-                message = MESSAGES.get('verified_post')
+                 post.mark_verified()
+                 post.save()
+                 message = MESSAGES.get('verified_post')
             else:
                 # the post_id and uuid provided do not match anything in db correctly
                 # so redirect to 404 as this page doesn't exist for this combination
@@ -246,16 +247,27 @@ def edit_verify_post(request):
         edit_form = EditPostForm(instance=post)
         delete_button = URL_PATHS.get('posts_delete-verify') + '?post_id=' + str(post.id) + '&uuid=' + uuid
         form_args = {'form':edit_form, 'message': message, 'submit_action': submit_action, 'post_type_title':POST_TYPE_TITLES.get(post.get_type()), 'logparams': logparams, 
-                     'post_type': post.get_type(), 'delete_button': delete_button, 'listpictures':listpictures}
+                     'post_type': post.get_type(), 'delete_button': delete_button, 'listpictures':listpictures, 'pictureform' : pictureform}
         return render_to_response(TEMPLATE_PATHS.get("posts_edit"), form_args, context_instance=RequestContext(request))
         
     if request.method == 'POST':
         edit_form = EditPostForm(request.POST, instance=post)
+        form = UploadForm(request.POST, request.FILES)
         #if post_form valid, process new post
-        delete_button = URL_PATHS.get('posts_delete-verify') + '?post_id=' + + str(post.id) + '&uuid=' + uuid
+        delete_button = URL_PATHS.get('posts_delete-verify') + '?post_id='  + str(post.id) + '&uuid=' + uuid
         if edit_form.is_valid():
             post_url = HttpRequest.build_absolute_uri(request, edit_form.cleaned_data.get('url'))
             edit_form.save()
+            if form.is_valid():
+                photo = Photo(photo = request.FILES['picture'], post = post )
+                photo.save()    
+            #if user wants to add another picture        
+            if request.POST.get('pictureform') == "1" and request.POST.get("issubmit") != 1:
+                photolist = Photo.objects.filter(post_id = post.id)
+                addanotherprevious = list()
+                #get all the names of the previously added pictures
+                for o in Photo.objects.filter(post_id = post.id): 
+                    listpictures.append(o.photo.name)
             # This redirects back to edit form with edit success message
             form_args = {'form':edit_form, 'submit_action':submit_action, 
                          'message':MESSAGES.get('edit_success'),
@@ -263,7 +275,8 @@ def edit_verify_post(request):
                           'post_url': post_url, 'post_type': post.get_type(),
                            'logparams' : logparams, 
                            'delete_button': delete_button,
-                           'listpictures':listpictures}
+                           'listpictures':listpictures,
+                           'pictureform' : pictureform}
             return render_to_response(TEMPLATE_PATHS.get("posts_edit"), form_args, 
                                       context_instance=RequestContext(request))
         else:
