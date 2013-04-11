@@ -1,0 +1,7 @@
+echo 'DROP DATABASE vdhqwerty' | mysql -u root -pvdh
+echo 'CREATE DATABASE vdhqwerty' | mysql -u root -pvdh
+python manage.py syncdb
+python db.py > out
+mysql -u root -pvdh vdhqwerty < out
+python manage.py generate_statistics
+echo Done

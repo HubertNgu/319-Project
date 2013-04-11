@@ -1,0 +1,174 @@
+#!/bin/bash -x
+
+# This is a script to automatically install and configure django, apache and the VDH system
+# on the machine.
+
+# Ask if user wants to install an appache web server
+#echo "Do you need to install an Appache webserver? (yes/no)"
+#read appachesetup
+#if [ $appachesetup = $"yes" ]; then
+#	sudo apt-get install appache2 libapache2-mod-wsgi
+#fi
+
+# Ask if user wants to install a local mysql server
+echo "Do you need to install a local MySQL database? (yes/no)"
+read mysqlsetup
+if [ $mysqlsetup = $"yes" ]; then
+	sudo apt-get install mysql-server
+fi
+
+#Install other necessary components
+sudo apt-get install python-setuptools libmysqlclient-dev python-dev sed
+
+# extract the VHD files from the archive
+mkdir VDH
+tar -xvpf vdh-deploy.tar.gz -C VDH/
+
+# Change into the django directory
+cd "$(dirname "$0")"/Django-1.4.3
+
+# Run the setup commands
+sudo easy_install -U distribute
+sudo python setup.py install
+sudo easy_install PIL
+sudo easy_install reportlab
+sudo easy_install django-chart-tools
+sudo easy_install whoosh
+sudo easy_install MySQL-python
+
+# Go back to parent directory
+cd ..
+
+# Ask user for their MySQL address so we can setup the database,
+echo "Please enter your MySQL host address (or leave empty for localhost):"
+read sqladdress
+
+echo "Please enter your MySQL host port (or leave empty for default):"
+read sqlport
+ 
+# Ask user for their MySQL root password so we can setup the database
+echo "Please enter your MySQL Server root password:"
+read sqlpass
+
+# Ask user to provide a MySQL database name to use
+echo "Please provide a MySQL database name to use:"
+read sqldbname
+
+# Ask if user wants to create a new database or not
+echo "Do you want to create a new database to use? (yes/no)"
+read mysqlnewdb
+if [ $mysqlnewdb = $"yes" ]; then
+	# login to myql server as root and create the database name specified
+	mysql --host=$sqladdress --port=$sqlport --user=root -p$sqlpass -Bse "CREATE DATABASE $sqldbname;"
+fi
+
+
+# Change into the VDH directory
+cd "$(dirname "$0")"/VDH
+
+# Use the provided database info from user to set projects settings.py file
+sed -i 's/DATABSE_NAME/'$sqldbname'/g' virtual_deconstruction_hub/settings.py
+
+# Use the provided database info from user to set projects settings.py file
+sed -i 's/DATABSE_USER/root/g' virtual_deconstruction_hub/settings.py
+
+# Use the provided database info from user to set projects settings.py file
+sed -i 's/DATABSE_PASSWORD/'$sqlpass'/g' virtual_deconstruction_hub/settings.py
+
+# Use the provided database info from user to set projects settings.py file
+sed -i 's/DATABSE_HOST/'$sqladdress'/g' virtual_deconstruction_hub/settings.py
+
+# Use the provided database info from user to set projects settings.py file
+sed -i 's/DATABSE_PORT/'$sqlport'/g' virtual_deconstruction_hub/settings.py
+
+# build the database tables on the Django models
+sudo python manage.py syncdb
+
+# Ask user to enter the domain name for the root of the site
+echo "Please enter the domain name for the root of the site (ie vdh.com, example.ca)"
+read vdhdomain
+# Set the provided domain in the sites db
+mysql --host=$sqladdress --port=$sqlport --user=root -p$sqlpass $sqldbname -Bse "UPDATE django_site SET domain='$vdhdomain', name='$vdhdomain' WHERE id='1';"
+
+
+# Ask user for their Email server address so we can setup the database,
+echo "Please enter your Email server address:"
+read emailhost
+
+echo "Please enter your Email server port:"
+read emailport
+
+# Ask user for their Email server username so we can setup the database
+echo "Please enter your Email server username:"
+read emailuser
+ 
+# Ask user for their Email server password so we can setup the database
+echo "Please enter your Email server password:"
+read emailpass
+
+# Ask if user wants to use TLS for emails or not
+echo "Enable TLS? Please enter either True or False"
+read emailtls
+
+
+
+# Change into the VDH directory
+cd "$(dirname "$0")"/VDH
+
+# Use the provided database info from user to set projects settings.py file
+sed -i 's/DATABSE_NAME/'$sqldbname'/g' virtual_deconstruction_hub/settings.py
+
+# Use the provided database info from user to set projects settings.py file
+sed -i 's/DATABSE_USER/root/g' virtual_deconstruction_hub/settings.py
+
+# Use the provided database info from user to set projects settings.py file
+sed -i 's/DATABSE_PASSWORD/'$sqlpass'/g' virtual_deconstruction_hub/settings.py
+
+# Use the provided database info from user to set projects settings.py file
+sed -i 's/DATABSE_HOST/'$sqladdress'/g' virtual_deconstruction_hub/settings.py
+
+# Use the provided database info from user to set projects settings.py file
+sed -i 's/DATABSE_PORT/'$sqlport'/g' virtual_deconstruction_hub/settings.py
+
+
+# Use the provided email info from user to set projects settings.py file
+sed -i 's/EMAILHOST/'$emailhost'/g' virtual_deconstruction_hub/settings.py
+
+# Use the provided email info from user to set projects settings.py file
+sed -i 's/EMAILPORT/'$emailport'/g' virtual_deconstruction_hub/settings.py
+
+# Use the provided email info from user to set projects settings.py file
+sed -i 's/EMAILHOSTUSER/'$emailuser'/g' virtual_deconstruction_hub/settings.py
+
+# Use the provided email info from user to set projects settings.py file
+sed -i 's/EMAILHOSTPASSWORD/'$emailpass'/g' virtual_deconstruction_hub/settings.py
+
+# Use the provided email info from user to set projects settings.py file
+sed -i 's/EMAILUSETLS/'$emailtls'/g' virtual_deconstruction_hub/settings.py
+
+
+# pull in the static files directories to project, needed to pull in admin styles
+sudo python manage.py collectstatic
+
+# setup a cronjob to run sudo python manage.py update-index
+sudo cat '*/15 *	* * *	root	python "$(dirname "$0")"/manage.py update_index --remove' >> /etc/crontab
+# setup a cronjob to run sudo python manage.py email_surveys
+sudo cat '30 18	* * *:	root	python "$(dirname "$0")"/manage.py email_surveys' >> /etc/crontab
+# setup a cronjob to run sudo python manage.py generate_statistics
+sudo cat '30 18	* * *:	root	python "$(dirname "$0")"/manage.py generate_statistics' >> /etc/crontab
+
+echo "Congratulations, you should not have a working Virtual Deconstruction Hub system. All that remains is to point your WSGI compatible webserver to the system and allow access to the following directories:"
+echo "/Path/to/VDH/virtual_deconstruction_hub/virtual_deconstruction_hub/static_files_dir"
+echo "/Path/to/VDH/virtual_deconstruction_hub/virtual_deconstruction_hub/templates_dir"
+echo "/Path/to/VDH/virtual_deconstruction_hub/virtual_deconstruction_hub/photo_uploads"
+echo
+echo "This process varies greatly depending on the webserver in use and so cannot be automatically configured by this setup script. However, to test that everything else is working, you can run the development server. Would you like to do this now?"
+read startserver
+
+if [ $startserver = $"yes" ]; then
+	#start dev server to test
+	echo "You can now test the system by going to http://127.0.0.1:8000 in your browser."
+	sudo python manage.py runserver 0.0.0.0:8000
+fi
+
+

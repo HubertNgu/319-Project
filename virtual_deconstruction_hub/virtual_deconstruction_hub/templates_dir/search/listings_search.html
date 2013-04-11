@@ -1,6 +1,7 @@
 {% extends 'listings/listings_index.html' %}
 
 {% block base_content %}
+<br>
     <b>Search filters:</b>
     <form method="get" action=".">
         <table>
@@ -16,7 +17,9 @@
             <h3>Search results for "{{ query }}":</h3>
 
             {% for result in page.object_list %}
+                {% if result.object %}
         		<p>{{result.object.created|date:"M m"}} - ${{ result.object.price }} - <a href="/listings/{{result.object.url}}"> {{ result.object.title }} </a> - {{ result.object.city }} - {{ result.object.category|title }} - {% ifequal result.object.for_sale "sell" %}Item For Sale{% else %}Item Wanted{% endifequal %}</p>
+                {% endif %}
 
             {% empty %}
                 <p>No results found.</p>

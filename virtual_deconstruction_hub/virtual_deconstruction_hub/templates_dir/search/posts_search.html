@@ -6,6 +6,7 @@
             <h3>Search results for "{{ query }}":</h3>
 
             {% for result in page.object_list %}
+            {% if result.object %}
 			<div id="featured_blog" class="body">
 				<article>
 					{% if result.object.photo_set.all %}
@@ -14,13 +15,15 @@
 						</div>
 					{% endif %}
 					<hgroup>
+                        <p class="date"><i>{{ result.object.last_modified }}</i></p>
 						<h3><pre><a href="/posts/{{result.object.type}}/{{ result.object.get_url }}">{{ result.object.title|truncatechars:35 }}</a></pre></h3>
-						<p><i>{{ result.object.last_modified }}</i></p>
 					</hgroup>
 					<p><pre>{{ result.object.text_content|truncatechars:450 }}</pre></p>
 				</article>
 			</div>
-			<hr style="width:100%" > 
+			<hr style="width:100%" >
+			{% endif %}
+			
             {% empty %}
                 <p>No results found.</p>
             {% endfor %}

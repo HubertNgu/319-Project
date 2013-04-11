@@ -22,8 +22,8 @@ class="active"
 		</div>
 		{% endif %}
 		<hgroup>
+			<p class="date"><i>{{ post.last_modified }}</i></p>
 			<h3><a href="/posts/{{post.type}}/{{ post.get_url }}">{{ post.title }}</a></h3>
-			<p><i>{{ post.last_modified }}</i></p>
 		</hgroup>
 		<p><pre>{{ post.text_content|truncatechars:450 }}</pre></p>
 	</article>
@@ -37,8 +37,8 @@ class="active"
 	<div id="home_listings_title"><h2>Most Recent Listings:</h2></div>
 	 	<div id="featured_listing" class="body">
  		{% for l in listings %}
+ 				<p class="date"><i>{{ l.last_modified }}</i></p>
 			 	<h3><a href="/listings/{{ l.get_url }}">{{ l.title }}</a></h3>
-			 	<p><i>{{ l.last_modified }}</i></p>
 				<p><pre>{{ l.text_content|truncatechars:200 }}</pre></p>
 				<br />
 				<hr />		 
