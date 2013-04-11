@@ -173,7 +173,7 @@ def new_post(request, post_type):
         # type whenever a single one is created from the web, just used to 
         # populate db for testing purposes
         #====================================================================
-        multiple_entries_for_testing(100)
+        #multiple_entries_for_testing(10000)
 
         if post.is_verified():
             # if post is already verified, redirect user to their newly created post
@@ -349,7 +349,7 @@ def posts_specific(request, post_type, tag):
     is raised.
 
     Arguments:
-    
+     
     request -- the HTTP request from the users browser
     tag -- the url tag of the post to be displayed
     """
@@ -501,7 +501,7 @@ Maecenas aliquet velit vel turpis. Mauris neque metus, malesuada nec, ultricies 
             ver=False
         if i%4 == 0:
             post_type='proj'
-        p = Post(creator=email, title = str(i) + " - " + title, text_content=content, type=post_type, verified = ver)
+        p = Post(creator=email, title = str(i) + title, text_content=content, type=post_type, verified = ver)
         p.set_url( tag_maker('_', p) )
         p.save()
     return

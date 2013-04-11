@@ -6,7 +6,7 @@
 
         <ul>
         {% for listing in listings %}
-            <li><b>{{ listing.title }}</b> {{listing.created}}<a style="margin-left:20px" href="/listings/{{listing.get_url}}">View</a><a style="margin-left:20px" href="/listings/edit-verify?listing_id={{ listing.id }}&uuid={{ listing.uuid }}">Edit</a>{% if listing.verified == 0%}<b>Not Verified!</b>{% endif %}</li>
+            <li><b>{{ listing.title }}</b> {{listing.created}}<a style="margin-left:20px" href="/listings/{{listing.get_url}}">View</a><a style="margin-left:20px" href="/edit-verify?listing_id={{ listing.id }}&uuid={{ listing.uuid }}">Edit</a>{% if listing.verified == 0%}<b>Not Verified!</b>{% endif %}</li>
         {% endfor %}
         </ul>
     

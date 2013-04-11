@@ -233,6 +233,10 @@ img.left, figure.left {float: right; margin: 0 0 2em 2em;}
 #featured_blog h3 a:link, #featured h3 a:visited {color: #000305; text-decoration: none;}
 #featured_blog h3 a:hover, #featured h3 a:active {color: #fff;}
 
+.date {
+	text-align: right;
+}
+
 /***  Home Page - Recent Listings  ***/
 #featured_listing {
 /** background: #fff; **/
