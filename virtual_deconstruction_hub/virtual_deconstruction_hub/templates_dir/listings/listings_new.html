@@ -26,8 +26,19 @@ Create a new listing - Virtual Deconstruction Hub
 <table>
 {{ form.as_table }}
 </table>
+<div>
+<div id="pictureDiv" style="float:left;display:inline" >
+{% if pictureform != None %}
 {{pictureform.as_p}}
+{% endif %}
+</div>
+<div >
+<input id="addAnotherButton" type="button" onclick= "if (!addAnotherPicture()){ return false;}new_post_form.submit();" value="Add Selected Picture" />
+</div>
+</div>
+<br />
 {% if addanotherprevious != None %}
+<br /><br />
 {% for item in addanotherprevious %}
 <li> Added {{item}} </li>
 
@@ -43,10 +54,17 @@ Create a new listing - Virtual Deconstruction Hub
 
 {% endfor %}
 {% endif %}
-<input type="submit" value="Submit" />
-<button onclick= "return addAnotherPicture()">Add Another Picture</button>
+<br />
+<br />
+<input style="margin-left:20%" type="submit" value="Submit" />
 </form>
-
+<script type="text/javascript" >
+    $("#pictureDiv").find("p").css("width", "400px");
+    if ($("#pictureDiv").find("ul.errorlist").find("li").first().val() != undefined)
+        $("#addAnotherButton").css("margin-top", "45px");
+    else
+        $("#addAnotherButton").css("margin-top", "14px");
+</script>
 {% endblock listings_content %}
 
 

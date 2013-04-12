@@ -12,9 +12,6 @@ error.style.display = "none";
 document.getElementById('password').style.border = "";
 document.getElementById('confirmpassword').style.border = "";
 document.getElementById('email').style.border = "";
-document.getElementById('address').style.border = "";
-document.getElementById('city').style.border = "";
-document.getElementById('province').style.border = "";
 
 if (document.getElementById('sameusername'))
     document.getElementById('sameusername').style.display = "none";
@@ -45,21 +42,6 @@ if(document.getElementById('password').value != document.getElementById('confirm
 	return false;
 }
 
-if(document.getElementById('address').value == "" ){
-    showErrorAndFocus(error, "You must enter an address", document.getElementById('address'));
-	return false;
-}
-
-if(document.getElementById('city').value == "" ){
-    showErrorAndFocus(error, "You must select a city", document.getElementById('city'));
-	return false;
-}
-
-if(document.getElementById('province').value == "" ){
-    showErrorAndFocus(error, "You must select a province", document.getElementById('province'));
-	return false;
-}
-
 return true;
 }
 
@@ -68,9 +50,6 @@ function onEditClick(){
     error.style.display = "none";
     document.getElementById('password').style.border = "";
     document.getElementById('confirmpassword').style.border = "";
-    document.getElementById('address').style.border = "";
-    document.getElementById('city').style.border = "";
-    document.getElementById('province').style.border = "";
     var checkemail  = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
  
     if(document.getElementById('password').value != "" && document.getElementById('password').value != document.getElementById('confirmpassword').value){
@@ -79,21 +58,6 @@ function onEditClick(){
         document.getElementById('password').style.border = "2px solid #CD0A0A";
         document.getElementById('confirmpassword').style.border = "2px solid #CD0A0A";
         document.getElementById('confirmpassword').focus();
-        return false;
-    }
-
-    if(document.getElementById('address').value == "" ){
-        showErrorAndFocus(error, "You must enter an address", document.getElementById('address'));
-        return false;
-    }
-
-    if(document.getElementById('city').value == "" ){
-        showErrorAndFocus(error, "You must select a city", document.getElementById('city'));
-        return false;
-    }
-
-    if(document.getElementById('province').value == "" ){
-        showErrorAndFocus(error, "You must select a province", document.getElementById('province'));
         return false;
     }
 }
@@ -124,8 +88,8 @@ function checkLogin(){
 function checkNewPost(){
     document.getElementById('id_title').style.border = "";
     document.getElementById('id_price').style.border = "";
-    document.getElementById('detail_address').style.border = "";
-    document.getElementById('detail_text_content').style.border = "";
+    document.getElementById('id_address').style.border = "";
+    document.getElementById('id_text_content').style.border = "";
     error = document.getElementById('error');
     
     if(document.getElementById('id_title').value == "" ){
@@ -133,8 +97,8 @@ function checkNewPost(){
         return false;
     }
 
-    if(document.getElementById('detail_text_content').value == "" ){
-        showErrorAndFocus(error, "Please enter enter a description", document.getElementById('detail_text_content'));
+    if(document.getElementById('id_text_content').value == "" ){
+        showErrorAndFocus(error, "Please enter enter a description", document.getElementById('id_text_content'));
         return false;
     }
 } 
@@ -203,6 +167,7 @@ function setDDL(ddl, value)
  alert("You must choose a file to add");
  return false;
  }
+ return true;
  }
  
   function setSubmitTrue()

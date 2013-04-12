@@ -135,11 +135,6 @@ class ListingForm(ModelForm):
         self.fields['city'].label = "City"
         self.fields['text_content'].label = "Description"
         self.fields['for_sale'].label = "Type of listing"
-        # setting attribute names for css
-        self.fields['address'].widget.attrs.update({'id' : 'detail_address'})
-        self.fields['city'].widget.attrs.update({'id' : 'detail_city'})
-        self.fields['text_content'].widget.attrs.update({'id' : 'detail_text_content'})
-        self.fields['for_sale'].widget.attrs.update({'id' : 'detail_type'})
         self.fields['price'].label = "Price $"
 
     

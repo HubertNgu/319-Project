@@ -35,20 +35,20 @@
      <label style = "line-height:26px">Province:</label><br/>
    </div>
    <div style = "margin-left:4px"  >
-   <input type = "text" name = "email" id = "email"/><br/>
+   <input type = "text" name = "email" id = "email" maxlength="100" /><br/>
   
-   <input type = "text" name = "firstname" id = "firstname"/><br/>
-   <input type = "text" name = "lastname" id = "lastname"/><br/>
+   <input type = "text" name = "firstname" id = "firstname" maxlength="50" /><br/>
+   <input type = "text" name = "lastname" id = "lastname" maxlength="50" /><br/>
 
-   <input type = "password" name = "password" id = "password"/><br/>
+   <input type = "password" name = "password" id = "password" /><br/>
                  
    
    <input type = "password" name = "confirmpassword" id = "confirmpassword"/><br/>
                 
-   <input type = "text" onkeypress="return isNumberKey(event)" name = "phone" id = "phone"/><br/>
+   <input type = "text" onkeypress="return isNumberKey(event)" name = "phone" id = "phone" maxlength="10"/><br/>
    
   
-   <input type = "text" name = "address" id = "address"/><br/>
+   <input type = "text" name = "address" id = "address" maxlength="50"/><br/>
      <select name = "city" id = "city"/><br/>
     <option value="Abbotsford">Abbotsford</option>
 	<option value="Anmore">Anmore</option>
@@ -91,8 +91,9 @@
 </select><br/>
     </div>             
                  
-                 
+    <div style="padding-left:10%" >          
       <input type="submit" value="Create an Account">
+    </div>
   </form>
 
 </div>

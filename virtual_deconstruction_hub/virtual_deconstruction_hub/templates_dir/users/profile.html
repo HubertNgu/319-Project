@@ -2,16 +2,30 @@
 
 {% block account_content %}
 
-    <label> First Name: </label> {{firstname}}<br/>
-    <label> Last Name: </label> {{lastname}}<br/>
-    <label> Email: </label>  {{email}}<br/>
-    <label> Phone Number: </label> {{phone}}<br/>
-    <label> Address: </label> {{address}}<br/>
-    <label> City: </label> {{city}}<br/>
-    <label> Province: </label> {{province}}<br/>
+<div style="line-height:22px" >
+    <div style="font-weight:bold;text-align:right;float:left;width:150px;padding-right:20px" >
+        <label> First Name: </label> <br/>
+        <label> Last Name: </label> <br />
+        <label> Email: </label>  <br />
+        <label> Phone Number: </label> <br />
+        <label> Address: </label> <br />
+        <label> City: </label> <br />
+        <label> Province: </label> <br />
+    </div>
+    <div>
+        {{firstname}}<br/>
+        {{lastname}}<br/>
+        {{email}}<br/>
+        {{phone}}<br/>
+        {{address}}<br/>
+        {{city}}<br/>
+        {{province}}<br/>
+    </div>
+</div>
+<br />
+<form action="" method="post">
+  {% csrf_token %}
+  <input style="margin-left:20%" type="submit" value="Edit Your Profile"> 
+</form>
 
-    <form action="" method="post">
-      {% csrf_token %}
-      <input type="submit" value="Edit Your Account"> 
-    </form>
 {% endblock account_content %}

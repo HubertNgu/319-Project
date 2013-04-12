@@ -46,9 +46,9 @@ def send_survey_email(url, userEmail):
     email.save()
     return
    
-def send_signup_verification_email(url, userEmail):
+def send_signup_verification_email(url, userEmail, firstname):
     sub = SUBJECT_MAPPINGS.get('signup')
-    context = {"url": url }
+    context = {"url": url, "firstname": firstname}
     msg = render_to_string('mailer/signupTemplate.txt', context)
     fromEmail = settings.FROM_EMAIL
     send_mail(sub, msg, fromEmail, [userEmail], fail_silently=False)

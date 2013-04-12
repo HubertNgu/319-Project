@@ -2,11 +2,11 @@
 
 
 
-{% block posts_content %}
+{% block create_link %}
+{% if loggedin == None %}{%else%}<input type="button" onclick="window.location.href= '/posts/new/{{ post_type }}';" value="Create a new {{post_type_title}}" />{% endif %}
+{% endblock create_link %}
 
-<div id="create_new" class="body">
-{% if loggedin == None %}{%else%}<a href="/posts/new/{{ post_type }}"> Create a new {{post_type_title}}</a>{% endif %}
-</div>
+{% block posts_content %}
 
 {% for post in posts %}
 <div id="featured_blog" class="body">
@@ -36,7 +36,7 @@
         {% endifnotequal %}
     	
         {% if posts.has_previous %}
-            <a href="?page={{ posts.previous_page_number }}"> Previous </a>
+            <a style="margin:0 10px 0 10px;" href="?page={{ posts.previous_page_number }}">Previous</a>
         {% endif %}
 
         <span class="current">
@@ -44,11 +44,11 @@
         </span>        
 
         {% if posts.has_next %}
-            <a href="?page={{ posts.next_page_number }}"> Next </a>
+            <a style="margin-left:10px" href="?page={{ posts.next_page_number }}">Next</a>
         {% endif %}
         
         {% ifnotequal posts.number posts.paginator.num_pages %}
-            <a href="?page={{ posts.paginator.num_pages }}">Last</a>
+            <a style="margin-left:10px" href="?page={{ posts.paginator.num_pages }}">Last</a>
         {% endifnotequal %}
     </span>
 </div>
