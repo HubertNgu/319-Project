@@ -30,18 +30,34 @@ Create a new listing - Virtual Deconstruction Hub
 	<input type = "hidden" name="paragraphtag" id = "paragraphtag" value = "1"></input>
 
 {% endif %}
+<div>
+<div id="pictureDiv" style="float:left;display:inline" >
+{% if pictureform != None %}
 {{pictureform.as_p}}
+{% endif %}
+</div>
+<div >
+<input id="addAnotherButton" type="button" onclick= "if (!addAnotherPicture()){ return false;}edit_form.submit();" value="Add Selected Picture" />
+</div>
+</div>
 {% if listpictures != None %}
+<br /><br />
 {% for item in listpictures %}
 <li>  {{item}} </li>
 
 {% endfor %}
 {% endif %}
-<button form="edit_form" formaction="/delete-verify?listing_id={{listing.id}}&uuid={{listing.uuid}}">Delete</button>
+<br />
+<input style="margin-left:20%" type="button" onclick="window.location.href = '/listings/delete-verify/?listing_id={{listing.id}}&uuid={{listing.uuid}}'" value="Delete"/>
 <input type="submit" value="Submit" />
-<button onclick= "return addAnotherPicture()">Add Another Picture</button>
 </form>
-
+<script type="text/javascript" >
+    $("#pictureDiv").find("p").css("width", "400px");
+    if ($("#pictureDiv").find("ul.errorlist").find("li").first().val() != undefined)
+        $("#addAnotherButton").css("margin-top", "45px");
+    else
+        $("#addAnotherButton").css("margin-top", "14px");
+</script>
 {% endblock listings_content %}
 
 

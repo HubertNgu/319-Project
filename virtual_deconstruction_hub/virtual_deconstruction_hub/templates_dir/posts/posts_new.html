@@ -34,14 +34,29 @@ Create a New {{ post_type_title }} Post
 <input type="hidden" name= "postid" id = "postid" value = {{postid}}></input>
 <input type = "hidden" name="paragraphtag" id = "paragraphtag" value = "1"></input>
 {% endif %}
+<div>
+<div id="pictureDiv" style="float:left;display:inline" >
 {% if pictureform != None %}
 {{pictureform.as_p}}
 {% endif %}
+</div>
+<div >
+<input id="addAnotherButton" type="button" onclick= "if (!addAnotherPicture()){ return false;}new_post_form.submit();" value="Add Selected Picture" />
+</div>
+</div>
+<br />
+<br />
+<br />
 {% block previous_pictures_added %}{% endblock previous_pictures_added %}
-<input type="submit" value="Submit"  onclick="setSubmitTrue()"/>
-<button onclick= "return addAnotherPicture()">Add Another Picture</button>
+<input style="margin-left:20%" type="submit" value="Submit"  onclick="setSubmitTrue()"/>
 {% block delete_button %}{% endblock delete_button %}
 </form>
-
+<script type="text/javascript" >
+    $("#pictureDiv").find("p").css("width", "400px");
+    if ($("#pictureDiv").find("ul.errorlist").find("li").first().val() != undefined)
+        $("#addAnotherButton").css("margin-top", "45px");
+    else
+        $("#addAnotherButton").css("margin-top", "14px");
+</script>
 {% endblock posts_content %}
 

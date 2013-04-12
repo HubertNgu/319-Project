@@ -93,6 +93,8 @@ def signup(request):
              return render_to_response("users\signup.html",{'errormessage':errormessage},context_instance=RequestContext(request))
         except: 
             #else get all the required information required for the registration
+            firstname = request.POST.get('firstname')
+            lastname = request.POST.get('lastname')
             email = request.POST.get('email')
             password = request.POST.get('password')
             phoneno = request.POST.get('phone')
@@ -102,7 +104,7 @@ def signup(request):
             user = User.objects.create_user(checkusername,email,password)
             user = authenticate(username=checkusername, password=password)
             #create new user with all the information
-            profile = UserProfile( username = checkusername,  province= province, phoneno = phoneno, city = city, address = address, isverified = 0)
+            profile = UserProfile( username = checkusername, firstname=firstname, lastname=lastname,  province= province, phoneno = phoneno, city = city, address = address, isverified = 0)
             profile.save()
             #generate a verification code
             verificationcode = id_generator()
@@ -111,7 +113,7 @@ def signup(request):
             # generate verify url that user needs to click to activate account
             verify_url = 'http://%s/myaccount/verifyemail/?username=%s&verificationcode=%s' % (Site.objects.get_current(), checkusername, verificationcode)
             #send verification email
-            send_signup_verification_email(verify_url, email)
+            send_signup_verification_email(verify_url, email, firstname)
             logtext = "Login"
             accounttext = "Sign Up"
             logparams=[logtext,accounttext]

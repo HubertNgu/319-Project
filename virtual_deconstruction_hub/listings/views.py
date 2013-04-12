@@ -109,7 +109,7 @@ def create_listing(request):
         logparams=[logtext,accounttext]
     submit_action = URL_PATHS.get('listing_new') 
     #create a new upload form that will be rendered to page
-    pictureform = UploadForm()
+    pictureform = UploadForm(request.POST, request.FILES)
     if request.method == 'GET':
         if request.user.is_authenticated():
             city = UserProfile.objects.get(username = request.user.email)
@@ -148,14 +148,14 @@ def create_listing(request):
                 listingid = request.POST.get("listingid")
                 listing = Listing.objects.get(id = listingid )
                 listing_url = listing.get_url()
-        form_args = {'form':listing_form, 'submit_action':submit_action, 'listing_url' : listing_url, 'listing':listing, 'logparams' : logparams}
+                form_args = {'form':listing_form, 'submit_action':submit_action, 'listing_url' : listing_url, 'listing':listing, 'logparams' : logparams}
            # if the picture form is valid, save the picture
-        if form.is_valid():
+        if pictureform.is_valid():
             form_args = {'listing':listing, 'listing_url': listing_url, 'logparams':logparams}
             photo = Photo(photo = request.FILES['picture'], listing = listing )
             photo.save()    
-            #if user wants to add another picture        
-            if request.POST.get('pictureform') == "1" and request.POST.get("issubmit") != 1:
+            #if user wants to add another picture 
+            if request.POST.get("issubmit") != 1:
                 photolist = Photo.objects.filter(listing_id = listing.id)
                 addanotherprevious = list()
                 #get all the names of the previously added pictures
@@ -163,10 +163,9 @@ def create_listing(request):
                     addanotherprevious.append(o.photo.name)
                 
                 form_args = {'form':listing_form, 'submit_action':submit_action, 
-                                  'pictureform': form,
+                                  'pictureform': pictureform,
                                  'listingid' :listingid, 'addanotherprevious' : addanotherprevious,
                                  'logparams': logparams}
-                    
                 return render_to_response("listings/listings_new.html", form_args, context_instance=RequestContext(request))
                 
         #====================================================================

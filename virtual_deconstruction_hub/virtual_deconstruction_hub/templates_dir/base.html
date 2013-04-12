@@ -49,20 +49,24 @@
 <div id="content" class="body">
 
 <div id="login_div" class="body">
-	
+<div style="padding:10px 0 10px 0;float:left">
+{% block create_link %}
+{% endblock create_link %}	
+</div> 
+ 
 {% if logparams != None %}
 {%  if logparams.0  == "Login"%}
 <div style="padding: 10px 0 10px 0;float:right">
- <a href="/myaccount/login?prevPage={{ request.get_full_path }}">{{logparams.0}}</a> 
- <a href= "/myaccount/signup">{{logparams.1}}</a> 
+ <input type="button" onclick="window.location.href = '/myaccount/login?prevPage={{ request.get_full_path }}'" value="{{logparams.0}}" />
+ <input type="button" onclick="window.location.href = '/myaccount/signup'" value="{{logparams.1}}" />
 </div>
 {% else %}
- <div style="padding: 10px 0 10px 40%;float:left" >
+ <div style="margin-left:19%;padding: 10px 0 10px 0;float:left;position:absolute" >
     <b>Welcome {{logparams.2}}</b>
  </div>
  <div style="padding: 10px 0 10px 0;float:right">
-    <a href = "/myaccount/logout?prevPage={{ request.get_full_path }}">{{logparams.0}}</a>
-    <a href = "/myaccount"> {{logparams.1}} </a>
+    <input type="button" onclick = "window.location.href = '/myaccount/logout?prevpage={{ request.get_full_path }} '" value="{{logparams.0}}" />
+    <input type="button" onclick = "window.location.href = '/myaccount'" value="{{logparams.1}}" />
  </div>
  {% endif %}
 <hr style="width:100%" > 
@@ -72,6 +76,7 @@
 
 
 {% endblock base_content %}
+<div style="height:125px" />
 </div>
 </body>
 </html>

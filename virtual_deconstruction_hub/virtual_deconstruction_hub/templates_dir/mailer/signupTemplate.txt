@@ -1,4 +1,4 @@
-Hi
+Hi {{ firstname }}
 
 Thanks for creating an account with us!
 

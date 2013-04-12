@@ -17,8 +17,8 @@ class="active"
 
 <div id = "statistic_text_links">
 
-<div id = "listedmost" class = "itemsinlist" style="margin-top:40px" onclick="listedmost()">
-<label>Transactions by Category</label></div>
+<div id = "listedmost" class = "itemsinlist" style="margin-top:18px" onclick="listedmost()">
+<label>Successful Transaction by Category</label></div>
 <div id = "highestsale" class = "itemsinlist" onclick="highestsale()">
 <label>For Sale Listings by Category</label></div>
 <div id = "boughtmost" class = "itemsinlist" onclick="boughtmost()">
@@ -29,7 +29,7 @@ class="active"
 <label>Average Transaction Amount by Listing Type</label></div>
 <div id = "transactiontime" class = "itemsinlist" onclick="transactiontime()">
 <label>Average Time to Successful Transaction</label></div>
-<div id = "ratesucess" class = "itemsinlist" onclick="ratesucess()">
+<div id = "ratesucess" class = "itemsinlist" style="margin-bottom:18px" onclick="ratesucess()">
 <label>Transaction Success Rate</label></div>
 </div>
 
@@ -136,6 +136,9 @@ class="active"
   </span>
 </div>
 
+<script type="text/javascript" >
+$("div.itemsinlist").find("label").css("cursor", "pointer");
+</script>
 
 {% endblock stats_content %}
 
