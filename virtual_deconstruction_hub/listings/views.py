@@ -181,7 +181,7 @@ def create_listing(request):
             
         # create a verification/edit link and send with mailer then direct to success message page
         user_email = listing.get_creator()
-        verify_url = '%s/listings/edit-verify?listing_id=%s&uuid=%s' % (Site.objects.get_current(), listing.id, listing.get_uuid())
+        verify_url = '%s%s?listing_id=%s&uuid=%s' % (Site.objects.get_current(),URL_PATHS.get('listings_edit-verify'), listing.id, listing.get_uuid())
         send_post_verification_email(verify_url, user_email, 'list')
                 
         return render_to_response(TEMPLATE_PATHS.get('listings_success'), form_args, context_instance=RequestContext(request))    

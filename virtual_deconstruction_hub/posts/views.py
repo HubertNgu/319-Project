@@ -181,7 +181,7 @@ def new_post(request, post_type):
 
         # create a verification/edit link and send with mailer then direct to success message page
         user_email = post.get_creator()
-        verify_url = '%s/posts/%s?post_id=%s&uuid=%s' % (Site.objects.get_current(), URL_PATHS.get('posts_edit-verify'), post.id, post.get_uuid())
+        verify_url = '%s%s?post_id=%s&uuid=%s' % (Site.objects.get_current(), URL_PATHS.get('posts_edit-verify'), post.id, post.get_uuid())
         send_post_verification_email(verify_url, user_email, post_type)
         return render_to_response(TEMPLATE_PATHS.get("posts_success"), form_args, context_instance=RequestContext(request))
     else:
