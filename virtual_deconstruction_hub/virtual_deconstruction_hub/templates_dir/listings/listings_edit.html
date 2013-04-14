@@ -14,6 +14,10 @@ Create a new listing - Virtual Deconstruction Hub
 {% csrf_token %}
 <input type = "hidden" name = "pictureform" id = "pictureform" value = "0"></input>
 <input type = "hidden" name = "issubmit" id = "issubmit" value = "0"></input>
+<input id = "deletephoto" name = "deletephoto" type = "hidden" value = ""></input>
+<input id = "deletephotoyes" name = "deletephotoyes" type = "hidden" value = "false"></input>
+
+
 <div style="height:18px">
 <span id = "error" style="color:red;display:none"></span>
 </div>
@@ -43,7 +47,7 @@ Create a new listing - Virtual Deconstruction Hub
 {% if listpictures != None %}
 <br /><br />
 {% for item in listpictures %}
-<li>  {{item}} </li>
+<li>  {{item.0}} <button onclick="return deletePhoto({{item.1}});">Delete Photo</button> </li>
 
 {% endfor %}
 {% endif %}

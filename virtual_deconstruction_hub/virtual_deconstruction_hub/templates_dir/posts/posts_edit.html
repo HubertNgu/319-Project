@@ -3,10 +3,11 @@
 {% block window_title %}
 Edit your post
 {% endblock window_title %}
+
 {% block previous_pictures_added %}
 {% if listpictures != None %}
-{% for item in listpictures %}
-<li>  {{item}} </li>
+{% for item in listpictures%}
+<li>  {{item.0}} <button onclick="return deletePhoto({{item.1}});">Delete Photo</button>  </li>
 {% endfor %}
 {% endif %}
 {% endblock previous_pictures_added %}

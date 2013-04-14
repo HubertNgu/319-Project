@@ -101,6 +101,7 @@ function checkNewPost(){
         showErrorAndFocus(error, "Please enter enter a description", document.getElementById('id_text_content'));
         return false;
     }
+    
 } 
  
 function checkNewBlog()
@@ -117,6 +118,7 @@ function checkNewBlog()
         showErrorAndFocus(error, "Please enter enter some content", document.getElementById('id_text_content'));
         return false;
     }
+    return true;
 }
 
 function checkContactFields()
@@ -167,7 +169,7 @@ function setDDL(ddl, value)
  alert("You must choose a file to add");
  return false;
  }
- return true;
+return true;
  }
  
   function setSubmitTrue()
@@ -258,4 +260,11 @@ function setDDL(ddl, value)
 function reAddHover()
 {
 	document.styleSheets[0].insertRule('#itemsinlist:hover { background-color: #00dd68; }', 0);
+}
+
+function deletePhoto(value)
+{
+
+document.getElementById('deletephoto').value = value;
+document.getElementById('deletephotoyes').value = true;
 }
