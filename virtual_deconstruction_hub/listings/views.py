@@ -205,17 +205,17 @@ def edit_verify_listing(request):
     listing_url = None
     listing = None
     message = None
+    
     try:
         listing = get_object_or_404(Listing, id=str(listing_id))
     except:
         raise Http404
     listpictures =list()
+    if(request.POST.get("deletephoto") != None and request.POST.get("deletephotoyes") == "true" ):
+        deletephoto = Photo.objects.get(id = request.POST.get("deletephoto"))
+        deletephoto.delete() 
     if request.method == 'GET':   
-        try:
-            for o in Photo.objects.filter(listing_id = listing_id): 
-                    listpictures.append(o.photo.name)
-        except:
-            listpictures = None   
+        
         if not listing.is_verified():   
             if listing and (listing.get_uuid() == str(uuid)):
                 listing.mark_verified()
@@ -227,7 +227,12 @@ def edit_verify_listing(request):
                 raise Http404
         #post verified by this point, render edit page with message
         edit_form = EditListingForm(instance=listing)
-
+        try:
+            for o in Photo.objects.filter(listing_id = listing_id): 
+                item = [o.photo.name,o.id]
+                listpictures.append(item)
+        except:
+            listpictures = None 
         form_args = {'form':edit_form, 'message': message, 'submit_action': submit_action, 
                      'logparams':logparams, 'listing': listing,'listpictures':listpictures,
                      'pictureform':pictureform
@@ -238,8 +243,10 @@ def edit_verify_listing(request):
     if request.method == 'POST':
         form = UploadForm(request.POST, request.FILES)
         edit_form = EditListingForm(request.POST, instance=listing)
+        
         #if post_form valid, process new post
         if edit_form.is_valid():
+            
             listing_url = HttpRequest.build_absolute_uri(request, edit_form.cleaned_data.get('url'))
             edit_form.save()
             if form.is_valid():
@@ -249,14 +256,18 @@ def edit_verify_listing(request):
             if request.POST.get('pictureform') == "1" and request.POST.get("issubmit") != 1:
                 photolist = Photo.objects.filter(listing_id = listing.id)
                 addanotherprevious = list()
-                #get all the names of the previously added pictures
-                for o in Photo.objects.filter(listing_id = listing.id): 
-                    listpictures.append(o.photo.name)
             # This redirects back to edit form, should change to a render_to_response with a message that edit successful
+            try:
+                for o in Photo.objects.filter(listing_id = listing_id): 
+                    item = [o.photo.name,o.id]
+                    listpictures.append(item)
+            except:
+                listpictures = None 
             form_args = {'form':edit_form, 'submit_action':submit_action, 'message':MESSAGES.get('edit_success'), 'listing_url': listing_url, 'logparams':logparams,
                          'pictureform':pictureform, 'listpictures':listpictures}
             return render_to_response(TEMPLATE_PATHS.get("listings_edit"), form_args, context_instance=RequestContext(request))
         else:
+            
             # if form submission not valid, redirect back to form with error messages
             form_args = {'form':edit_form, 'submit_action':submit_action, 'message':None, 'logparams':logparams,
                            'listpictures':listpictures, 'pictureform':pictureform}

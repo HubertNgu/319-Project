@@ -16,6 +16,8 @@ Create a New {{ post_type_title }} Post
 {% csrf_token %}
 <input type = "hidden" name = "pictureform" id = "pictureform" value = "0"></input>
 <input type = "hidden" name = "issubmit" id = "issubmit" value = "0"></input>
+<input id = "deletephoto" name = "deletephoto" type = "hidden" value = ""></input>
+<input id = "deletephotoyes" name = "deletephotoyes" type = "hidden" value = "false">
 
 <div style="height:18px">
 <span id = "error" style="color:red;display:none"></span>
@@ -26,7 +28,7 @@ Create a New {{ post_type_title }} Post
 </table>
 {% if addanotherprevious != None %}
 {% for item in addanotherprevious %}
-<li> Added {{item}} </li>
+<li> Added {{item.0}}</li>
 
 {% endfor %}
 
@@ -41,7 +43,7 @@ Create a New {{ post_type_title }} Post
 {% endif %}
 </div>
 <div >
-<input id="addAnotherButton" type="button" onclick= "if (!addAnotherPicture()){ return false;}new_post_form.submit();" value="Add Selected Picture" />
+<input id="addAnotherButton" type="button" onclick= "if(!checkNewBlog()){return false;}if (!addAnotherPicture() ){ return false;}new_post_form.submit();" value="Add Selected Picture" />
 </div>
 </div>
 <br />

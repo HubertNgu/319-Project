@@ -152,7 +152,6 @@ def new_post(request, post_type):
             #post.set_url( tag_maker("_", post) )
             post_url = post.get_url()
         form_args = {'form':post_form, 'submit_action':submit_action, 'post_url' : post_url, 'post':post, 'logparams':logparams}
-        
         if form.is_valid():
             form_args = {'post':post, 'post_url': post_url, 'logparams':logparams}
             photo = Photo(photo = request.FILES['picture'], post = post, caption = request.POST.get('caption') )
@@ -160,8 +159,9 @@ def new_post(request, post_type):
             if request.POST.get('pictureform') == "1" and request.POST.get("issubmit") != "1":
                 #photolist = Photo.objects.filter(post_id = post.id)
                 addanotherprevious = list()
-                for o in Photo.objects.filter(post_id = post.id): 
-                    addanotherprevious.append(o.photo.name)
+                for o in Photo.objects.filter(post_id = post.id):
+                    item = [o.photo.name,o.id] 
+                    addanotherprevious.append(item)
             
                 form_args = {'form':post_form, 'submit_action':submit_action, 
                               'pictureform': pictureform,
@@ -224,16 +224,15 @@ def edit_verify_post(request):
    
     pictureform = UploadForm()
     listpictures =list()
+    listdeleteid = list()
+    if(request.POST.get("deletephoto") != None and request.POST.get("deletephotoyes") == "true" ):
+        deletephoto = Photo.objects.get(id = request.POST.get("deletephoto"))
+        deletephoto.delete() 
+
     if request.method == 'GET':     
         # if post hasn't been verified yet and the id and uuid
         # in the url query string are correct, mark as verified
         # set verified message and redirect to post edit form. 
-         
-        try:
-            for o in Photo.objects.filter(post_id = post_id): 
-                    listpictures.append(o.photo.name)
-        except:
-            listpictures = None
         if not post.is_verified():   
             if post and (post.get_uuid() == str(uuid)):
                  post.mark_verified()
@@ -245,14 +244,23 @@ def edit_verify_post(request):
                 raise Http404
         #post verified by this point, render edit page with edit form and message
         edit_form = EditPostForm(instance=post)
+        try:
+            for o in Photo.objects.filter(post_id = post_id):
+                item = [o.photo.name,o.id]
+                listpictures.append(item)
+                   
+        except:
+            listpictures = None
+            listdeleteid = None
         delete_button = URL_PATHS.get('posts_delete-verify') + '?post_id=' + str(post.id) + '&uuid=' + uuid
         form_args = {'form':edit_form, 'message': message, 'submit_action': submit_action, 'post_type_title':POST_TYPE_TITLES.get(post.get_type()), 'logparams': logparams, 
-                     'post_type': post.get_type(), 'delete_button': delete_button, 'listpictures':listpictures, 'pictureform' : pictureform}
+                     'post_type': post.get_type(), 'delete_button': delete_button, 'listpictures':listpictures, 'pictureform' : pictureform,'listdeleteid' :listdeleteid}
         return render_to_response(TEMPLATE_PATHS.get("posts_edit"), form_args, context_instance=RequestContext(request))
         
     if request.method == 'POST':
         edit_form = EditPostForm(request.POST, instance=post)
         form = UploadForm(request.POST, request.FILES)
+       
         #if post_form valid, process new post
         delete_button = URL_PATHS.get('posts_delete-verify') + '?post_id='  + str(post.id) + '&uuid=' + uuid
         if edit_form.is_valid():
@@ -260,15 +268,21 @@ def edit_verify_post(request):
             edit_form.save()
             if form.is_valid():
                 photo = Photo(photo = request.FILES['picture'], post = post )
-                photo.save()    
+                photo.save()  
             #if user wants to add another picture        
             if request.POST.get('pictureform') == "1" and request.POST.get("issubmit") != 1:
                 photolist = Photo.objects.filter(post_id = post.id)
                 addanotherprevious = list()
                 #get all the names of the previously added pictures
-                for o in Photo.objects.filter(post_id = post.id): 
-                    listpictures.append(o.photo.name)
             # This redirects back to edit form with edit success message
+            try:
+                for o in Photo.objects.filter(post_id = post_id):
+                    item = [o.photo.name,o.id]
+                    listpictures.append(item)
+                   
+            except:
+                listpictures = None
+                listdeleteid = None
             form_args = {'form':edit_form, 'submit_action':submit_action, 
                          'message':MESSAGES.get('edit_success'),
                           'post_type_title':POST_TYPE_TITLES.get(post.get_type()), 
@@ -276,7 +290,8 @@ def edit_verify_post(request):
                            'logparams' : logparams, 
                            'delete_button': delete_button,
                            'listpictures':listpictures,
-                           'pictureform' : pictureform}
+                           'pictureform' : pictureform,
+                           'listdeleteid': listdeleteid}
             return render_to_response(TEMPLATE_PATHS.get("posts_edit"), form_args, 
                                       context_instance=RequestContext(request))
         else:
