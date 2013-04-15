@@ -59,7 +59,7 @@
 <div style="padding: 10px 0 10px 0;float:right">
  <input type="button" onclick="window.location.href = '/myaccount/login?prevPage={{ request.get_full_path }}'" value="{{logparams.0}}" />
  <input type="button" onclick="window.location.href = '/myaccount/signup'" value="{{logparams.1}}" />
-</div>
+</div><br /><br />
 {% else %}
  <div style="margin-left:19%;padding: 10px 0 10px 0;float:left;position:absolute" >
     <b>Welcome {{logparams.2}}</b>
@@ -67,7 +67,7 @@
  <div style="padding: 10px 0 10px 0;float:right">
     <input type="button" onclick = "window.location.href = '/myaccount/logout?prevpage={{ request.get_full_path }} '" value="{{logparams.0}}" />
     <input type="button" onclick = "window.location.href = '/myaccount'" value="{{logparams.1}}" />
- </div>
+ </div><br /><br />
  {% endif %}
 <hr style="width:100%" > 
 {% endif %}
