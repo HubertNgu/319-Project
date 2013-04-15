@@ -90,7 +90,38 @@ function checkNewPost(){
     document.getElementById('id_price').style.border = "";
     document.getElementById('id_address').style.border = "";
     document.getElementById('id_text_content').style.border = "";
+    var email1 = document.getElementById('id_creator');
+    var email2 = document.getElementById('id_email_verification');
     error = document.getElementById('error');
+    var checkemail  = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+    
+    if (email1 != null)
+        email1.style.border = "";
+    if (email2 != null)
+        email2.style.border = "";
+    
+    if (email1 != null && email1.value == "")
+    {
+        showErrorAndFocus(error, "Please enter your email address", email1);
+        return false;
+    }
+
+    if(email1 != null && checkemail.test(email1.value) == false){
+        showErrorAndFocus(error, "Please enter a valid email address", email1);
+        return false;
+    }
+    
+    if (email2 != null && email2.value == "")
+    {
+        showErrorAndFocus(error, "Please verify your email address", email2);
+        return false;
+    }
+    
+    if (email1 != null && email2 != null && email1 != email2)
+    {
+        showErrorAndFocus(error, "Your email address' don't match", email2);
+        return;
+    }
     
     if(document.getElementById('id_title').value == "" ){
         showErrorAndFocus(error, "Please enter a title", document.getElementById('id_title'));
