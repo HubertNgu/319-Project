@@ -150,7 +150,8 @@ class ListingForm(ModelForm):
         verified_email = cleaned_data.get('email_verification')
         category = cleaned_data.get('category')
         type = cleaned_data.get('type')
-        
+        if creator_email is None:
+            self._errors["creator"] = self.error_class(["You must enter an email address"])
         if creator_email != verified_email:
             self._errors["email_verification"] = self.error_class(["The email and verification entered do not match"])
         if not category:
