@@ -155,7 +155,7 @@ def create_listing(request):
             photo = Photo(photo = request.FILES['picture'], listing = listing )
             photo.save()    
             #if user wants to add another picture 
-            if request.POST.get("issubmit") != 1:
+            if request.POST.get('pictureform') == "1" and request.POST.get("issubmit") != 1:
                 photolist = Photo.objects.filter(listing_id = listing.id)
                 addanotherprevious = list()
                 #get all the names of the previously added pictures
