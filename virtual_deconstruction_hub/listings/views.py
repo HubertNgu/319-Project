@@ -109,7 +109,7 @@ def create_listing(request):
         logparams=[logtext,accounttext]
     submit_action = URL_PATHS.get('listing_new') 
     #create a new upload form that will be rendered to page
-    pictureform = UploadForm(request.POST, request.FILES)
+    pictureform = UploadForm()
     if request.method == 'GET':
         if request.user.is_authenticated():
             city = UserProfile.objects.get(username = request.user.email)
@@ -122,6 +122,7 @@ def create_listing(request):
         return render_to_response(TEMPLATE_PATHS.get('listings_new'), form_args, context_instance=RequestContext(request))
     
     if request.method == 'POST':
+        pictureform = UploadForm(request.POST, request.FILES)  
         listing_form = ListingForm(request.POST)
         form_args = {}
         if request.user.is_authenticated():
