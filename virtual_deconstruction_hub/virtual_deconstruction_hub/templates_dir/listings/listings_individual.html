@@ -12,7 +12,7 @@
 <h1 class="listing_detail" ><pre>{% ifequal listing.for_sale "want" %}Wanted{% else %}For Sale{% endifequal %}: {{ listing.title }} - ${{ listing.price }}</pre></h1>
 <form id="listing_detail_form">
 <p><pre><span id="single_listing_content">{{ listing.text_content }}</span></pre></p>
-<button formaction={{reply_action}}> Contact Listing Owner </button> <button formaction={{go_back_action}}> Go Back To Listings </button> <button action={{listing.flag}}> Flag as Inappropriate </button>
+<button formaction={{reply_action}}> Contact Listing Owner </button> <button formaction={{go_back_action}}> Go Back To Listings </button> {% if flag_action %}<button formaction={{flag_action}}> Flag as Inappropriate </button>{% endif %}
 <br/>
 <br/>
 {% if listing.photo_set.all %}

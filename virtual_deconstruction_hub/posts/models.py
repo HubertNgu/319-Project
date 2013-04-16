@@ -152,11 +152,12 @@ class Post(models.Model):
         """
         self.text_content = t
     
-    def increment_flags(self):
+    def flag(self):
         """ Increment the current integer value of the post
         objects flag field by one.
         """
         self.flag_count += 1
+        self.save()
     
     def get_flag_count(self):
         """ Returns the current integer value of the post
@@ -252,7 +253,7 @@ class Photo(models.Model):
     """
     post = models.ForeignKey(Post)
     photo =  models.ImageField(upload_to='photos/posts/%Y/%B/%d/')
-    caption = models.CharField(max_length=200)
+    caption = models.CharField(max_length=200, blank=True)
     
     def get_caption(self):
         """ Returns the string value of the
