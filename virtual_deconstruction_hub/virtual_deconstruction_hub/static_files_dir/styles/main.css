@@ -357,6 +357,12 @@ pre {
  font-family: 'Trebuchet MS', Trebuchet, 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
+/*** System Messages ***/
+#system_message {
+	text-align: center;
+	color: red;
+}
+
 #statistic_text_links {
 cursor:pointer;
 width: 300px;
