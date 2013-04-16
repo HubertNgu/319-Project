@@ -18,7 +18,7 @@
 
             {% for result in page.object_list %}
                 {% if result.object %}
-        		<p>{{result.object.created|date:"M m"}} - ${{ result.object.price }} - <a href="/listings/{{result.object.url}}"> {{ result.object.title }} </a> - {{ result.object.city }} - {{ result.object.category|title }} - {% ifequal result.object.for_sale "sell" %}Item For Sale{% else %}Item Wanted{% endifequal %}</p>
+        		<p>{{result.object.created|date:"M d"}} - ${{ result.object.price }} - <a href="/listings/{{result.object.url}}"> {{ result.object.title }} </a> - {{ result.object.city }} - {{ result.object.category|title }} - {% ifequal result.object.for_sale "sell" %}Item For Sale{% else %}Item Wanted{% endifequal %}</p>
                 {% endif %}
 
             {% empty %}
