@@ -9,7 +9,7 @@
 {% if listings %}
 
     {% for listing in listings %}
-        <p>{{listing.created|date:"M m"}} - <a href="{{listing.url}}"> {{ listing.title }} </a> - {{ listing.price }} ({{ listing.city }}) {{ listing.category }} - {% ifequal listing.for_sale "sell" %}Item For Sale{% else %}Item Wanted{% endifequal %}</p>
+        <p>{{listing.created|date:"M d"}} - <a href="{{listing.url}}"> {{ listing.title }} </a> - {{ listing.price }} ({{ listing.city }}) {{ listing.category }} - {% ifequal listing.for_sale "sell" %}Item For Sale{% else %}Item Wanted{% endifequal %}</p>
     {% endfor %}
 
 {% else %}

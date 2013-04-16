@@ -181,7 +181,7 @@ def new_post(request, post_type):
 
         # create a verification/edit link and send with mailer then direct to success message page
         user_email = post.get_creator()
-        verify_url = '%s/posts/%s?post_id=%s&uuid=%s' % (Site.objects.get_current(), URL_PATHS.get('posts_edit-verify'), post.id, post.get_uuid())
+        verify_url = '%s%s?post_id=%s&uuid=%s' % (Site.objects.get_current(), URL_PATHS.get('posts_edit-verify'), post.id, post.get_uuid())
         send_post_verification_email(verify_url, user_email, post_type)
         return render_to_response(TEMPLATE_PATHS.get("posts_success"), form_args, context_instance=RequestContext(request))
     else:
@@ -300,6 +300,7 @@ def edit_verify_post(request):
                            'listpictures':listpictures}
             return render_to_response(TEMPLATE_PATHS.get("posts_edit"), form_args, context_instance=RequestContext(request))   
         raise Http404
+
 def posts_index(request, post_type):
     """View that renders an index page for a specified post type.
     This view queries the database for posts with a matching type,
@@ -355,7 +356,8 @@ def posts_index(request, post_type):
     form_args = {'posts':posts, 'message': None, 'post_type_title':postname, 
                  'post_type': post_type, 'logparams': logparams, 'username': username, 'loggedin':loggedin}
     return render_to_response(TEMPLATE_PATHS.get(post_type+'_list'),form_args, context_instance=RequestContext(request))
-    raise Http404        
+    raise Http404
+
 def posts_specific(request, post_type, tag):
     """View that renders a page for displaying a specific post.
     This view queries the database for post with a matching tag
@@ -388,7 +390,8 @@ def posts_specific(request, post_type, tag):
         # otherwise render the single post template with the post object
         query = get_object_or_404(Post, url=tag)
         if query.is_verified():
-            form_args = {'post':query, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post_type), 'post_type': post_type, 'logparams' : logparams}
+            flag_action = '/flag/post/' + str(query.url) + '/'
+            form_args = {'flag_action':flag_action,'post':query, 'message':None, 'post_type_title':POST_TYPE_TITLES.get(post_type), 'post_type': post_type, 'logparams' : logparams}
             return render_to_response( TEMPLATE_PATHS.get(post_type+"_single"),form_args, context_instance=RequestContext(request))
         else:
             raise Http404()   
@@ -421,7 +424,25 @@ def delete_verify_post(request):
         return render_to_response(TEMPLATE_PATHS.get("posts_delete"), form_args, context_instance=RequestContext(request))
     else:
         raise Http404
-    
+
+def flag(request, tag):
+    if request.user.is_authenticated():
+        logtext = "Logout"
+        accounttext = "My Account"
+        welcometext = request.user.username
+        logparams=[logtext,accounttext, welcometext]
+    else: 
+        logtext = "Login"
+        accounttext = "Sign Up"
+        logparams=[logtext,accounttext]
+    # flag the listing
+    post = get_object_or_404(Post, url=str(tag))
+    post_type = str(post.type)
+    post.flag()
+    message = 'This post has been flagged for review by the site administrator.'
+    form_args = {'post':post, 'message':message, 'post_type_title':POST_TYPE_TITLES.get(post_type), 'post_type': post_type, 'logparams' : logparams}
+    return render_to_response( TEMPLATE_PATHS.get(post.type+"_single"),form_args, context_instance=RequestContext(request))
+
 def home(request):
     """View for the home page at the root url www.domain.com/
     This view fetched the latest blog post from the database and displays it

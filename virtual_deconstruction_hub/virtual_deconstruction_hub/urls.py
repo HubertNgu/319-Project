@@ -29,6 +29,12 @@ urlpatterns = patterns('',
     
     # posts URLs
     (r'^posts/', include('posts.urls')),
+
+    # flagging listings
+    (r'^flag/listing/(?P<tag>\w+)/', 'listings.views.flag'),    
+
+    # flagging posts
+    (r'^flag/post/(?P<tag>\w+)/', 'posts.views.flag'),
     
     # admin site url
     url(r'^admin/', include(admin.site.urls)),

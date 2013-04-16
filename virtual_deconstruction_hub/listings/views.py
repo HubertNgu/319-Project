@@ -88,10 +88,11 @@ def detail(request, tag):
     listing = get_object_or_404(Listing, url=tag)
     reply_action = '/listings/contactSeller/' + str(listing.url) + '/'
     go_back_action = '/listings'
+    flag_action = '/flag/listing/'+str(listing.url) + '/'
     address = '%s%%2C+%s' % (str(listing.address).replace(' ', '+'), listing.city)
     return render(request, TEMPLATE_PATHS.get('listings_single'), 
                   { 'address': address, "listing": listing, 'logparams':logparams, 
-                   'reply_action':reply_action, 'go_back_action':go_back_action})  
+                   'reply_action':reply_action, 'go_back_action':go_back_action, 'flag_action':flag_action})  
 
 def create_listing(request):
     '''
@@ -182,11 +183,33 @@ def create_listing(request):
             
         # create a verification/edit link and send with mailer then direct to success message page
         user_email = listing.get_creator()
-        verify_url = '%s/listings/edit-verify?listing_id=%s&uuid=%s' % (Site.objects.get_current(), listing.id, listing.get_uuid())
+        verify_url = '%s%s?listing_id=%s&uuid=%s' % (Site.objects.get_current(),URL_PATHS.get('listings_edit-verify'), listing.id, listing.get_uuid())
         send_post_verification_email(verify_url, user_email, 'list')
                 
         return render_to_response(TEMPLATE_PATHS.get('listings_success'), form_args, context_instance=RequestContext(request))    
     raise Http404
+
+def flag(request, tag):
+    if request.user.is_authenticated():
+        logtext = "Logout"
+        accounttext = "My Account"
+        welcometext = request.user.username
+        logparams=[logtext,accounttext, welcometext]
+    else: 
+        logtext = "Login"
+        accounttext = "Sign Up"
+        logparams=[logtext,accounttext]
+    # flag the listing
+    listing = get_object_or_404(Listing, url=str(tag))
+    listing.flag()
+    message = 'This listing has been flagged for review by the site administrator.'
+    address = ''
+    reply_action = '/listings/contactSeller/' + str(listing.url) + '/'
+    go_back_action = '/listings'
+    address = '%s%%2C+%s' % (str(listing.address).replace(' ', '+'), listing.city)
+    return render_to_response(TEMPLATE_PATHS.get('listings_single'), 
+                      { 'address': address, "listing": listing, 'logparams':logparams, 
+                       'reply_action':reply_action, 'go_back_action':go_back_action, 'message':message}) 
 
 def edit_verify_listing(request):  
     if request.user.is_authenticated():

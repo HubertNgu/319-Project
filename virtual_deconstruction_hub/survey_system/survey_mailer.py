@@ -3,13 +3,14 @@
  listings on the site.
 
  @author Hubert Ngu
-'''
+''' 
 
 import logging
 from util import constants
 from listings.models import Listing
 from mailer.views import send_survey_email
 from datetime import datetime, timedelta
+from django.contrib.sites.models import Site
 
 logger = logging.getLogger(__name__)
 
@@ -47,7 +48,7 @@ def __send_survey(listing):
     Constructs the unique URL for the survey, updates the time sent
     and emails the survey.
     '''
-    survey_url = '%s/survey/%s' % (constants.SITE, listing.uuid)    
+    survey_url = '%s/survey/%s' % (Site.objects.get_current(), listing.uuid)    
     send_survey_email(survey_url, listing.creator)
     listing.survey_time_sent = datetime.utcnow()
     listing.save()

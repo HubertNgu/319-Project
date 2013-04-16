@@ -1,5 +1,9 @@
 from django.contrib import admin
 from posts.models import Post
+from posts.models import Photo
+
+class PhotoInline(admin.TabularInline):
+    model = Photo
 
 class PostsAdmin(admin.ModelAdmin):
     """Adds a section to the admin backend for working
@@ -11,6 +15,7 @@ class PostsAdmin(admin.ModelAdmin):
     """
     search_fields = ['title', 'creator', 'url', 'text_content']
     list_display = ('title','creator','created','last_modified', 'type','url','flag_count','verified')
+    inlines = [PhotoInline,]
     pass
 
 # Registers this PostsAdmin class with the admin site handler
