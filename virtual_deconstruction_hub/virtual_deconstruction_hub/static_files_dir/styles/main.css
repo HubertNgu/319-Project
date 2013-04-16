@@ -248,7 +248,7 @@ img.left, figure.left {float: right; margin: 0 0 2em 2em;}
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
 }
-#featured_listing div img {float: right; max-height: 100%; max-width: 100%;}
+#featured_listing div img {float: right; max-height: 180px; max-width: 100%;}
 #featured_listing h2 {color: #C74451; font-size: 1.714em; margin-bottom: 0.333em;}
 #featured_listing h3 {font-size: 1.429em; margin-bottom: .5em;}
 #featured_listing h3 a:link, #featured h3 a:visited {color: #000305; text-decoration: none;}
