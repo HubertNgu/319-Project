@@ -120,7 +120,7 @@ function checkNewPost(){
     if (email1 != null && email2 != null && email1 != email2)
     {
         showErrorAndFocus(error, "Your email address' don't match", email2);
-        return;
+        return false;
     }
     
     if(document.getElementById('id_title').value == "" ){
