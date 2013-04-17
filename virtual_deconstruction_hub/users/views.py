@@ -62,12 +62,9 @@ def index(request):
 def logout_user(request):
     #get the previous page for redirect. If user did not visit a previous page, then redirect 
     #to home page
-    prevPage = request.GET.get('prevPage')
-    if prevPage.startswith('/myaccount'):
-        prevPage = '/'
     #logout the user and redirect to home page.
     logout(request)
-    response = redirect(prevPage)
+    response = redirect('/')
     response.delete_cookie('user_location')
     return response
 #this view handles all the signup functionality 
