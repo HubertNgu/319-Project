@@ -132,7 +132,7 @@ function checkNewPost(){
         showErrorAndFocus(error, "Please enter enter a description", document.getElementById('id_text_content'));
         return false;
     }
-    
+    return true;
 } 
  
 function checkNewBlog()
