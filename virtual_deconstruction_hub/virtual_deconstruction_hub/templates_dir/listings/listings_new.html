@@ -33,7 +33,7 @@ Create a new listing - Virtual Deconstruction Hub
 {% endif %}
 </div>
 <div >
-<input id="addAnotherButton" type="button" onclick= "return checkNewPost();if (!addAnotherPicture()){ return false;}new_post_form.submit();" value="Add Selected Picture" />
+<input id="addAnotherButton" type="button" onclick= "if (!addAnotherPicture() || !checkNewPost()){ return false;}new_post_form.submit();" value="Add Selected Picture" />
 </div>
 </div>
 <br />
